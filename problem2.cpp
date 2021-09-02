@@ -1,4 +1,3 @@
-// problem 2 of project 1
 #include <iostream>
 #include <armadillo>
 
