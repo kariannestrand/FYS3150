@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 x = []; u = []
-with open("data_problem2.txt") as f:
+with open("problem2.txt") as f:
     f.readline()
     for line in f.readlines():
         line = line.split()
