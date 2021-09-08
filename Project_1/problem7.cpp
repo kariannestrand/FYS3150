@@ -1,5 +1,6 @@
 #include <iostream>
 #include <armadillo>
+#include <iomanip>
 
 using namespace arma;
 using namespace std;
@@ -51,5 +52,15 @@ int main(){
     cout << v << endl;
     //cout << b << endl;
     //cout << g << endl;
+
+    ofstream myfile;
+    myfile.open ("problem7.txt");
+    myfile << setw(15) << setprecision(8) << "x";
+    myfile << setw(15) << setprecision(8) << "v" << endl;
+    for (int i = 0; i < n; i++){
+        myfile << setw(15) << setprecision(8) << x(i);
+        myfile << setw(15) << setprecision(8) << v(i) << endl; // formatting txt-file
+    }
+    myfile.close();
     return 0;
 }
