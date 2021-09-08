@@ -4,14 +4,14 @@
 
 using namespace arma;
 using namespace std;
-double n = 10; // length of array
+double n = 11; // length of array
 double h = 1/n; // step size
 
 int main(){
     vec a = vec(n-1).fill(-1.); // defining a-vector
     vec b = vec(n).fill(2.); // defining b-vector
     vec c = vec(n-1).fill(-1.); // defining c-vector
-    vec x = arma::linspace(0, 1, n); // defining array x in [0, 1]
+    vec x = arma::linspace(0+h, 1-h, n); // defining array x in [0, 1]
     vec f = 100*exp(-10*x); // defining source term
     vec g = h*h*f; // defining solution-vector g
     vec v = vec(n);
