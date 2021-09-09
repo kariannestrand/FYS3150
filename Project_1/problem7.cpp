@@ -4,12 +4,12 @@
 
 using namespace arma;
 using namespace std;
-     
+
 
 vec forward(vec, vec, vec, vec, int);
 vec backward(vec, vec, vec, vec, int);
 vec elimination(vec, vec, vec, vec, vec, int);
-void writetofile(vec, vec, int);
+//void writetofile(vec, vec, int);
 
 
 int main(int argc, char* argv[]){
