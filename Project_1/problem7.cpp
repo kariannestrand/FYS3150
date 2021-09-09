@@ -27,7 +27,7 @@ int main(){
     }
 
     v(n-1) = g(n-1)/b(n-1);
-    //Backwards substitution
+    //Backwards substitution HAHAHAHAHHAHAH
     for (int i = n-2; i >= 0; i--){
       v(i) = (g(i)-c(i)*v(i+1))/b(i);
       //cout << v(i) << endl;
