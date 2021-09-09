@@ -27,7 +27,7 @@ int main(){
 }
 
 
-     
+
 // Declaring functions
 vec exact(vec, vec, int);
 void forward(vec, vec*, vec, vec*, int);
@@ -58,7 +58,7 @@ int main(int argc, char* argv[]){
 
 // Calculating exact solution
 vec exact(vec x, vec u, int n){
-  vec u = 1 - (1 - exp(-10))*x - exp(-10*x); 
+  vec u = 1 - (1 - exp(-10))*x - exp(-10*x);
 }
 
 // Forward substitution
@@ -108,5 +108,5 @@ void writetofile_approx(vec x, vec v, int n){
         myfile << setw(15) << scientific << v(i) << endl; // formatting txt-file
     }
     myfile.close();
-    
+
 }
