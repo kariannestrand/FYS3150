@@ -8,7 +8,6 @@ double n = 10; // length of array
 double h = 1/n; // step size
 
 int main(){
-<<<<<<< HEAD
     vec a = vec(n-1).fill(-1.); // defining a-vector and filling with -1's
     vec b = vec(n).fill(2.); // defining b-vector and filling with 2's
     vec c = vec(n-1).fill(-1.); // defining c-vector and filling with -1's
@@ -21,7 +20,6 @@ int main(){
         b(i) = b(i)-a(i)/b(i-1)*c(i-1);
         g(i) = g(i)-a(i)/b(i-1)*g(i-1);
     }
-=======
   vec a = vec(n-1).fill(-1.);          // defining a-vector
   vec b = vec(n).fill(2.);             // defining b-vector
   vec c = vec(n-1).fill(-1.);          // defining c-vector
@@ -33,7 +31,6 @@ int main(){
       b(i) = b(i)-a(i)/b(i-1)*c(i-1);
       g(i) = g(i)-a(i)/b(i-1)*g(i-1);
   }
->>>>>>> 2af25d230bb7086ae03782b1e3773fefc428e59f
 
     v(n-1) = g(n-1)/b(n-1);
     //Backwards substitution
@@ -41,9 +38,8 @@ int main(){
       v(i) = (g(i)-c(i)*v(i+1))/b(i);
       cout << v(i) << endl;
     }
-    
 
-<<<<<<< HEAD
+
     ofstream myfile;
     myfile.open ("problem7_10.txt");
     myfile << setw(15) << setprecision(8) << "x";
@@ -54,16 +50,4 @@ int main(){
     }
     myfile.close();
     return 0;
-=======
-  ofstream myfile;
-  myfile.open ("problem7.txt");
-  myfile << setw(15) << setprecision(8) << "x";
-  myfile << setw(15) << setprecision(8) << "v" << endl;
-  for (int i = 0; i < n; i++){
-      myfile << setw(15) << setprecision(8) << x(i);
-      myfile << setw(15) << setprecision(8) << v(i) << endl; // formatting txt-file
-  }
-  myfile.close();
-  return 0;
->>>>>>> 2af25d230bb7086ae03782b1e3773fefc428e59f
 }
