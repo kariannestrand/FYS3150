@@ -2,14 +2,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-n_list = [10, 100, 1000, 10000]
+#n_list = [10, 100, 1000, 10000]
 
-def file_reader(n_list):
-    data = np.zeros((len(4), 2)) 
-    for i in range(len(n_list)):
-        v = np.zeros(n_list[i]+1)
-        filename = "problem7_" + str(n_list[i]) + ".txt"
-        v = 
+#def file_reader(n_list):
+    #data = np.zeros((len(4), 2)) 
+    #for i in range(len(n_list)):
+        #v = np.zeros(n_list[i]+1)
+        #filename = "problem7_" + str(n_list[i]) + ".txt"
+        #v = 
 
 x_exact = []; u_exact = []
 with open("problem2.txt") as f:
