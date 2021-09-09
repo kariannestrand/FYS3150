@@ -30,7 +30,6 @@ int main(){
     //Backwards substitution
     for (int i = n-2; i >= 0; i--){
       v(i) = (g(i)-c(i)*v(i+1))/b(i);
-      //cout << v(i) << endl;
     }
 
     ofstream myfile;
