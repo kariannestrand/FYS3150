@@ -10,7 +10,7 @@ vec exact(vec x){
 
 // Forward substitution
 void forward(vec a, vec *b, vec c, vec *g, int n){
-    for (int i = 1; i < n-1; i++){
+    for (int i = 1; i < n; i++){
         (*b)(i) = (*b)(i)-a(i)/(*b)(i-1)*c(i-1);
         (*g)(i) = (*g)(i)-a(i)/(*b)(i-1)*(*g)(i-1);
     }
