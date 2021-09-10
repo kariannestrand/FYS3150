@@ -1,6 +1,5 @@
 #include "functions.hpp"
 
-
 using namespace arma;
 using namespace std;
 
@@ -31,17 +30,18 @@ void elimination(vec a, vec b, vec c, vec g, vec *v, int n){
     backward(b, c, g, v, n);
 }
 
-// Writing to file exact.txt
-void writetofile_exact(vec x, vec u){
+// Writing to file exact_n.txt
+void writetofile_exact(vec x, vec u, int n){
     ofstream myfile;
-    myfile.open ("exact.txt");
+    string filename = "exact_" + to_string(n) + ".txt";
+    myfile.open (filename);
     myfile << setw(15) << scientific << "x";
     myfile << setw(15) << scientific << "u" << endl;
-    for (int i = 0; i < 11; i++){
+    for (int i = 0; i < n; i++){
         myfile << setw(15) << scientific << x(i);
-        myfile << setw(15) << scientific << u(i) << endl; // formatting txt-file
-    }
-    myfile.close();
+        myfile << setw(15) << scientific << u(i) << endl;
+  }
+  myfile.close();
 }
 
 // Writing to file approx_n.txt
@@ -53,8 +53,13 @@ void writetofile_approx(vec x, vec v, int n){
     myfile << setw(15) << scientific << "v" << endl;
     for (int i = 0; i < n; i++){
         myfile << setw(15) << scientific << x(i);
-        myfile << setw(15) << scientific << v(i) << endl; // formatting txt-file
+        myfile << setw(15) << scientific << v(i) << endl;
     }
     myfile.close();
-    
+}
+
+// Writing to files exact_n.txt and approx_n.txt
+void writetofile(vec x, vec v, vec u, int n){
+    writetofile_exact(x, u, n);
+    writetofile_approx(x, v, n);
 }
