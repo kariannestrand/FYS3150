@@ -21,7 +21,8 @@ int main(int argc, char* argv[]){
 
     vec u = exact(x);                    // calling exact solution function
     elimination(a, b, c, g, &v, n);      // calling gaussian elimination function
-    writetofile(x, v, u, n);             // calling writing to file function
+    vec Delta = abs_err(u, v);           // calling absolute error function
+    writetofile(x, u, v, Delta, n);      // calling writing to file function
 
     return 0;
 }
