@@ -28,14 +28,8 @@ void backward_gen(vec b, vec c, vec g, vec *v, int n){
 
 // Gaussian elimination, general algorithm
 void gauss_elim_gen(vec a, vec b, vec c, vec g, vec *v, int n){
-    auto t1_gen = std::chrono::high_resolution_clock::now();
-
     forward_gen(a, &b, c, &g, n);
     backward_gen(b, c, g, v, n);
-
-    auto t2_gen = std::chrono::high_resolution_clock::now();
-    double duration_seconds_gen = std::chrono::duration<double>(t2_gen - t1_gen).count();
-    cout << "time used by the general algorithm = " << duration_seconds_gen << " seconds\n";
 }
 
 
@@ -58,14 +52,8 @@ void backward_spec(vec b, vec c, vec g, vec *v, int n){
 
 // Gaussian elimination, special algorithm
 void gauss_elim_spec(vec a, vec b, vec c, vec g, vec *v, int n){
-    auto t1_spec = std::chrono::high_resolution_clock::now();
-
     forward_spec(a, &b, c, &g, n);
     backward_spec(b, c, g, v, n);
-
-    auto t2_spec = std::chrono::high_resolution_clock::now();
-    double duration_seconds_spec = std::chrono::duration<double>(t2_spec - t1_spec).count();
-    cout << "time used by the special algorithm = " << duration_seconds_spec << " seconds\n";
 }
 
 
