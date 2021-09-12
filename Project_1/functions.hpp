@@ -4,6 +4,7 @@
 #include <armadillo>
 #include <iostream>
 #include <iomanip>
+#include <chrono>
 
 // Declearing functions
 arma::vec exact(arma::vec x);
