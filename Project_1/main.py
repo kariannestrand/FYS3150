@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-n_list = [10, 100, 1000, 10000]
+n_list = [10, 100, 1000, 10000, 100000, 1000000, 10000000]
 
 def file_reader(filename):
     with open(filename, "r") as infile:
@@ -71,6 +71,33 @@ x_exact_10000 = np.insert(x_exact_10000_1, 0, 0)
 u_10000_1 = np.append(u_10000_meat, 0)
 u_10000 = np.insert(u_10000_1, 0, 0)
 
+exact_100000 = exact_list[4]
+labels_100000 = list(exact_100000.keys())
+x_exact_100000_meat = exact_100000[labels_100000[0]]
+u_100000_meat = exact_100000[labels_100000[1]]
+x_exact_100000_1 = np.append(x_exact_100000_meat, 1)
+x_exact_100000 = np.insert(x_exact_100000_1, 0, 0)
+u_100000_1 = np.append(u_100000_meat, 0)
+u_100000 = np.insert(u_100000_1, 0, 0)
+
+exact_1000000 = exact_list[5]
+labels_1000000 = list(exact_1000000.keys())
+x_exact_1000000_meat = exact_1000000[labels_1000000[0]]
+u_1000000_meat = exact_1000000[labels_1000000[1]]
+x_exact_1000000_1 = np.append(x_exact_1000000_meat, 1)
+x_exact_1000000 = np.insert(x_exact_1000000_1, 0, 0)
+u_1000000_1 = np.append(u_1000000_meat, 0)
+u_1000000 = np.insert(u_1000000_1, 0, 0)
+
+exact_10000000 = exact_list[6]
+labels_10000000 = list(exact_10000000.keys())
+x_exact_10000000_meat = exact_10000000[labels_10000000[0]]
+u_10000000_meat = exact_10000000[labels_10000000[1]]
+x_exact_10000000_1 = np.append(x_exact_10000000_meat, 1)
+x_exact_10000000 = np.insert(x_exact_10000000_1, 0, 0)
+u_10000000_1 = np.append(u_10000000_meat, 0)
+u_10000000 = np.insert(u_10000000_1, 0, 0)
+
 approx_10 = approx_list[0]
 labels_10 = list(approx_10.keys())
 x_approx_10_meat = approx_10[labels_10[0]]
@@ -108,6 +135,33 @@ x_approx_10000 = np.insert(x_approx_10000_1, 0, 0)
 v_10000_1 = np.append(v_10000_meat, 0)
 v_10000 = np.insert(v_10000_1, 0, 0)
 
+approx_100000 = approx_list[4]
+labels_100000 = list(approx_100000.keys())
+x_approx_100000_meat = approx_100000[labels_100000[0]]
+v_100000_meat = approx_100000[labels_100000[1]]
+x_approx_100000_1 = np.append(x_approx_100000_meat, 1)
+x_approx_100000 = np.insert(x_approx_100000_1, 0, 0)
+v_100000_1 = np.append(v_100000_meat, 0)
+v_100000 = np.insert(v_100000_1, 0, 0)
+
+approx_1000000 = approx_list[5]
+labels_1000000 = list(approx_1000000.keys())
+x_approx_1000000_meat = approx_1000000[labels_1000000[0]]
+v_1000000_meat = approx_1000000[labels_1000000[1]]
+x_approx_1000000_1 = np.append(x_approx_1000000_meat, 1)
+x_approx_1000000 = np.insert(x_approx_1000000_1, 0, 0)
+v_1000000_1 = np.append(v_1000000_meat, 0)
+v_1000000 = np.insert(v_1000000_1, 0, 0)
+
+approx_10000000 = approx_list[6]
+labels_10000000 = list(approx_10000000.keys())
+x_approx_10000000_meat = approx_10000000[labels_10000000[0]]
+v_10000000_meat = approx_10000000[labels_10000000[1]]
+x_approx_10000000_1 = np.append(x_approx_10000000_meat, 1)
+x_approx_10000000 = np.insert(x_approx_10000000_1, 0, 0)
+v_10000000_1 = np.append(v_10000000_meat, 0)
+v_10000000 = np.insert(v_10000000_1, 0, 0)
+
 abs_error_10 = np.abs(u_10-v_10)
 abs_error_100 = np.abs(u_100-v_100)
 abs_error_1000 = np.abs(u_1000-v_1000)
@@ -118,6 +172,11 @@ rel_error_100 = np.abs((u_100_meat-v_100_meat)/u_100_meat)
 rel_error_1000 = np.abs((u_1000_meat-v_1000_meat)/u_1000_meat)
 rel_error_10000 = np.abs((u_10000_meat-v_10000_meat)/u_10000_meat)
 
+
+rel_error_100000 = np.abs((u_100000_meat-v_100000_meat)/u_100000_meat)
+rel_error_1000000 = np.abs((u_1000000_meat-v_1000000_meat)/u_1000000_meat)
+rel_error_10000000 = np.abs((u_10000000_meat-v_10000000_meat)/u_10000000_meat)
+
 log_abs_error_10 = np.log(abs_error_10)
 log_abs_error_100 = np.log(abs_error_100)
 log_abs_error_1000 = np.log(abs_error_1000)
@@ -127,49 +186,78 @@ log_rel_error_10 = np.log(rel_error_10)
 log_rel_error_100 = np.log(rel_error_100)
 log_rel_error_1000 = np.log(rel_error_1000)
 log_rel_error_10000 = np.log(rel_error_10000)
+log_rel_error_100000 = np.log(rel_error_100000)
+log_rel_error_1000000 = np.log(rel_error_1000000)
+log_rel_error_10000000 = np.log(rel_error_10000000)
+
 
 max_rel_error_10 = np.amax(rel_error_10)
 max_rel_error_100 = np.amax(rel_error_100)
 max_rel_error_1000 = np.amax(rel_error_1000)
 max_rel_error_10000 = np.amax(rel_error_10000)
+max_rel_error_100000 = np.amax(rel_error_100000)
+max_rel_error_1000000 = np.amax(rel_error_1000000)
+max_rel_error_10000000 = np.amax(rel_error_10000000)
 
-max_rel_error = np.array([max_rel_error_10, max_rel_error_100, max_rel_error_1000, max_rel_error_10000])
+max_rel_error = np.array([max_rel_error_10, max_rel_error_100, max_rel_error_1000, max_rel_error_10000, max_rel_error_100000, max_rel_error_1000000, max_rel_error_10000000])
+print(max_rel_error)
 
-n = np.linspace(1,4,4)
-print(n)
+n = np.linspace(10,10**7,7)
 
+figwidth = 5.5
+figheight = figwidth / 1.33333
 
+plt.figure(figsize=(figwidth, figheight))
 plt.plot(x_exact_10, u_10, linestyle="-", marker="o", color='blue')
-plt.title('Plot of $u(x)=1-(1-e^{-10})x-e^{-10x}$')
+plt.title('Plot of exact solution $u(x)=1-(1-e^{-10})x-e^{-10x}$', fontsize=10)
 plt.xlabel('x-values')
 plt.ylabel('u(x)')
 plt.savefig("exact.pdf")
 plt.show()
 
-plt.plot(x_exact_10, u_10, linestyle="-", marker="o", color='blue')
-plt.plot(x_approx_10, v_10, linestyle="-", marker="o", color='red')
-plt.plot(x_approx_100, v_100, linestyle="-", color='green')
-plt.plot(x_approx_1000, v_1000, linestyle="-", color='yellow')
-plt.plot(x_approx_10000, v_10000, linestyle="-", color='brown')
-plt.title('Comparison of exact and approximated solution')
+plt.figure(figsize=(figwidth, figheight))
+plt.plot(x_exact_10, u_10, '--', color='blue', label='Exact solution')
+plt.plot(x_approx_10, v_10, '--', color='black', label='Approximated solution n=10')
+plt.plot(x_approx_100, v_100, '--', color='green', label='Approximated solution n=10^2')
+plt.plot(x_approx_1000, v_1000, '--', color='orange', label='Approximated solution n=10^3')
+plt.plot(x_approx_10000, v_10000, '--', color='red', label='Approximated solution n=10^4')
+plt.title('Comparison of exact and approximated solutions to (write expression here)', fontsize=12)
 plt.xlabel('x')
 plt.ylabel('u(x)/v(x)')
+plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left')
 plt.savefig("comparison.pdf")
 plt.show()
 
-plt.plot(x_exact_10, log_abs_error_10, color='blue')
-plt.plot(x_exact_100, log_abs_error_100, color='red')
-plt.plot(x_exact_1000, log_abs_error_1000, color='green')
-plt.plot(x_exact_10000, log_abs_error_10000, color='yellow')
+plt.figure(figsize=(figwidth, figheight))
+plt.plot(x_exact_10, abs_error_10, '--', color='blue', label='n=10')
+plt.plot(x_exact_100, abs_error_100, '--', color='red', label='n=10^2')
+plt.plot(x_exact_1000, abs_error_1000, '--', color='green', label='n=10^3')
+plt.plot(x_exact_10000, abs_error_10000, '--', color='yellow', label='n=10^4')
+plt.title("Absolute error for approximation of (write expression here)", fontsize=12)
+plt.xlabel("x")
+plt.ylabel("Absolute error")
+plt.yscale('log')
+plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left')
 plt.savefig("abs_error.pdf")
 plt.show()
 
-plt.plot(x_exact_10_meat, log_rel_error_10, color='blue')
-plt.plot(x_exact_100_meat, log_rel_error_100, color='red')
-plt.plot(x_exact_1000_meat, log_rel_error_1000, color='green')
-plt.plot(x_exact_10000_meat, log_rel_error_10000, color='yellow')
+plt.figure(figsize=(figwidth, figheight))
+plt.plot(x_exact_10_meat, rel_error_10, '--', color='blue', label='n=10')
+plt.plot(x_exact_100_meat, rel_error_100, '--', color='red', label='n=10^2')
+plt.plot(x_exact_1000_meat, rel_error_1000, '--', color='green', label='n=10^3')
+plt.plot(x_exact_10000_meat, rel_error_10000, '--', color='yellow', label='n=10^4')
+plt.title("Relative error", fontsize=12)
+plt.xlabel("x")
+plt.ylabel("Relative error for approximation of (write expression here)")
+plt.yscale('log')
+plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left')
 plt.savefig("rel_error.pdf")
 plt.show()
 
-plt.plot(n, max_rel_error)
+plt.figure(figsize=(figwidth, figheight))
+plt.plot(n, max_rel_error, '--')
+plt.xlabel('n')
+plt.ylabel('Max relative error')
+plt.title("Maximum relative error for approximation of (write expression here)", fontsize=12)
+plt.savefig("max_rel_error.pdf")
 plt.show()

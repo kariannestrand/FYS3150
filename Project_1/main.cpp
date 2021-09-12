@@ -23,7 +23,7 @@ int main(int argc, char* argv[]){
     gauss_elim_spec(a, b_spec, c, g_spec, &v_spec, n);   // calling gaussian elimination function (special algorithm)
 
     // Creates files exact_n.txt and approx_n.txt if true
-    bool write_to_file = false;
+    bool write_to_file = true;
     if (write_to_file){
         writetofile(x, u, v_gen, n);
     }
