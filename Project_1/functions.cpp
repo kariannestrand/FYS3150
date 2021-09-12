@@ -3,32 +3,72 @@
 using namespace arma;
 using namespace std;
 
+
 // Calculating exact solution
 vec exact(vec x){
   return 1 - (1 - exp(-10))*x - exp(-10*x);
 }
 
-// Forward substitution
-void forward(vec a, vec *b, vec c, vec *g, int n){
+
+// Forward substitution, general algorithm
+void forward_gen(vec a, vec *b, vec c, vec *g, int n){
     for (int i = 1; i < n; i++){
-        (*b)(i) = (*b)(i)-a(i)/(*b)(i-1)*c(i-1);
-        (*g)(i) = (*g)(i)-a(i)/(*b)(i-1)*(*g)(i-1);
+        (*b)(i) = (*b)(i) - a(i)/(*b)(i-1)*c(i-1);
+        (*g)(i) = (*g)(i) - a(i)/(*b)(i-1)*(*g)(i-1);
     }
 }
 
-// Backwards substitution
-void backward(vec b, vec c, vec g, vec *v, int n){
+// Backwards substitution, general algorithm
+void backward_gen(vec b, vec c, vec g, vec *v, int n){
     (*v)(n-1) = g(n-1)/b(n-1);
     for (int i = n-2; i >= 0; i--){
-      (*v)(i) = (g(i)-c(i)*(*v)(i+1))/b(i);
+      (*v)(i) = (g(i) - c(i)*(*v)(i+1))/b(i);
     }
 }
 
 // Gaussian elimination, general algorithm
 void gauss_elim_gen(vec a, vec b, vec c, vec g, vec *v, int n){
-    forward(a, &b, c, &g, n);
-    backward(b, c, g, v, n);
+    auto t1_gen = std::chrono::high_resolution_clock::now();
+
+    forward_gen(a, &b, c, &g, n);
+    backward_gen(b, c, g, v, n);
+
+    auto t2_gen = std::chrono::high_resolution_clock::now();
+    double duration_seconds_gen = std::chrono::duration<double>(t2_gen - t1_gen).count();
+    cout << "time used by the general algorithm = " << duration_seconds_gen << " seconds\n";
 }
+
+
+
+// Forward substitution, special algorithm
+void forward_spec(vec a, vec *b, vec c, vec *g, int n){
+    for (int i = 1; i < n; i++){
+        (*b)(i) = 1.*(i+1)/i;
+        (*g)(i) = (*g)(i) + (*g)(i-1)*(i-1)/i;
+    }
+}
+
+// Backwards substitution, special algorithm
+void backward_spec(vec b, vec c, vec g, vec *v, int n){
+    (*v)(n-1) = g(n-1)/b(n-1);
+    for (int i = n-2; i >= 0; i--){
+      (*v)(i) = (g(i) + (*v)(i+1))/(i+1);
+    }
+}
+
+// Gaussian elimination, special algorithm
+void gauss_elim_spec(vec a, vec b, vec c, vec g, vec *v, int n){
+    auto t1_spec = std::chrono::high_resolution_clock::now();
+
+    forward_spec(a, &b, c, &g, n);
+    backward_spec(b, c, g, v, n);
+
+    auto t2_spec = std::chrono::high_resolution_clock::now();
+    double duration_seconds_spec = std::chrono::duration<double>(t2_spec - t1_spec).count();
+    cout << "time used by the special algorithm = " << duration_seconds_spec << " seconds\n";
+}
+
+
 
 // Writing to file exact_n.txt
 void writetofile_exact(vec x, vec u, int n){
