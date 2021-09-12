@@ -37,13 +37,13 @@ void gauss_elim_gen(vec a, vec b, vec c, vec g, vec *v, int n){
 
 // Forward substitution, special algorithm
 void forward_spec(vec a, vec *b, vec c, vec *g, int n){
-    for (int i = 1; i < n-1; i++){
+    for (int i = 1; i < n; i++){
         (*b)(i) = 1.*(i+1)/i;
-        (*g)(i) = (*g)(i) + (*g)(i-1)*1.*(i-1)/i;
+        (*g)(i) = (*g)(i) + (*g)(i-1)*(i-1)/i;
     }
 }
 
-// Backwards substitution, special algorithm,
+// Backwards substitution, special algorithm
 void backward_spec(vec b, vec c, vec g, vec *v, int n){
     (*v)(n-1) = g(n-1)/b(n-1);
     for (int i = n-2; i >= 0; i--){
