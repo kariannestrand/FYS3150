@@ -19,11 +19,11 @@ To run the timing test of the algorithms, line 25 in [main.cpp](https://github.c
 
 If you do not want to run the timing tests, simply change "true" to "false".
 
-To link and compile the code, we use a [makefile](https://github.com/mariaoftedahl/FYS3150/blob/main/Project_1/makefile). In a Linux command line, write the following:
+To link and compile the code, we use a [makefile](https://github.com/mariaoftedahl/FYS3150/blob/main/Project_1/makefile). In a command line, write the following:
 
     make all
 
-This will produce a file called main.exe. To run it, write the following in a Linux command line:
+This will produce a file called main.exe. To run it, write the following in a command line:
 
     ./main.exe n
     
