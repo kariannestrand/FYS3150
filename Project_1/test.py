@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-n = [10, 10**2, 10**3, 10**4]#, 1000000, 10000000]
+n = [10, 10**2, 10**3, 10**4, 10**5]
 
 
 """ plotting exact solution for all n if True """
@@ -10,13 +10,13 @@ exact_solution = False
 if exact_solution:
 
     # reading from file, extracting x and u from exact_100.txt:
-    filename = "exact_100.txt"
+    filename = "exact_1000.txt"
     exact = np.loadtxt(filename, skiprows = 1)
     x = exact[:, 0]
     u = exact[:, 1]
 
     # plotting exact solution using x and u:
-    plt.plot(x, u, label = "n = 100")
+    plt.plot(x, u, label = "n = 1000")
     plt.title("Exact solution", fontsize = 20)
     plt.xlabel("x", size = 20); plt.xticks(size = 15)
     plt.ylabel("u(x)", size = 20); plt.yticks(size = 15)
@@ -31,25 +31,26 @@ if exact_solution:
 compare_solution = True
 if compare_solution:
 
-    # reading from files, extracting x, u from exact_n.txt and v from approx_n.txt:
-    filename_exact = "exact_100.txt"
+    # reading from files, extracting u from exact_n.txt:
+    filename_exact = "exact_1000.txt"
     exact = np.loadtxt(filename_exact, skiprows = 1)
     u = exact[:, 1]
 
     for i in range(len(n)):
+        # reading from files, extracting x and v from approx_n.txt:
         filename_approx = "approx_" + str(n[i]) + ".txt"
         approx = np.loadtxt(filename_approx, skiprows = 1)
         x = approx[:, 0]
         v = approx[:, 1]
 
         # plotting compared solutions using x, u and v:
-        if n[i] == 100:
-            plt.plot(x, u, label = "u(x)")
-        plt.plot(x, v, "--", label = "n = " + str(n[i]))
-        plt.title("Comparison between exact and approximated solutions ", fontsize = 20)
+        if n[i] == 1000:
+            plt.plot(x, u, label = "u(x), n = 1000")
+        plt.plot(x, v, "--", label = "v(x), n = " + str(n[i]))
+        plt.title("Comparison between exact and approximated solutions", fontsize = 14)
         plt.xlabel("x", size = 20); plt.xticks(size = 15)
         plt.ylabel("u(x) and v(x)", size = 20); plt.yticks(size = 15)
-        plt.legend(fontsize = 15)
+        plt.legend(fontsize = 10)
         plt.tight_layout()
         plt.savefig("compare_solution.pdf")
     plt.show()
@@ -111,7 +112,7 @@ if relative_error:
         plt.title("Relative error", fontsize = 20)
         plt.xlabel("x", size = 20); plt.xticks(size = 15)
         plt.ylabel("$log_{10}(\epsilon)$", size = 20); plt.yticks(size = 15)
-        plt.legend(loc = "upper left")
+        plt.legend(loc = "upper left", fontsize = 10)
         plt.tight_layout()
         plt.savefig("relative_error.pdf")
     plt.show()
