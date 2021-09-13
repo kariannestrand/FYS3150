@@ -5,7 +5,7 @@ using namespace std;
 
 
 int main(int argc, char* argv[]){
-    int n = atoi(argv[1]);                 // length of array
+    int n = atoi(argv[1]);                 // creating command line argument for n
     double h = 1./n;                       // step size
     vec a = vec(n).fill(-1.);              // defining a-vector filled with -1's
     vec b_gen = vec(n).fill(2.);           // defining b-vector filled with 2's for general algortihm
@@ -16,7 +16,7 @@ int main(int argc, char* argv[]){
     vec g_gen = h*h*f;                     // defining solution vector g for general algortihm
     vec g_spec = h*h*f;                    // defining solution vector g for special algortihm
     vec v_gen = vec(n).fill(0.);           // creating empty solution vector v for general algortihm
-    vec v_spec = vec(n).fill(0.);          // creating empty solution vector v gor special algorithm
+    vec v_spec = vec(n).fill(0.);          // creating empty solution vector v for special algorithm
 
     vec u = exact(x);                      // calling exact solution function
 
