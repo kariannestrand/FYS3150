@@ -1,1 +1,6 @@
 # FYS3150
+Repository with the projects from FYS3150 at UiO done by Maria Lunde Oftedahl and Karianne Strand.
+
+## Project 1
+
+The topic of the first [project](https://github.com/mariaoftedahl/FYS3150/tree/main/Project_1) is numerical solution of the one-dimensional Poisson equation. 
