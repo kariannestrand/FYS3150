@@ -1,265 +1,153 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-n_list = [10, 100, 1000, 10000, 100000, 1000000, 10000000]
 
-def file_reader(filename):
-    with open(filename, "r") as infile:
-        labels = infile.readline().split()
-        num_lists = len(labels)
-        lines = infile.readlines()
-        data = {key : [] for key in labels}
-        for line in lines:
-            vals = line.split()
-            for i in range(num_lists):
-                data[labels[i]].append(float(vals[i]))
-    return data
-
-exact_list = []
-approx_list = []
-
-for i in range(len(n_list)):
-    filename = "exact_" + str(n_list[i]) + ".txt"
-
-    data = file_reader(filename)
-    labels = data.keys()
-    data = {key : np.array(data[key]) for key in labels}
-    exact_list.append(data)
-
-for i in range(len(n_list)):
-    filename = "approx_" + str(n_list[i]) + ".txt"
-
-    data = file_reader(filename)
-    labels = data.keys()
-    data = {key : np.array(data[key]) for key in labels}
-    approx_list.append(data)
+n = [10, 10**2, 10**3, 10**4, 10**5]
 
 
-exact_10 = exact_list[0]
-labels_10 = list(exact_10.keys())
-x_exact_10_meat = exact_10[labels_10[0]]
-u_10_meat = exact_10[labels_10[1]]
-x_exact_10_1 = np.append(x_exact_10_meat, 1)
-x_exact_10 = np.insert(x_exact_10_1, 0, 0)
-u_10_1 = np.append(u_10_meat, 0)
-u_10 = np.insert(u_10_1, 0, 0)
+""" plotting exact solution for all n if True """
+exact_solution = False
+if exact_solution:
 
-exact_100 = exact_list[1]
-labels_100 = list(exact_100.keys())
-x_exact_100_meat = exact_100[labels_100[0]]
-u_100_meat = exact_100[labels_100[1]]
-x_exact_100_1 = np.append(x_exact_100_meat, 1)
-x_exact_100 = np.insert(x_exact_100_1, 0, 0)
-u_100_1 = np.append(u_100_meat, 0)
-u_100 = np.insert(u_100_1, 0, 0)
+    # reading from file, extracting x and u from exact_100.txt:
+    filename = "exact_1000.txt"
+    exact = np.loadtxt(filename, skiprows = 1)
+    x = exact[:, 0]
+    u = exact[:, 1]
 
-exact_1000 = exact_list[2]
-labels_1000 = list(exact_1000.keys())
-x_exact_1000_meat = exact_1000[labels_1000[0]]
-u_1000_meat = exact_1000[labels_1000[1]]
-x_exact_1000_1 = np.append(x_exact_1000_meat, 1)
-x_exact_1000 = np.insert(x_exact_1000_1, 0, 0)
-u_1000_1 = np.append(u_1000_meat, 0)
-u_1000 = np.insert(u_1000_1, 0, 0)
-
-exact_10000 = exact_list[3]
-labels_10000 = list(exact_10000.keys())
-x_exact_10000_meat = exact_10000[labels_10000[0]]
-u_10000_meat = exact_10000[labels_10000[1]]
-x_exact_10000_1 = np.append(x_exact_10000_meat, 1)
-x_exact_10000 = np.insert(x_exact_10000_1, 0, 0)
-u_10000_1 = np.append(u_10000_meat, 0)
-u_10000 = np.insert(u_10000_1, 0, 0)
-
-exact_100000 = exact_list[4]
-labels_100000 = list(exact_100000.keys())
-x_exact_100000_meat = exact_100000[labels_100000[0]]
-u_100000_meat = exact_100000[labels_100000[1]]
-x_exact_100000_1 = np.append(x_exact_100000_meat, 1)
-x_exact_100000 = np.insert(x_exact_100000_1, 0, 0)
-u_100000_1 = np.append(u_100000_meat, 0)
-u_100000 = np.insert(u_100000_1, 0, 0)
-
-exact_1000000 = exact_list[5]
-labels_1000000 = list(exact_1000000.keys())
-x_exact_1000000_meat = exact_1000000[labels_1000000[0]]
-u_1000000_meat = exact_1000000[labels_1000000[1]]
-x_exact_1000000_1 = np.append(x_exact_1000000_meat, 1)
-x_exact_1000000 = np.insert(x_exact_1000000_1, 0, 0)
-u_1000000_1 = np.append(u_1000000_meat, 0)
-u_1000000 = np.insert(u_1000000_1, 0, 0)
-
-exact_10000000 = exact_list[6]
-labels_10000000 = list(exact_10000000.keys())
-x_exact_10000000_meat = exact_10000000[labels_10000000[0]]
-u_10000000_meat = exact_10000000[labels_10000000[1]]
-x_exact_10000000_1 = np.append(x_exact_10000000_meat, 1)
-x_exact_10000000 = np.insert(x_exact_10000000_1, 0, 0)
-u_10000000_1 = np.append(u_10000000_meat, 0)
-u_10000000 = np.insert(u_10000000_1, 0, 0)
-
-approx_10 = approx_list[0]
-labels_10 = list(approx_10.keys())
-x_approx_10_meat = approx_10[labels_10[0]]
-v_10_meat = approx_10[labels_10[1]]
-x_approx_10_1 = np.append(x_approx_10_meat, 1)
-x_approx_10 = np.insert(x_approx_10_1, 0, 0)
-v_10_1 = np.append(v_10_meat, 0)
-v_10 = np.insert(v_10_1, 0, 0)
-
-approx_100 = approx_list[1]
-labels_100 = list(approx_100.keys())
-x_approx_100_meat = approx_100[labels_100[0]]
-v_100_meat = approx_100[labels_100[1]]
-x_approx_100_1 = np.append(x_approx_100_meat, 1)
-x_approx_100 = np.insert(x_approx_100_1, 0, 0)
-v_100_1 = np.append(v_100_meat, 0)
-v_100 = np.insert(v_100_1, 0, 0)
-
-
-approx_1000 = approx_list[2]
-labels_1000 = list(approx_1000.keys())
-x_approx_1000_meat = approx_1000[labels_1000[0]]
-v_1000_meat = approx_1000[labels_1000[1]]
-x_approx_1000_1 = np.append(x_approx_1000_meat, 1)
-x_approx_1000 = np.insert(x_approx_1000_1, 0, 0)
-v_1000_1 = np.append(v_1000_meat, 0)
-v_1000 = np.insert(v_1000_1, 0, 0)
-
-approx_10000 = approx_list[3]
-labels_10000 = list(approx_10000.keys())
-x_approx_10000_meat = approx_10000[labels_10000[0]]
-v_10000_meat = approx_10000[labels_10000[1]]
-x_approx_10000_1 = np.append(x_approx_10000_meat, 1)
-x_approx_10000 = np.insert(x_approx_10000_1, 0, 0)
-v_10000_1 = np.append(v_10000_meat, 0)
-v_10000 = np.insert(v_10000_1, 0, 0)
-
-approx_100000 = approx_list[4]
-labels_100000 = list(approx_100000.keys())
-x_approx_100000_meat = approx_100000[labels_100000[0]]
-v_100000_meat = approx_100000[labels_100000[1]]
-x_approx_100000_1 = np.append(x_approx_100000_meat, 1)
-x_approx_100000 = np.insert(x_approx_100000_1, 0, 0)
-v_100000_1 = np.append(v_100000_meat, 0)
-v_100000 = np.insert(v_100000_1, 0, 0)
-
-approx_1000000 = approx_list[5]
-labels_1000000 = list(approx_1000000.keys())
-x_approx_1000000_meat = approx_1000000[labels_1000000[0]]
-v_1000000_meat = approx_1000000[labels_1000000[1]]
-x_approx_1000000_1 = np.append(x_approx_1000000_meat, 1)
-x_approx_1000000 = np.insert(x_approx_1000000_1, 0, 0)
-v_1000000_1 = np.append(v_1000000_meat, 0)
-v_1000000 = np.insert(v_1000000_1, 0, 0)
-
-approx_10000000 = approx_list[6]
-labels_10000000 = list(approx_10000000.keys())
-x_approx_10000000_meat = approx_10000000[labels_10000000[0]]
-v_10000000_meat = approx_10000000[labels_10000000[1]]
-x_approx_10000000_1 = np.append(x_approx_10000000_meat, 1)
-x_approx_10000000 = np.insert(x_approx_10000000_1, 0, 0)
-v_10000000_1 = np.append(v_10000000_meat, 0)
-v_10000000 = np.insert(v_10000000_1, 0, 0)
-
-abs_error_10 = np.abs(u_10-v_10)
-abs_error_100 = np.abs(u_100-v_100)
-abs_error_1000 = np.abs(u_1000-v_1000)
-abs_error_10000 = np.abs(u_10000-v_10000)
-
-rel_error_10 = np.abs((u_10_meat-v_10_meat)/u_10_meat)
-rel_error_100 = np.abs((u_100_meat-v_100_meat)/u_100_meat)
-rel_error_1000 = np.abs((u_1000_meat-v_1000_meat)/u_1000_meat)
-rel_error_10000 = np.abs((u_10000_meat-v_10000_meat)/u_10000_meat)
-
-
-rel_error_100000 = np.abs((u_100000_meat-v_100000_meat)/u_100000_meat)
-rel_error_1000000 = np.abs((u_1000000_meat-v_1000000_meat)/u_1000000_meat)
-rel_error_10000000 = np.abs((u_10000000_meat-v_10000000_meat)/u_10000000_meat)
-
-log_abs_error_10 = np.log(abs_error_10)
-log_abs_error_100 = np.log(abs_error_100)
-log_abs_error_1000 = np.log(abs_error_1000)
-log_abs_error_10000 = np.log(abs_error_10000)
-
-log_rel_error_10 = np.log(rel_error_10)
-log_rel_error_100 = np.log(rel_error_100)
-log_rel_error_1000 = np.log(rel_error_1000)
-log_rel_error_10000 = np.log(rel_error_10000)
-log_rel_error_100000 = np.log(rel_error_100000)
-log_rel_error_1000000 = np.log(rel_error_1000000)
-log_rel_error_10000000 = np.log(rel_error_10000000)
-
-
-max_rel_error_10 = np.amax(rel_error_10)
-max_rel_error_100 = np.amax(rel_error_100)
-max_rel_error_1000 = np.amax(rel_error_1000)
-max_rel_error_10000 = np.amax(rel_error_10000)
-max_rel_error_100000 = np.amax(rel_error_100000)
-max_rel_error_1000000 = np.amax(rel_error_1000000)
-max_rel_error_10000000 = np.amax(rel_error_10000000)
-
-max_rel_error = np.array([max_rel_error_10, max_rel_error_100, max_rel_error_1000, max_rel_error_10000, max_rel_error_100000, max_rel_error_1000000, max_rel_error_10000000])
-#print(max_rel_error)
-
-n = np.linspace(10,10**7,7)
-
-figwidth = 5.5
-figheight = figwidth / 1.33333
-
-plot = True
-if plot:
-    plt.figure(figsize=(figwidth, figheight))
-    plt.plot(x_exact_10, u_10, linestyle="-", marker="o", color='blue')
-    plt.title('Plot of exact solution $u(x)=1-(1-e^{-10})x-e^{-10x}$', fontsize=10)
-    plt.xlabel('x-values')
-    plt.ylabel('u(x)')
-    plt.savefig("exact.pdf")
+    # plotting exact solution using x and u:
+    plt.plot(x, u, label = "n = 1000")
+    plt.title("Exact solution", fontsize = 20)
+    plt.xlabel("x", size = 20); plt.xticks(size = 15)
+    plt.ylabel("u(x)", size = 20); plt.yticks(size = 15)
+    plt.legend(fontsize = 15)
+    plt.tight_layout()
+    plt.savefig("exact_solution.pdf")
     plt.show()
 
-    plt.figure(figsize=(figwidth, figheight))
-    plt.plot(x_exact_10, u_10, '--', color='blue', label='Exact solution')
-    plt.plot(x_approx_10, v_10, '--', color='black', label='Approximated solution n=10')
-    plt.plot(x_approx_100, v_100, '--', color='green', label='Approximated solution n=10^2')
-    plt.plot(x_approx_1000, v_1000, '--', color='orange', label='Approximated solution n=10^3')
-    plt.plot(x_approx_10000, v_10000, '--', color='red', label='Approximated solution n=10^4')
-    plt.title('Comparison of exact and approximated solutions to (write expression here)', fontsize=12)
-    plt.xlabel('x')
-    plt.ylabel('u(x)/v(x)')
-    plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left')
-    plt.savefig("comparison.pdf")
+
+
+""" plotting comparison between exact and approximate solutions for all n if True """
+compare_solution = True
+if compare_solution:
+
+    # reading from files, extracting u from exact_n.txt:
+    filename_exact = "exact_1000.txt"
+    exact = np.loadtxt(filename_exact, skiprows = 1)
+    u = exact[:, 1]
+
+    for i in range(len(n)):
+        # reading from files, extracting x and v from approx_n.txt:
+        filename_approx = "approx_" + str(n[i]) + ".txt"
+        approx = np.loadtxt(filename_approx, skiprows = 1)
+        x = approx[:, 0]
+        v = approx[:, 1]
+
+        # plotting compared solutions using x, u and v:
+        if n[i] == 1000:
+            plt.plot(x, u, label = "u(x), n = 1000")
+        plt.plot(x, v, "--", label = "v(x), n = " + str(n[i]))
+        plt.title("Comparison between exact and approximated solutions", fontsize = 14)
+        plt.xlabel("x", size = 20); plt.xticks(size = 15)
+        plt.ylabel("u(x) and v(x)", size = 20); plt.yticks(size = 15)
+        plt.legend(fontsize = 10)
+        plt.tight_layout()
+        plt.savefig("compare_solution.pdf")
     plt.show()
 
-    plt.figure(figsize=(figwidth, figheight))
-    plt.plot(x_exact_10, abs_error_10, '--', color='blue', label='n=10')
-    plt.plot(x_exact_100, abs_error_100, '--', color='red', label='n=10^2')
-    plt.plot(x_exact_1000, abs_error_1000, '--', color='green', label='n=10^3')
-    plt.plot(x_exact_10000, abs_error_10000, '--', color='yellow', label='n=10^4')
-    plt.title("Absolute error for approximation of (write expression here)", fontsize=12)
-    plt.xlabel("x")
-    plt.ylabel("Absolute error")
-    plt.yscale('log')
-    plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left')
-    plt.savefig("abs_error.pdf")
+
+
+""" plotting absolute error for all n if True """
+absolute_error = False
+if absolute_error:
+
+    # function calculating absolute error:
+    def abs_error(u, v):
+        return np.log(np.abs(u - v))
+
+    for i in range(len(n)):
+        # reading from files, extracting x, u from exact_n.txt and v from approx_n.txt:
+        filename_exact = "exact_" + str(n[i]) + ".txt"
+        exact = np.loadtxt(filename_exact, skiprows = 1)
+        x = exact[:, 0]
+        u = exact[:, 1]
+
+        filename_approx = "approx_" + str(n[i]) + ".txt"
+        approx = np.loadtxt(filename_approx, skiprows = 1)
+        v = approx[:, 1]
+
+        # plotting absolute error by calling function abs_error with u and v:
+        plt.plot(x, abs_error(u, v), "--", label = "n = " + str(n[i]))
+        plt.title("Absolute error", fontsize = 20)
+        plt.xlabel("x", size = 20); plt.xticks(size = 15)
+        plt.ylabel("$log_{10}(\Delta)$", size = 20); plt.yticks(size = 15)
+        plt.tight_layout()
+        plt.legend(fontsize = 15)
+        plt.savefig("absolute_error.pdf")
     plt.show()
 
-    plt.figure(figsize=(figwidth, figheight))
-    plt.plot(x_exact_10_meat, rel_error_10, '--', color='blue', label='n=10')
-    plt.plot(x_exact_100_meat, rel_error_100, '--', color='red', label='n=10^2')
-    plt.plot(x_exact_1000_meat, rel_error_1000, '--', color='green', label='n=10^3')
-    plt.plot(x_exact_10000_meat, rel_error_10000, '--', color='yellow', label='n=10^4')
-    plt.title("Relative error", fontsize=12)
-    plt.xlabel("x")
-    plt.ylabel("Relative error for approximation of (write expression here)")
-    plt.yscale('log')
-    plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left')
-    plt.savefig("rel_error.pdf")
+
+
+""" plotting relative error for all n if True """
+relative_error = False
+if relative_error:
+
+    # function calculating relative error:
+    def rel_error(u, v):
+        return np.log(np.abs((u - v)/u))
+
+    for i in range(len(n)):
+        # reading from files, extracting x, u from exact_n.txt and v from approx_n.txt:
+        filename_exact = "exact_" + str(n[i]) + ".txt"
+        exact = np.loadtxt(filename_exact, skiprows = 1)
+        x = exact[:, 0]
+        u = exact[:, 1]
+
+        filename_approx = "approx_" + str(n[i]) + ".txt"
+        approx = np.loadtxt(filename_approx, skiprows = 1)
+        v = approx[:, 1]
+
+        # plotting relative error by calling function rel_error with u and v:
+        plt.plot(x, rel_error(u, v), "--", label = "n = " + str(n[i]))
+        plt.title("Relative error", fontsize = 20)
+        plt.xlabel("x", size = 20); plt.xticks(size = 15)
+        plt.ylabel("$log_{10}(\epsilon)$", size = 20); plt.yticks(size = 15)
+        plt.legend(loc = "upper left", fontsize = 10)
+        plt.tight_layout()
+        plt.savefig("relative_error.pdf")
     plt.show()
 
-    plt.figure(figsize=(figwidth, figheight))
-    plt.plot(n, max_rel_error, '--')
-    plt.xlabel('n')
-    plt.ylabel('Max relative error')
-    plt.title("Maximum relative error for approximation of (write expression here)", fontsize=12)
-    plt.savefig("max_rel_error.pdf")
+
+
+""" plotting maxiumum relative error for n up to 10**7 if True """
+maximum_relative_error = False
+if maximum_relative_error:
+
+    # function calculating maximum relative error:
+    def max_rel_error(u, v):
+        return np.amax(np.log(np.abs((u - v)/u)))
+
+    # defining n up to 10**7:
+    n = [10, 10**2, 10**3, 10**4, 10**5, 10**6, 10**7]
+
+
+    for i in range(len(n)):
+        # reading from files, extracting u from exact_n.txt and v from approx_n.txt:
+        filename_exact = "exact_" + str(n[i]) + ".txt"
+        exact = np.loadtxt(filename_exact, skiprows = 1)
+        u = exact[:, 1]
+
+        filename_approx = "approx_" + str(n[i]) + ".txt"
+        approx = np.loadtxt(filename_approx, skiprows = 1)
+        v = approx[:, 1]
+
+        # plotting maximum relative error as a function of n by calling function max_rel_error with u and v:
+        plt.plot(n[i], max_rel_error(u, v), "o", label = "n = " + str(n[i]))
+        plt.title("Maximum relative error", fontsize = 20)
+        plt.xlabel("n", size = 20); plt.xticks(size = 15)
+        plt.ylabel("$log_{10}(\epsilon)_{max}$", size = 20); plt.yticks(size = 15)
+        plt.xscale("log")
+        plt.tight_layout()
+        plt.legend(fontsize = 15)
+        plt.savefig("maximum_relative_error.pdf")
     plt.show()
