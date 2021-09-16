@@ -9,41 +9,29 @@
 using namespace arma;
 using namespace std;
 
+mat num(double N, double a, double d);
 mat anal(double N);
 vec eigen_values(double N, double a, double d);
 
 int main() {
-    // Trying to do problem 3, but none of it is done with classes yet
     double n = 7;
     double N = (n-1);
     double h = 1/n;
-    mat A = mat(N, N).fill(0.); // unfilled matrix
     double a = -1/(h*h);
     double d = 2/(h*h);
-    vec lambda = vec(N);
 
-    // filling main diagonal with 2/(h*h)
-    for (int i = 0; i < N; i++){
-            A(i, i) = d;
-    }
-
-    // filling sub- and superdiagonal with -1/(h*h)
-    for (int i = 0; i < N-1; i++){
-            A(i, i+1) = a;
-            A(i+1, i) = a;
-    }
-
+    mat A = num(N, a, d);
     vec eigval;
     mat eigvec;
     eig_sym(eigval, eigvec, A);
+
+    mat V = normalise(anal(N), 2, 0);
+    vec Lambda = eigen_values(N, a, d);
+
     eigvec.print();
     cout << " " << endl;
     eigval.print();
-
     cout << " " << endl;
-    //mat V = anal(N);
-    mat V = normalise(anal(N), 2, 0);
-    vec Lambda = eigen_values(N, a, d);
     V.print();
     cout << " " << endl;
     Lambda.print();
@@ -68,6 +56,52 @@ int main() {
     */
 
     return 0;
+}
+
+// A function that finds the max off-diag element of a symmetric matrix A.
+// - The matrix indices of the max element are returned by writing to the
+//   int references k and l (row and column, respectively)
+// - The value of the max element A(k,l) is returned as the function
+//   return value
+double max_offdiag_symmetric(const arma::mat& A, int& k, int& l)
+{
+  // Get size of the matrix A. Use e.g. A.n_rows, see the Armadillo documentation
+
+  // Possible consistency checks:
+  // Check that A is square and larger than 1x1. Here you can for instance use A.is_square(),
+  // see the Armadillo documentation.
+  //
+  // The standard function 'assert' from <assert.h> can be useful for quick checks like this
+  // during the code development phase. Use it like this: assert(some condition),
+  // e.g assert(a==b). If the condition evaluates to false, the program is killed with
+  // an assertion error. More info: https://www.cplusplus.com/reference/cassert/assert/
+
+  // Initialize references k and l to the first off-diagonal element of A
+
+  // Initialize a double variable 'maxval' to A(k,l). We'll use this variable
+  // to keep track of the largest off-diag element.
+
+  // Loop through all elements in the upper triangle of A (not including the diagonal)
+  // When encountering a matrix element with larger absolute value than the current value of maxval,
+  // update k, l and max accordingly.
+
+  // Return maxval 
+}
+
+
+mat num(double N, double a, double d){
+    mat A = mat(N, N).fill(0.);
+    for (int i = 0; i < N; i++){
+        // filling main diagonal with d:
+        A(i, i) = d;
+    }
+
+    for (int i = 0; i < N-1; i++){
+        // filling sub- and superdiagonal with a:
+        A(i, i+1) = a;
+        A(i+1, i) = a;
+    }
+    return A;
 }
 
 mat anal(double N){
