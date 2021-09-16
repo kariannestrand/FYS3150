@@ -1,6 +1,6 @@
 #include "derived.hpp"
 
-DerivedClass::DerivedClass(double c0, double c1, double c2) : Line(c0, c1){ //Here we reuse the constructor of the Line class. Note the syntax!
+DerivedClass::DerivedClass(double c0, double c1, double c2) : MyClass(c0, c1){ //Here we reuse the constructor of the Line class. Note the syntax!
     c2_ = c2; //Assign the higher order coefficient. The others are assigned in Line(c0,c1).
 }
 
