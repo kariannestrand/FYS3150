@@ -11,11 +11,12 @@ using namespace arma;
 using namespace std;
 
 mat num(int N, double a, double d);
-mat anal(int N);
+mat eigen_vectors(int N);
 vec eigen_values(int N, double a, double d);
-double max_offdiag_symmetric(const mat& A, int& k, int& l);
+double max_offdiag_symmetric(const mat &A, int &k, int &l);
+void rotation(int N, mat &A, mat &R, double k, double l, double tol);
 
-int main() {
+int main(){
     int n = 7;
     int N = (n-1);
     double h = 1./n;
@@ -28,8 +29,8 @@ int main() {
     mat eigvec;
     eig_sym(eigval, eigvec, A);
 
-    mat V = normalise(anal(N), 2, 0);
-    vec Lambda = eigen_values(N, a, d);
+    // mat V = normalise(eigen_vectors(N), 2, 0);
+    // vec Lambda = eigen_values(N, a, d);
 
     /*
     eigvec.print();
@@ -51,8 +52,6 @@ int main() {
     int l;
 
     double maxval_B = max_offdiag_symmetric(B, k, l);
-    cout << k <<  " " << l << endl;
-    cout << maxval_B << endl;
 
 
     double maxval_A = max_offdiag_symmetric(A, k, l);
@@ -61,6 +60,9 @@ int main() {
 
     mat R = mat(N, N).eye();
 
+    rotation(N, A, R, k, l, tol);
+    A.print();
+    R.print();
 
     /*
     // Line example
@@ -116,7 +118,7 @@ mat num(int N, double a, double d){
     return A;
 }
 
-mat anal(int N){
+mat eigen_vectors(int N){
     mat V = mat(N, N).fill(0.);
     for (int i = 0; i < N; i++){
         for (int j = 0; j < N; j++){
@@ -135,23 +137,26 @@ vec eigen_values(int N, double a, double d){
     return Lambda;
 }
 
-void rotation(int N, mat A, double k, double l, double tol){
+void rotation(int N, mat &A, mat &R, double k, double l, double tol){
     while (A(k, l) > tol){
+
         double tau = (A(l, l) - A(k, k))/(2*A(k, l));
-        double t = tau +- sqrt(1 + tau*tau);
+        double t;
+        double c = 1/sqrt(1 + tau*tau);
+        double s = c*t;
+
         if (tau > 0){
             t = 1/(tau + sqrt(1 + tau*tau));
         }
-        if else (tau < 0){
+        if (tau < 0){
             t = -1/(-tau + sqrt(1 + tau*tau));
         }
-        double c = 1/sqrt(1 + tau*tau)
-        if (A(k, l) = 0){
+        if (A(k, l) == 0){
             c = 1;
             s = 0;
             t = 0;
         }
-        s = c*t
+
 
         A(k, k) = A(k, k)*c*c - 2*A(k, l)*c*s + A(l, l)*s*s;
         A(l, l) = A(l, l)*c*c + 2*A(k, l)*c*s + A(k, k)*s*s;
@@ -159,11 +164,17 @@ void rotation(int N, mat A, double k, double l, double tol){
         A(l, k) = 0;
 
 
-        for (int i = 0; i != l && int i != k); i < N; i++){
+        // make sure to keep A_m(i, k) and A_m+1(i, k) separate! ?
+        for (int i = 0; i != l && i != k && i < N; i++){
             A(i, k) = A(i, l)*c - A(i, l)*s;
             A(k, i) = A(i, k);
             A(i, l) = A(i, l)*c + A(i, k)*s;
             A(l, i) = A(i, l);
+        }
+
+        for (int i = 0; i < N; i++){
+            R(i, k) = R(i, k)*c - R(i, l)*s;
+            R(i, l) = R(i, l)*c + R(i, k)*s;
         }
     }
 }
