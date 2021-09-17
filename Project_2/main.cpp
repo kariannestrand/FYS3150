@@ -12,6 +12,7 @@ using namespace std;
 mat num(double N, double a, double d);
 mat anal(double N);
 vec eigen_values(double N, double a, double d);
+double max_offdiag_symmetric(const arma::mat& B, int& k, int& l);
 
 int main() {
     double n = 7;
@@ -58,18 +59,21 @@ int main() {
     return 0;
 }
 
+
 // A function that finds the max off-diag element of a symmetric matrix A.
 // - The matrix indices of the max element are returned by writing to the
 //   int references k and l (row and column, respectively)
 // - The value of the max element A(k,l) is returned as the function
 //   return value
-double max_offdiag_symmetric(const arma::mat& A, int& k, int& l)
-{
+double max_offdiag_symmetric(const arma::mat& B, int& k, int& l){
+    mat B = mat(N, N).fill(0.);
+    for i in range
   // Get size of the matrix A. Use e.g. A.n_rows, see the Armadillo documentation
 
   // Possible consistency checks:
   // Check that A is square and larger than 1x1. Here you can for instance use A.is_square(),
   // see the Armadillo documentation.
+    cout << B.is_square() << endl;
   //
   // The standard function 'assert' from <assert.h> can be useful for quick checks like this
   // during the code development phase. Use it like this: assert(some condition),
@@ -85,9 +89,8 @@ double max_offdiag_symmetric(const arma::mat& A, int& k, int& l)
   // When encountering a matrix element with larger absolute value than the current value of maxval,
   // update k, l and max accordingly.
 
-  // Return maxval 
+  return maxval; // Return maxval 
 }
-
 
 mat num(double N, double a, double d){
     mat A = mat(N, N).fill(0.);
