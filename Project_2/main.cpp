@@ -1,16 +1,9 @@
-// #include "class.hpp"
-// #include "derived.hpp"
-
-#include <armadillo>
-#include <iostream>
-#include <iomanip>
-#include <chrono>
-#include <assert.h>
+#include "class.hpp"
 
 using namespace arma;
 using namespace std;
 
-mat num(int N, double a, double d);
+//mat num(int N, double a, double d);
 mat eigen_vectors(int N);
 vec eigen_values(int N, double a, double d);
 double max_offdiag_symmetric(const mat &A, int &k, int &l);
@@ -22,9 +15,11 @@ int main(){
     double h = 1./n;
     double a = -1./(h*h);
     double d = 2./(h*h);
-    double tol = 1e-8;
+    double tol = 1e-12;
 
-    mat A = num(N, a, d);
+    MyClass numerical = MyClass(N, a, d);
+    mat A = numerical.num();
+
     vec eigval;
     mat eigvec;
     eig_sym(eigval, eigvec, A);
@@ -32,10 +27,10 @@ int main(){
     mat V = normalise(eigen_vectors(N), 2, 0);
     vec Lambda = eigen_values(N, a, d);
 
+    //A.print();
 
-    eigvec.print();
-    cout << " " << endl;
-    eigval.print();
+    //cout << " " << endl;
+    //eigval.print();
     cout << " " << endl;
 
     mat B = mat(4, 4).eye();
@@ -53,14 +48,26 @@ int main(){
     mat R = mat(N, N).eye();
 
     int count = 0;
-    while (maxval_A > tol){
-        count += 1;
+    while (maxval_A >= tol){
+        count ++;
         rotation(N, A, R, k, l, tol);
         maxval_A = max_offdiag_symmetric(A, k, l);
-        }
-    A.print();
+        //cout << " " << endl;
+        //cout << maxval_A << endl;
+    }
+    //A.print();
     R.print();
-    cout << count << endl;
+    cout << " " << endl;
+    normalise(R).print();
+    cout << " " << endl;
+    eigvec.print();
+    cout << " " << endl;
+    eigval.print();
+    cout << " " << endl;
+    A.print();
+    //cout << count << endl;
+
+
 
     return 0;
 }
@@ -71,9 +78,9 @@ double max_offdiag_symmetric(const mat &A, int &k, int &l){
     assert(A.is_square());                  // assert is an included function that makes sure the argument is true. We make sure the matrix is a nxn-matrix (square matrix)
 
     double maxval = 0.;                     // declears maxval
-    for (int j = 0; j < n; j++){            // the for loop iterates in the lower triangle of the matrix where the row index always is always bigger than the column index
-        for (int i = j+1; i < n; i++){
-            if (abs(A(i, j)) > maxval){     // if the next element is bigger than the previous, save it as maxval
+    for (int i = 0; i < n; i++){            // the for loop iterates in the lower triangle of the matrix where the row index always is always bigger than the column index
+        for (int j = 0; j < n; j++){
+            if (abs(A(i, j)) > maxval && i !=j){     // if the next element is bigger than the previous, save it as maxval
                 maxval = abs(A(i, j));
                 k = i;                      // indices of row for maxval
                 l = j;                      // indices of column for maxval
@@ -82,7 +89,7 @@ double max_offdiag_symmetric(const mat &A, int &k, int &l){
     }
     return maxval;
 }
-
+/*
 mat num(int N, double a, double d){
     mat A = mat(N, N).fill(0.);
 
@@ -99,7 +106,7 @@ mat num(int N, double a, double d){
 
     return A;
 }
-
+*/
 mat eigen_vectors(int N){
     mat V = mat(N, N).fill(0.);
     for (int i = 0; i < N; i++){
@@ -119,29 +126,22 @@ vec eigen_values(int N, double a, double d){
     return Lambda;
 }
 
-
-
 void rotation(int N, mat &A, mat &R, double k, double l, double tol){
-    double tau = (A(l, l) - A(k, k))/(2*A(k, l));
-    double t;
+    double t,c,s,tau;
 
-    if (tau >= 0.0){
-        t = 1/(tau + sqrt(1 + tau*tau));
-    }
-    if (tau < 0.0){
-        t = -1/(-tau + sqrt(1 + tau*tau));
-    }
-    double c = 1/sqrt(1 + t*t);
-    double s = c*t;
-
-    if (A(k, l) == 0.0){
+    if (A(k,l) != 0.0){
+        tau = (A(l, l) - A(k, k))/(2*A(k, l));
+        if (tau >= 0.0){
+            t = 1/(tau + sqrt(1 + tau*tau));
+        }else{
+            t = -1/(-tau + sqrt(1 + tau*tau));
+        }
+        c = 1/sqrt(1 + t*t);
+        s = c*t;
+    }else{
         c = 1.0;
         s = 0.0;
     }
-
-
-
-
 
     double a_kk_m = A(k, k);
     A(k, k) = A(k, k)*c*c - 2*A(k, l)*c*s + A(l, l)*s*s;

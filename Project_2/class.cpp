@@ -4,17 +4,30 @@ using namespace arma;
 using namespace std;
 
 //This is how a constructor looks like in practice in the source file
-MyClass::MyClass(double c0, double c1){
+MyClass::MyClass(int N, double a, double d){
   //definition of constructor
   //Assign member variables c0_ and c1_ to input variables c0 and c1, respectively.
-  c0_ = c0;
-  c1_ = c1;
+  N_ = N;
+  a_ = a;
+  d_ = d;
 }
 
 //Definitions of other class methods come here.
 
 
-double MyClass::compute_val(double x){
-    //Returns the value of a straight line for an input x.
-    return c0_ + c1_*x;
+mat MyClass::num(){
+    mat A = mat(N_, N_).fill(0.);
+
+    for (int i = 0; i < N_-1; i++){
+        // filling main diagonal with d:
+        A(i, i) = d_;
+        // filling sub- and superdiagonal with a:
+        A(i, i+1) = a_;
+        A(i+1, i) = a_;
+    }
+
+    // filling the last element in the main diagonal with d:
+    A(N_-1, N_-1) = d_;
+
+    return A;
 }
