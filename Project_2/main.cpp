@@ -166,9 +166,10 @@ void rotation(int N, mat &A, mat &R, double k, double l, double tol){
 
         // make sure to keep A_m(i, k) and A_m+1(i, k) separate! ?
         for (int i = 0; i != l && i != k && i < N; i++){
+            double a_ik_m = A(i, k);
             A(i, k) = A(i, l)*c - A(i, l)*s;
             A(k, i) = A(i, k);
-            A(i, l) = A(i, l)*c + A(i, k)*s;
+            A(i, l) = A(i, l)*c + a_ik_m*s;
             A(l, i) = A(i, l);
         }
 
