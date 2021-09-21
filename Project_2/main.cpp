@@ -151,12 +151,14 @@ void rotation(int N, mat &A, mat &R, double k, double l, double tol){
         if (tau < 0){
             t = -1/(-tau + sqrt(1 + tau*tau));
         }
+        
+        /*
         if (A(k, l) == 0){
             c = 1;
             s = 0;
             t = 0;
         }
-
+        */
 
         A(k, k) = A(k, k)*c*c - 2*A(k, l)*c*s + A(l, l)*s*s;
         A(l, l) = A(l, l)*c*c + 2*A(k, l)*c*s + A(k, k)*s*s;
