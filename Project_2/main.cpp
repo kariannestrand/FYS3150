@@ -4,7 +4,7 @@ using namespace arma;
 using namespace std;
 
 //mat num(int N, double a, double d);
-mat eigen_vectors(int N);
+// mat eigen_vectors(int N);
 vec eigen_values(int N, double a, double d);
 double max_offdiag_symmetric(const mat &A, int &k, int &l);
 void rotation(int N, mat &A, mat &R, double k, double l, double tol);
@@ -19,12 +19,12 @@ int main(){
 
     MyClass numerical = MyClass(N, a, d);
     mat A = numerical.num();
+    mat V = normalise(numerical.eigen_vectors(), 2, 0);
 
     vec eigval;
     mat eigvec;
     eig_sym(eigval, eigvec, A);
 
-    mat V = normalise(eigen_vectors(N), 2, 0);
     vec Lambda = eigen_values(N, a, d);
 
     //A.print();
@@ -89,6 +89,7 @@ double max_offdiag_symmetric(const mat &A, int &k, int &l){
     }
     return maxval;
 }
+
 /*
 mat num(int N, double a, double d){
     mat A = mat(N, N).fill(0.);
@@ -106,7 +107,7 @@ mat num(int N, double a, double d){
 
     return A;
 }
-*/
+
 mat eigen_vectors(int N){
     mat V = mat(N, N).fill(0.);
     for (int i = 0; i < N; i++){
@@ -117,6 +118,7 @@ mat eigen_vectors(int N){
     }
     return V;
 }
+*/
 
 vec eigen_values(int N, double a, double d){
     vec Lambda = vec(N);

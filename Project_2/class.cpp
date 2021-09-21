@@ -31,3 +31,14 @@ mat MyClass::num(){
 
     return A;
 }
+
+mat MyClass::eigen_vectors(){
+    mat V = mat(N_, N_).fill(0.);
+    for (int i = 0; i < N_; i++){
+        for (int j = 0; j < N_; j++){
+            //V(j,i) = (i+1)*(j+1);
+            V(j, i) = sin((i+1)*(j+1)*M_PI/(N_+1));
+        }
+    }
+    return V;
+}
