@@ -1,18 +1,10 @@
-mac: compile_m link_m execute
-linux: compile_l link_l execute
+all: compile link execute
 
-compile_m:
+compile:
 	g++ -c *.cpp -std=c++11
 
-link_m:
+link:
 	g++ -o main.exe *.o -larmadillo
-
-
-compile_l:
-	g++ -c *.cpp
-
-link_l:
-	g++ -o main.exe *.o
 
 execute:
 	./main.exe
