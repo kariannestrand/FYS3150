@@ -29,18 +29,14 @@ int main(){
     mat eigvec;
     eig_sym(eigval, eigvec, A);
 
-    // mat V = normalise(eigen_vectors(N), 2, 0);
-    // vec Lambda = eigen_values(N, a, d);
+    mat V = normalise(eigen_vectors(N), 2, 0);
+    vec Lambda = eigen_values(N, a, d);
 
-    /*
+
     eigvec.print();
     cout << " " << endl;
     eigval.print();
     cout << " " << endl;
-    V.print();
-    cout << " " << endl;
-    Lambda.print();
-    */
 
     mat B = mat(4, 4).eye();
     B(3, 0) = 0.5;
@@ -52,33 +48,19 @@ int main(){
     int l;
 
     double maxval_B = max_offdiag_symmetric(B, k, l);
-
-
     double maxval_A = max_offdiag_symmetric(A, k, l);
-    cout << k <<  " " << l << endl;
-    cout << maxval_A << endl;
 
     mat R = mat(N, N).eye();
 
-    rotation(N, A, R, k, l, tol);
+    int count = 0;
+    while (maxval_A > tol){
+        count += 1;
+        rotation(N, A, R, k, l, tol);
+        maxval_A = max_offdiag_symmetric(A, k, l);
+        }
     A.print();
     R.print();
-
-    /*
-    // Line example
-    double x = 2; //Point to evaluate the polynomials in
-    double c0 = 1, c1 = 1; //Coefficients of the straight line.
-    MyClass my_line = Line(c0, c1); //Create a Line object called my_line
-    double y = my_line.compute_val(x); //Compute y = c0 + c1*x for a given x.
-    */
-
-    // quadratic example
-    /*
-    double x = 2; //Point to evaluate the polynomials in
-    double c0 = 1, c1 = 1, c2 = 1;
-    DerivedClass my_quad = DerivedClass(c0, c1, c2); //Call constructor and create Quadratic object my_quad.
-    double y = my_quad.compute_val(x); //Compute y = c0 + c1*x + c2*x*x.
-    */
+    cout << count << endl;
 
     return 0;
 }
@@ -137,45 +119,51 @@ vec eigen_values(int N, double a, double d){
     return Lambda;
 }
 
+
+
 void rotation(int N, mat &A, mat &R, double k, double l, double tol){
-    while (A(k, l) > tol){
+    double tau = (A(l, l) - A(k, k))/(2*A(k, l));
+    double t;
 
-        double tau = (A(l, l) - A(k, k))/(2*A(k, l));
-        double t;
-        double c = 1/sqrt(1 + tau*tau);
-        double s = c*t;
+    if (tau >= 0.0){
+        t = 1/(tau + sqrt(1 + tau*tau));
+    }
+    if (tau < 0.0){
+        t = -1/(-tau + sqrt(1 + tau*tau));
+    }
+    double c = 1/sqrt(1 + t*t);
+    double s = c*t;
 
-        if (tau > 0){
-            t = 1/(tau + sqrt(1 + tau*tau));
-        }
-        if (tau < 0){
-            t = -1/(-tau + sqrt(1 + tau*tau));
-        }
-        if (A(k, l) == 0){
-            c = 1;
-            s = 0;
-            t = 0;
-        }
+    if (A(k, l) == 0.0){
+        c = 1.0;
+        s = 0.0;
+    }
 
 
-        A(k, k) = A(k, k)*c*c - 2*A(k, l)*c*s + A(l, l)*s*s;
-        A(l, l) = A(l, l)*c*c + 2*A(k, l)*c*s + A(k, k)*s*s;
-        A(l, k) = 0;
-        A(l, k) = 0;
 
 
-        // make sure to keep A_m(i, k) and A_m+1(i, k) separate! ?
-        for (int i = 0; i != l && i != k && i < N; i++){
+
+    double a_kk_m = A(k, k);
+    A(k, k) = A(k, k)*c*c - 2*A(k, l)*c*s + A(l, l)*s*s;
+    A(l, l) = A(l, l)*c*c + 2*A(k, l)*c*s + a_kk_m*s*s;
+    A(k, l) = 0.0;
+    A(l, k) = 0.0;
+
+
+    // make sure to keep A_m(i, k) and A_m+1(i, k) separate! ?
+    for (int i = 0; i < N; i++){
+        if (i != l && i != k){
             double a_ik_m = A(i, k);
-            A(i, k) = A(i, l)*c - A(i, l)*s;
+            A(i, k) = A(i, k)*c - A(i, l)*s;
             A(k, i) = A(i, k);
             A(i, l) = A(i, l)*c + a_ik_m*s;
             A(l, i) = A(i, l);
         }
+    }
 
-        for (int i = 0; i < N; i++){
-            R(i, k) = R(i, k)*c - R(i, l)*s;
-            R(i, l) = R(i, l)*c + R(i, k)*s;
-        }
+    for (int i = 0; i < N; i++){
+        double r_ik_m = R(i, k)*s;
+        R(i, k) = R(i, k)*c - R(i, l)*s;
+        R(i, l) = R(i, l)*c + r_ik_m*s;
     }
 }
