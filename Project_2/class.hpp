@@ -14,7 +14,7 @@ private:
 public:
     MyClass(int N, double a, double d);
 
-    arma::mat num();
+    arma::mat tridiag_matrix();
     arma::mat eigen_vectors();
     arma::vec eigen_values();
     double max_offdiag_symmetric(arma::mat &A, int &k, int &l);

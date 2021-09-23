@@ -3,7 +3,6 @@
 using namespace arma;
 using namespace std;
 
-//This is how a constructor looks like in practice in the source file
 MyClass::MyClass(int N, double a, double d){
   //definition of constructor
   //Assign member variables c0_ and c1_ to input variables c0 and c1, respectively.
@@ -12,10 +11,7 @@ MyClass::MyClass(int N, double a, double d){
   d_ = d;
 }
 
-//Definitions of other class methods come here.
-
-
-mat MyClass::num(){
+mat MyClass::tridiag_matrix(){
     mat A = mat(N_, N_).fill(0.);
 
     for (int i = 0; i < N_-1; i++){
@@ -56,8 +52,8 @@ double MyClass::max_offdiag_symmetric(mat &A, int &k, int &l){
     assert(A.is_square());                        // assert is an included function that makes sure the argument is true. We make sure the matrix is a nxn-matrix (square matrix)
 
     double maxval = 0.;                            // declears maxval
-    for (int i = 0; i < n; i++){                   // the for loop iterates in the lower triangle of the matrix where the row index always is always bigger than the column index
-        for (int j = 0; j < n; j++){
+    for (int j = 0; j < n; j++){                   // the for loop iterates in the lower triangle of the matrix where the row index always is always bigger than the column index
+        for (int i = j + 1; i < n; i++){
             if (abs(A(i, j)) > maxval && i !=j){  // if the next element is bigger than the previous, save it as maxval
                 maxval = abs(A(i, j));
                 k = i;                            // indices of row for maxval
@@ -68,9 +64,8 @@ double MyClass::max_offdiag_symmetric(mat &A, int &k, int &l){
     return maxval;
 }
 
-
 void MyClass::rotation(mat &A, mat &R, int k, int l){
-    double t,c,s,tau;
+    double t, c, s, tau;
 
     if (A(k,l) != 0.0){
         tau = (A(l, l) - A(k, k))/(2*A(k, l));
