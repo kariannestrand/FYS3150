@@ -14,6 +14,17 @@ int main(int argc, char* argv[]){
     int k;                              // declearing maximum value row-index
     int l;                              // declearing maximum value column-index
 
+    /*
+    void write(vector<string> v){
+    	ofstream file;
+    	file.open("text.txt");
+    	for(int i=0;i<v.size();++i){
+    		file<<v[i]<<endl;
+    	}
+    	file.close();
+    }
+    */
+
     MyClass myclass = MyClass(N, a, d); // calling MyClass
 
     mat A = myclass.tridiag_matrix();   // creating matrix A with a and d on tridiagonal
