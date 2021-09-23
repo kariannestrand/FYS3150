@@ -3,23 +3,14 @@
 using namespace arma;
 using namespace std;
 
-<<<<<<< HEAD
-=======
-// Constructor
->>>>>>> f23d78ee4efbd77277d468c850a8b74b6ace1cc2
 MyClass::MyClass(int N, double a, double d){
-  //definition of constructor
-  //Assign member variables c0_ and c1_ to input variables c0 and c1, respectively.
   N_ = N;
   a_ = a;
   d_ = d;
 }
 
-<<<<<<< HEAD
+
 mat MyClass::tridiag_matrix(){
-=======
-mat MyClass::num(){
->>>>>>> f23d78ee4efbd77277d468c850a8b74b6ace1cc2
     mat A = mat(N_, N_).fill(0.);
 
     for (int i = 0; i < N_-1; i++){
@@ -112,4 +103,13 @@ void MyClass::rotation(mat &A, mat &R, int k, int l){
         R(i, k) = R(i, k)*c - R(i, l)*s;
         R(i, l) = R(i, l)*c + r_ik_m*s;
     }
+}
+
+void MyClass::write(mat R, int number){
+    ofstream file;
+    file.open("eigvec_" + to_string(number) + ".txt");
+    for(int i = 0; i < R.size(); ++i){
+        file << R[i] << endl;
+    }
+    file.close();
 }
