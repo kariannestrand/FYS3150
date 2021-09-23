@@ -5,9 +5,15 @@ using namespace std;
 
 //mat num(int N, double a, double d);
 // mat eigen_vectors(int N);
+<<<<<<< HEAD
 vec eigen_values(int N, double a, double d);
 double max_offdiag_symmetric(const mat &A, int &k, int &l);
 void rotation(int N, mat &A, mat &R, int k, int l, double tol);
+=======
+// vec eigen_values(int N, double a, double d);
+// double max_offdiag_symmetric(const mat &A, int &k, int &l);
+// void rotation(int N, mat &A, mat &R, double k, double l, double tol);
+>>>>>>> 92712d1d02e799a3297a79975999203836e47b4b
 
 int main(){
     int n = 7;
@@ -16,23 +22,20 @@ int main(){
     double a = -1./(h*h);
     double d = 2./(h*h);
     double tol = 1e-12;
+    int k;
+    int l;
 
-    MyClass numerical = MyClass(N, a, d);
-    mat A = numerical.num();
-    mat V = normalise(numerical.eigen_vectors(), 2, 0);
+    MyClass myclass = MyClass(N, a, d);
 
-    vec eigval;
-    mat eigvec;
-    eig_sym(eigval, eigvec, A);
 
-    vec Lambda = eigen_values(N, a, d);
-
-    //A.print();
-
+<<<<<<< HEAD
     //cout << " " << endl;
     //eigval.print();
     //eigvec.print()
     cout << " " << endl;
+=======
+    mat A = myclass.num();
+>>>>>>> 92712d1d02e799a3297a79975999203836e47b4b
 
     mat B = mat(4, 4).eye();
     B(3, 0) = 0.5;
@@ -40,22 +43,28 @@ int main(){
     B(1, 2) = -0.7;
     B(2, 1) = -0.7;
 
-    int k;
-    int l;
-
-    double maxval_B = max_offdiag_symmetric(B, k, l);
-    double maxval_A = max_offdiag_symmetric(A, k, l);
-
     mat R = mat(N, N).eye();
+
+
+    vec eigval;
+    mat eigvec;
+    eig_sym(eigval, eigvec, A);
+
+    mat V = normalise(myclass.eigen_vectors(), 2, 0);
+    vec Lambda = myclass.eigen_values();
+
+
+    double maxval_B = myclass.max_offdiag_symmetric(B, k, l);
+    double maxval_A = myclass.max_offdiag_symmetric(A, k, l);
+
 
     int count = 0;
     while (maxval_A >= tol){
         count ++;
-        rotation(N, A, R, k, l, tol);
-        maxval_A = max_offdiag_symmetric(A, k, l);
-        //cout << " " << endl;
-        //cout << maxval_A << endl;
+        myclass.rotation(A, R, k, l);
+        maxval_A = myclass.max_offdiag_symmetric(A, k, l);
     }
+<<<<<<< HEAD
     //A.print();
     R.print();
     //cout << " " << endl;
@@ -167,3 +176,26 @@ void rotation(int N, mat &A, mat &R, int k, int l, double tol){
         R(i, l) = R(i, l)*c + r_ik_m*s;
     }
 }
+=======
+
+
+
+    eigvec.print();
+    cout << " " << endl;
+    V.print();
+    cout << " " << endl;
+    R.print();
+    cout << " " << endl;
+
+    eigval.print();
+    cout << " " << endl;
+    Lambda.print();
+    cout << " " << endl;
+    A.print();
+
+
+    //cout << count << endl;
+
+    return 0;
+}
+>>>>>>> 92712d1d02e799a3297a79975999203836e47b4b

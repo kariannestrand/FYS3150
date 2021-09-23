@@ -16,6 +16,9 @@ public:
 
     arma::mat num();
     arma::mat eigen_vectors();
+    arma::vec eigen_values();
+    double max_offdiag_symmetric(arma::mat &A, int &k, int &l);
+    void rotation(arma::mat &A, arma::mat &R, int k, int l);
 };
 
 #endif
