@@ -14,17 +14,6 @@ int main(int argc, char* argv[]){
     int k;                              // declearing maximum value row-index
     int l;                              // declearing maximum value column-index
 
-    /*
-    void write(vector<string> v){
-    	ofstream file;
-    	file.open("text.txt");
-    	for(int i=0;i<v.size();++i){
-    		file<<v[i]<<endl;
-    	}
-    	file.close();
-    }
-    */
-
     MyClass myclass = MyClass(N, a, d); // calling MyClass
 
     mat A = myclass.tridiag_matrix();   // creating matrix A with a and d on tridiagonal
@@ -91,17 +80,18 @@ int main(int argc, char* argv[]){
         cout << count << endl;
     }
 
+    // makes txt-files with R-columns if make_txt_files = true
+    bool make_txt_files = true;
+    if (make_txt_files){
+        vec A_eigvals = vec(N).fill(0.);
+        for (int i = 0; i < N; i++){
+            A_eigvals(i) = A(i, i);
+        }
+        uvec eigval_indices = sort_index(A_eigvals);
 
-    vec A_eigvals = vec(N).fill(0.);
-    for (int i = 0; i < N; i++){
-        A_eigvals(i) = A(i, i);
+        myclass.write(R.col(eigval_indices(0)), 1);
+        myclass.write(R.col(eigval_indices(1)), 2);
+        myclass.write(R.col(eigval_indices(2)), 3);
     }
-
-    //cout << A_eigvals << endl;
-    uvec p = sort_index(A_eigvals);
-    cout << R.col(p(0)) << endl;
-    cout << R.col(p(1)) << endl;
-    cout << R.col(p(2)) << endl;
-
     return 0;
 }
