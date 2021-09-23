@@ -1,4 +1,4 @@
-all: compile link execute
+all: compile link
 
 compile:
 	g++ -c *.cpp -std=c++11
@@ -6,5 +6,3 @@ compile:
 link:
 	g++ -o main.exe *.o -larmadillo
 
-execute:
-	./main.exe

@@ -3,7 +3,7 @@
 using namespace arma;
 using namespace std;
 
-//This is how a constructor looks like in practice in the source file
+// Constructor
 MyClass::MyClass(int N, double a, double d){
   //definition of constructor
   //Assign member variables c0_ and c1_ to input variables c0 and c1, respectively.
@@ -11,9 +11,6 @@ MyClass::MyClass(int N, double a, double d){
   a_ = a;
   d_ = d;
 }
-
-//Definitions of other class methods come here.
-
 
 mat MyClass::num(){
     mat A = mat(N_, N_).fill(0.);
@@ -67,7 +64,6 @@ double MyClass::max_offdiag_symmetric(mat &A, int &k, int &l){
     }
     return maxval;
 }
-
 
 void MyClass::rotation(mat &A, mat &R, int k, int l){
     double t,c,s,tau;

@@ -3,12 +3,6 @@
 using namespace arma;
 using namespace std;
 
-//mat num(int N, double a, double d);
-// mat eigen_vectors(int N);
-// vec eigen_values(int N, double a, double d);
-// double max_offdiag_symmetric(const mat &A, int &k, int &l);
-// void rotation(int N, mat &A, mat &R, double k, double l, double tol);
-
 int main(){
     int n = 7;
     int N = (n-1);
