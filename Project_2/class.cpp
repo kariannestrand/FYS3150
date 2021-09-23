@@ -3,10 +3,7 @@
 using namespace arma;
 using namespace std;
 
-<<<<<<< HEAD
-=======
 // Constructor
->>>>>>> f23d78ee4efbd77277d468c850a8b74b6ace1cc2
 MyClass::MyClass(int N, double a, double d){
   //definition of constructor
   //Assign member variables c0_ and c1_ to input variables c0 and c1, respectively.
@@ -15,11 +12,7 @@ MyClass::MyClass(int N, double a, double d){
   d_ = d;
 }
 
-<<<<<<< HEAD
-mat MyClass::tridiag_matrix(){
-=======
 mat MyClass::num(){
->>>>>>> f23d78ee4efbd77277d468c850a8b74b6ace1cc2
     mat A = mat(N_, N_).fill(0.);
 
     for (int i = 0; i < N_-1; i++){
