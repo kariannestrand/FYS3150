@@ -7,7 +7,7 @@ using namespace std;
 // mat eigen_vectors(int N);
 vec eigen_values(int N, double a, double d);
 double max_offdiag_symmetric(const mat &A, int &k, int &l);
-void rotation(int N, mat &A, mat &R, double k, double l, double tol);
+void rotation(int N, mat &A, mat &R, int k, int l, double tol);
 
 int main(){
     int n = 7;
@@ -31,6 +31,7 @@ int main(){
 
     //cout << " " << endl;
     //eigval.print();
+    //eigvec.print()
     cout << " " << endl;
 
     mat B = mat(4, 4).eye();
@@ -57,18 +58,15 @@ int main(){
     }
     //A.print();
     R.print();
-    cout << " " << endl;
-    normalise(R).print();
+    //cout << " " << endl;
+    //normalise(R).print();
     cout << " " << endl;
     eigvec.print();
-    cout << " " << endl;
-    eigval.print();
-    cout << " " << endl;
-    A.print();
+    //cout << " " << endl;
+    //eigval.print();
+    //cout << " " << endl;
+    //A.print();
     //cout << count << endl;
-
-
-
     return 0;
 }
 
@@ -128,7 +126,7 @@ vec eigen_values(int N, double a, double d){
     return Lambda;
 }
 
-void rotation(int N, mat &A, mat &R, double k, double l, double tol){
+void rotation(int N, mat &A, mat &R, int k, int l, double tol){
     double t,c,s,tau;
 
     if (A(k,l) != 0.0){
@@ -164,7 +162,7 @@ void rotation(int N, mat &A, mat &R, double k, double l, double tol){
     }
 
     for (int i = 0; i < N; i++){
-        double r_ik_m = R(i, k)*s;
+        double r_ik_m = R(i, k);
         R(i, k) = R(i, k)*c - R(i, l)*s;
         R(i, l) = R(i, l)*c + r_ik_m*s;
     }
