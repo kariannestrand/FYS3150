@@ -3,6 +3,19 @@
 using namespace arma;
 using namespace std;
 
+
+/*
+void write(vector<string> v){
+	ofstream file;
+	file.open("text.txt");
+	for(int i=0;i<v.size();++i){
+		file<<v[i]<<endl;
+	}
+	file.close();
+}
+*/
+
+
 int main(){
     int n = 7;
     int N = (n-1);
