@@ -14,9 +14,7 @@ int main(int argc, char* argv[]){
     int k;                              // declearing maximum value row-index
     int l;                              // declearing maximum value column-index
 
-
     MyClass myclass = MyClass(N, a, d); // calling MyClass
-
 
     mat A = myclass.tridiag_matrix();   // creating matrix A with a and d on tridiagonal
 
