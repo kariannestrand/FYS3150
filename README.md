@@ -6,3 +6,5 @@ Repository with the projects from FYS3150 at UiO done by Maria Lunde Oftedahl an
 The topic of the first [project](https://github.com/mariaoftedahl/FYS3150/tree/main/Project_1) is numerical solution of the one-dimensional Poisson equation. 
 
 ## Project 2
+
+The topic of the second [project](https://github.com/mariaoftedahl/FYS3150/tree/main/Project_2) is solving eigenvalue problems, using the Jacobi rotation method. 
