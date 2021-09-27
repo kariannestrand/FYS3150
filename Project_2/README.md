@@ -30,4 +30,4 @@ This will produce a file called main.exe. To run it, write the following in a co
 
     ./main.exe n
     
-where $n=N-1$ where $N$ is the size of the matrix.
+where n=N-1 where N is the size of the matrix.
