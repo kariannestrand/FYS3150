@@ -9,11 +9,14 @@
 
 class MyClass {
 private:
+    // declaration of variables only accessible from within the class
     int N_;
     double a_, d_;
 public:
+    // declaration of constructors
     MyClass(int N, double a, double d);
 
+    // declaration of other class methods
     arma::mat tridiag_matrix();
     arma::mat eigen_vectors();
     arma::vec eigen_values();
