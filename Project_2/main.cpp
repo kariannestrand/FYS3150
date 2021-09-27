@@ -86,7 +86,7 @@ int main(int argc, char* argv[]){
     }
 
     // makes txt-files with R-columns if make_txt_files = true
-    bool make_txt_files = true;
+    bool make_txt_files = false;
     if (make_txt_files){
         vec A_eigvals = vec(N).fill(0.);
         for (int i = 0; i < N; i++){
