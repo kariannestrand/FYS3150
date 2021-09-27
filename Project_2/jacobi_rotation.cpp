@@ -1,15 +1,15 @@
-#include "class.hpp"
+#include "jacobi_rotation.hpp"
 
 using namespace arma;
 using namespace std;
 
-MyClass::MyClass(int N, double a, double d){
+JacobiRotation::JacobiRotation(int N, double a, double d){
   N_ = N;
   a_ = a;
   d_ = d;
 }
 
-mat MyClass::tridiag_matrix(){
+mat JacobiRotation::tridiag_matrix(){
     mat A = mat(N_, N_).fill(0.);      // declearing NxN-matrix filled with zeros
 
     for (int i = 0; i < N_-1; i++){
@@ -26,7 +26,7 @@ mat MyClass::tridiag_matrix(){
     return A;
 }
 
-mat MyClass::eigen_vectors(){
+mat JacobiRotation::eigen_vectors(){
     mat V = mat(N_, N_).fill(0.);      // declearing NxN-matrix filled with zeros
     for (int i = 0; i < N_; i++){
         for (int j = 0; j < N_; j++){
@@ -36,7 +36,7 @@ mat MyClass::eigen_vectors(){
     return V;
 }
 
-vec MyClass::eigen_values(){
+vec JacobiRotation::eigen_values(){
     vec Lambda = vec(N_);             // declearing NxN-matrix filled with zeros
     for (int i = 0; i < N_; i++){
         Lambda(i) = d_ + 2*a_*cos((i+1)*M_PI/(N_+1));  // filling matrix with analytical expression for eigenvalues
@@ -44,7 +44,7 @@ vec MyClass::eigen_values(){
     return Lambda;
 }
 
-double MyClass::max_offdiag_symmetric(mat &A, int &k, int &l){
+double JacobiRotation::max_offdiag_symmetric(mat &A, int &k, int &l){
     int n = A.n_rows;                             // declears length of matrix
     assert(A.is_square());                        // assert is an included function that makes sure the argument is true. We make sure the matrix is a nxn-matrix (square matrix)
 
@@ -61,7 +61,7 @@ double MyClass::max_offdiag_symmetric(mat &A, int &k, int &l){
     return maxval;
 }
 
-void MyClass::rotation(mat &A, mat &R, int k, int l){
+void JacobiRotation::rotation(mat &A, mat &R, int k, int l){
     // Jacobi´s rotation method:
     double t, c, s, tau;
 
@@ -104,7 +104,7 @@ void MyClass::rotation(mat &A, mat &R, int k, int l){
     }
 }
 
-void MyClass::write(mat R, int number){
+void JacobiRotation::write(mat R, int number){
     // function that writes eigenvectors found with Jacobi´s rotation method to file
     ofstream file;
     file.open("eigvec_" + to_string(number) + ".txt");

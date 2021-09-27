@@ -1,5 +1,5 @@
-#ifndef CLASS_HPP
-#define CLASS_HPP
+#ifndef JACOBI_ROTATION_HPP
+#define JACOBI_ROTATION_HPP
 
 #include <armadillo>
 #include <iostream>
@@ -7,14 +7,14 @@
 #include <chrono>
 #include <assert.h>
 
-class MyClass {
+class JacobiRotation {
 private:
     // declaration of variables only accessible from within the class
     int N_;
     double a_, d_;
 public:
     // declaration of constructors
-    MyClass(int N, double a, double d);
+    JacobiRotation(int N, double a, double d);
 
     // declaration of other class methods
     arma::mat tridiag_matrix();
