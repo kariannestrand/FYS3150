@@ -7,14 +7,13 @@
 class Particle {
 public:
     // member variables
-    double q;               // charge of particle
-    double m;               // mass of particle
-    // constructor
-    Particle(double q, double m);
+    double q_;               // charge of particle
+    double m_;               // mass of particle
+    arma::vec r_;            // position of particle
+    arma::vec v_;            // velocity of particle
 
-    // member variables
-    arma::vec r();            // position of particle
-    arma::vec v();            // velocity of particle
+    // constructor
+    Particle(double q, double m, arma::vec r, arma::vec v);
 
 };
 
