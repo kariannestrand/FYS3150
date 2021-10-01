@@ -10,9 +10,8 @@ PenningTrap::PenningTrap(double B0, double V0, double d, arma::mat R, arma::mat 
 
     int n_particles = R.n_cols;         // number of particles is number of columns in matrix with positions
 
-
     // making contatiner for particle objects
-    
+
     for (int i = 0; i < n_particles; i++){
         particles_.push_back(Particle(q_vec(i), m_vec(i), R.col(i), V.col(i)));
     }
