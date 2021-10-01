@@ -2,6 +2,7 @@
 #define PARTICLE_HPP
 
 #include <armadillo>
+#include <iostream>
 
 class Particle {
 public:

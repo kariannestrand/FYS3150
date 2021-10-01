@@ -1,18 +1,22 @@
 #ifndef PENNINGTRAP_HPP
 #define PENNINGTRAP_HPP
   
-#include
+#include <armadillo>
+#include <iostream>
+#include <vector>
   
 class PenningTrap {
 public:
     // member variables
-    double B0_in;
-    double V0_in;
-    double d_in;
+    double B0_in;           // magnetic field strength
+    double V0_in;           // applied potential
+    double d_in;            // characteristic dimension
+    std::vector<Particle>   // to contain all the Particle objects in the Penning trap (not sure how to do this)
+
     // constructor
     PenningTrap(double B0_in, double V0_in, double d_in);
-    // class methods
 
+    // class methods
     void add_particle(Particle p_in);           // add a particle to the trap
     arma::vec external_E_field(arma::vec r);    // external electric field at point r=(x,y,z)  
     arma::vec external_B_field(arma::vec r);    // external magnetic field at point r=(x,y,z) 
