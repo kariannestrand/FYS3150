@@ -13,8 +13,12 @@ int main(int argc, char const *argv[])
     double V0 = 9.65e8;           // applied potential 
     double d = 10e4;              // characteristic dimension
 
-    int n = 3;                    // number of particles
+    double k_e = 1.38935333e5;     // Couloumb contant
+
+    int n = 1;                    // number of particles
     int dim = 3;                  // dimension (x,y,z)
+
+    vec r = vec(3).fill(0);      // initial condition for position (filled with zeros for now)
 
     vec q_vec = vec(n).fill(q);     // vector with charges
     vec m_vec = vec(n).fill(m);     // vector with masses
@@ -24,7 +28,12 @@ int main(int argc, char const *argv[])
 
     PenningTrap penningtrap = PenningTrap(B0, V0, d, R, V, q_vec, m_vec);    // calling penningtrap
 
-// printing individual masses, charges, positions and velocities (we dont need this but nice to see what the particles-container contains)
+    vec B = penningtrap.external_B_field(r);        // external B-field
+    vec E = penningtrap.external_E_field(r);        // external E-field
+    E.print();
+    
+
+/* printing individual masses, charges, positions and velocities (we dont need this but nice to see what the particles-container contains)
     double x;
     double y;
     for (int i = 0; i < n; i++){
@@ -37,7 +46,7 @@ int main(int argc, char const *argv[])
         y = penningtrap.particles_[i].m_;
         cout << "mass:" << y << endl;
     }
-
+*/
     return 0;
 
 }
