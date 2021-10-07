@@ -10,7 +10,7 @@ int main(int argc, char const *argv[])
     double m = 40.078;            // atomic mass of Ca+ [u]
 
     double B0 = 9.65e1;           // magnetic field strength
-    double V0 = 9.65e8;           // applied potential 
+    double V0 = 9.65e8;           // applied potential
     double d = 10e4;              // characteristic dimension
 
     double ke = 1.38935333e5;     // Couloumb constant
