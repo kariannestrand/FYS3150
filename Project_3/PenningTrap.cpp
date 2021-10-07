@@ -33,7 +33,9 @@ vec PenningTrap::external_E_field(int i){
     F(1) = -1.;
     F(2) = 2.;
 
-    vec E = (-V0_/(d_*d_)*F) % particles_[i].r_;      // E-field
+    vec r = particles_[i].r_;
+
+    vec E = - V0_/(d_*d_)*F % r;      // E-field
 
     return E;
 }
@@ -41,7 +43,12 @@ vec PenningTrap::external_E_field(int i){
 vec PenningTrap::force_particle(int i, int j){
     vec F;
     vec r = particles_[i].r_ - particles_[j].r_;
-    F = ke_ * (particles_[i].q_ * particles_[j].q_) / (abs(r)%abs(r)%abs(r)) % r;
+
+    double q_i = particles_[i].q_;
+    double q_j = particles_[j].q_;
+    vec dr = abs(r) % abs(r) % abs(r)
+
+    F = ke_*(q_i*q_j)/dr % r;
 
     return F;
 }
@@ -49,8 +56,12 @@ vec PenningTrap::force_particle(int i, int j){
 vec PenningTrap::total_force_external(int i){
     vec F = vec(3).fill(0);
     vec E = external_E_field(i);
+    vec B = external_B_field();
+    vec v = particles_[i].v_
 
-    F = particles_[i].q_ * E + cross(particles_[i].q_ * particles_[i].v_, external_B_field());
+    double q = particles_[i].q_;
+
+    F = q*E + cross(q*v, B);
 
     return F;
 }
