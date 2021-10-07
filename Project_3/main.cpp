@@ -25,7 +25,7 @@ int main(int argc, char const *argv[])
 
     mat R = mat(dim, n).randn();        // fill in initial conditions for position here, just have random values for now
     mat V = mat(dim, n).randn();        // fill in initial conditions for position here, just have random values for now
-    
+
 
     PenningTrap penningtrap = PenningTrap(B0, V0, d, ke, n, R, V, q_vec, m_vec);    // calling penningtrap
 

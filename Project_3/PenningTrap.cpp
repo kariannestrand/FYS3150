@@ -28,8 +28,8 @@ vec PenningTrap::external_B_field(){
 
 vec PenningTrap::external_E_field(int i){
     vec F = vec(3).fill(0);
-    // position of E-field       
-    F(0) = -1.;                     
+    // position of E-field
+    F(0) = -1.;
     F(1) = -1.;
     F(2) = 2.;
 
@@ -73,7 +73,7 @@ vec PenningTrap::total_force_particles(int i){
 vec PenningTrap::total_force(int i){
     vec F;
     F = total_force_particles(i) + total_force_external(i);
-    
+
     return F;
 
 }
