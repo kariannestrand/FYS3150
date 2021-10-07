@@ -1,11 +1,11 @@
 #ifndef PENNINGTRAP_HPP
 #define PENNINGTRAP_HPP
-  
+
 #include <armadillo>
 #include <iostream>
 #include <vector>
 #include "Particle.hpp"
-  
+
 class PenningTrap {
 public:
     // member variables
