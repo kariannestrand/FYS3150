@@ -9,7 +9,7 @@ int main(int argc, char const *argv[])
     double q = 20;                // charge of Ca+ particle [e]
     double m = 40.078;            // atomic mass of Ca+ [u]
 
-    double B0 = 9.65e1;           // magnetic field strength 
+    double B0 = 9.65e1;           // magnetic field strength
     double V0 = 9.65e8;           // applied potential 
     double d = 10e4;              // characteristic dimension
 
@@ -31,7 +31,7 @@ int main(int argc, char const *argv[])
     vec B = penningtrap.external_B_field(r);        // external B-field
     vec E = penningtrap.external_E_field(r);        // external E-field
     E.print();
-    
+
 
 /* printing individual masses, charges, positions and velocities (we dont need this but nice to see what the particles-container contains)
     double x;
