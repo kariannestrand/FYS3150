@@ -25,15 +25,16 @@ int main(int argc, char const *argv[])
 
     mat R = mat(dim, n).randn();        // fill in initial conditions for position here, just have random values for now
     mat V = mat(dim, n).randn();        // fill in initial conditions for position here, just have random values for now
+    mat F = mat(dim, n).randn();
 
     PenningTrap penningtrap = PenningTrap(B0, V0, d, ke, n, R, V, q_vec, m_vec);    // calling penningtrap
 
     vec B = penningtrap.external_B_field(r);        // external B-field
-    vec E = penningtrap.external_E_field(r);        // external E-field
-    vec F_particles = penningtrap.force_particle();
-    vec F_total_ext = penningtrap.total_force_external();
-    F_total_ext.print();
-
+    vec E = penningtrap.external_E_field(1);        // external E-field
+    vec F_particles = penningtrap.force_particle(0, 1);  // force from i to j
+    vec F_total_ext = penningtrap.total_force_external(E, B, 0);  // total external force on i
+    vec F_total_particle = penningtrap.total_force_particles(F_particles);
+    F_total_particle.print();
 
     return 0;
 
