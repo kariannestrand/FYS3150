@@ -4,12 +4,13 @@
 using namespace arma;
 using namespace std;
 
-PenningTrap::PenningTrap(double B0, double V0, double d, double ke, int n, mat R, mat V, vec q_vec, vec m_vec){
+PenningTrap::PenningTrap(double B0, double V0, double d, double ke, int n, int N, mat R, mat V, vec q_vec, vec m_vec){
     B0_ = B0;                   // magnetic field strength
     V0_ = V0;                   // applied potential
     d_ = d;                     // characteristic dimension
     ke_ = ke;
     n_ = n;
+    N_ = n;
 
     // making lis/contatiner for particle objects
 
@@ -40,6 +41,7 @@ vec PenningTrap::external_E_field(int i){
     return E;
 }
 
+
 vec PenningTrap::force_particle(int i, int j){
     vec F;
     vec r = particles_[i].r_ - particles_[j].r_;
@@ -53,6 +55,7 @@ vec PenningTrap::force_particle(int i, int j){
     return F;
 }
 
+
 vec PenningTrap::total_force_external(int i){
     vec F = vec(3).fill(0);
     vec E = external_E_field(i);
@@ -65,6 +68,7 @@ vec PenningTrap::total_force_external(int i){
 
     return F;
 }
+
 
 vec PenningTrap::total_force_particles(int i){
     vec F = vec(3).fill(0);
@@ -91,7 +95,7 @@ vec PenningTrap::total_force(int i){
 void PenningTrap::evolve_RK4(double dt){
 
 }
-
+*/
 void PenningTrap::evolve_forward_Euler(double dt){
     vec a;
     vec v;
@@ -113,8 +117,4 @@ void PenningTrap::evolve_forward_Euler(double dt){
     v(i+1) = v(i) + a(i)*dt;
     r(i+1) = r(i) + v(i+1)*dt;
 
-    return r;
-
 }
-
-*/

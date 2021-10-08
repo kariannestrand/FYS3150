@@ -18,6 +18,10 @@ int main(int argc, char const *argv[])
     int n = 2;                    // number of particles
     int dim = 3;                  // dimension (x,y,z)
 
+    double t = 100;
+    int N = 1000;
+    double dt = t/N;
+
     vec r = vec(3).fill(0);      // initial condition for position (filled with zeros for now)
 
     vec q_vec = vec(n).fill(q);     // vector with charges
@@ -27,7 +31,7 @@ int main(int argc, char const *argv[])
     mat V = mat(dim, n).randn();        // fill in initial conditions for position here, just have random values for now
 
 
-    PenningTrap penningtrap = PenningTrap(B0, V0, d, ke, n, R, V, q_vec, m_vec);    // calling penningtrap
+    PenningTrap penningtrap = PenningTrap(B0, V0, d, ke, n, N, R, V, q_vec, m_vec);    // calling penningtrap
 
     vec B = penningtrap.external_B_field();        // external B-field
     vec E = penningtrap.external_E_field(0);        // external E-field
