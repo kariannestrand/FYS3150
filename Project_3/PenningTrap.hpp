@@ -13,8 +13,8 @@ public:
     double V0_;           // applied potential
     double d_;            // characteristic dimension
     double ke_;           //coloumbs constant
-    int n_;
-    int N_;
+    int n_;               // number of particles
+    int N_;               // time steps
     std::vector<Particle> particles_;       // to contain all the Particle objects in the Penning trap
 
     // constructor

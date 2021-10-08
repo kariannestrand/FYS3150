@@ -18,9 +18,10 @@ int main(int argc, char const *argv[])
     int n = 2;                    // number of particles
     int dim = 3;                  // dimension (x,y,z)
 
-    double t = 100;
+    int t = 100;
     int N = 1000;
     double dt = t/N;
+
 
     vec r = vec(3).fill(0);      // initial condition for position (filled with zeros for now)
 
@@ -39,6 +40,7 @@ int main(int argc, char const *argv[])
     vec F_total_ext = penningtrap.total_force_external(0);  // total external force on i
     vec F_total_particles = penningtrap.total_force_particles(0);
     vec F_total = penningtrap.total_force(0);
+
     F_total.print();
 
     return 0;
