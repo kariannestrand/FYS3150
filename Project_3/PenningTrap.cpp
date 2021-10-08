@@ -4,15 +4,14 @@
 using namespace arma;
 using namespace std;
 
-PenningTrap::PenningTrap(double B0, double V0, double d, double ke, int n, int N, mat R, mat V, vec q_vec, vec m_vec){
+PenningTrap::PenningTrap(double B0, double V0, double d, double ke, int n, mat R, mat V, vec q_vec, vec m_vec){
     B0_ = B0;                   // magnetic field strength
     V0_ = V0;                   // applied potential
     d_ = d;                     // characteristic dimension
     ke_ = ke;
     n_ = n;
-    N_ = N;
 
-    // making lis/contatiner for particle objects
+    // making list/contatiner for particle objects
 
     for (int i = 0; i < n_; i++){
         particles_.push_back(Particle(q_vec(i), m_vec(i), R.col(i), V.col(i)));
@@ -95,39 +94,16 @@ void PenningTrap::evolve_RK4(double dt){
 */
 
 void PenningTrap::evolve_forward_Euler(double dt){
-    vec a;
 
-    double omega_p = ;
-    double omega_m = ;
-
-    double A_p = ;
-    double A_m = ;
-
-    double x0 = A_p + A_m;
-    double v0 = ;
-
-    // initial conditions 
-
-    vec v = vec(3).fill(0);
-
-    v(0) = 0.;
-    v(1) = v0;
-    v(2) = 0.;
-
-    vec r = vec(3).fill(0);
-
-    r(0) = x0;
-    r(1) = 0.;
-    r(2) = z0;
-
+    // Euler
 
     for (int i = 0; i < n_; i++){
+        Particle& p_i = particles_[i];
         F = total_force(i);
-        m = particles_[i].m_;
-        for (int j = 0; i < N_; j++){
-            a(j) = F/m;
-            v(j+1) = v(j) + a(j)*dt;
-            r(j+1) = r(j) + v(j+1)*dt;
+        
+        p_i.r = p_i.r + p_i.v*dt;
+        p_i.v = p_i.v + F/p_i.m*dt; 
+
         }
     }
 

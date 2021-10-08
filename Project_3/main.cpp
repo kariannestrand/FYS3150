@@ -22,26 +22,20 @@ int main(int argc, char const *argv[])
     int N = 1000;
     double dt = t/N;
     
-
     vec r = vec(3).fill(0);      // initial condition for position (filled with zeros for now)
 
     vec q_vec = vec(n).fill(q);     // vector with charges
     vec m_vec = vec(n).fill(m);     // vector with masses
 
-    mat R = mat(dim, n).randn();        // fill in initial conditions for position here, just have random values for now
-    mat V = mat(dim, n).randn();        // fill in initial conditions for position here, just have random values for now
-
+    mat R = mat(dim, n).randn() - 1/2*d;        // fill in initial conditions for position here, just have random values for now
+    mat V = mat(dim, n).randn() - 1/2*d;        // fill in initial conditions for position here, just have random values for now
 
     PenningTrap penningtrap = PenningTrap(B0, V0, d, ke, n, N, R, V, q_vec, m_vec);    // calling penningtrap
 
-    vec B = penningtrap.external_B_field();        // external B-field
-    vec E = penningtrap.external_E_field(0);        // external E-field
-    vec F_particles = penningtrap.force_particle(0, 1);  // force from i to j
-    vec F_total_ext = penningtrap.total_force_external(0);  // total external force on i
-    vec F_total_particles = penningtrap.total_force_particles(0);
-    vec F_total = penningtrap.total_force(0);
+    for i in range N
+    write
+        penningtrap.evolve_forward_Euler(dt);
     
-    F_total.print();
 
     return 0;
 
