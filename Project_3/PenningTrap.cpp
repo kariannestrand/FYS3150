@@ -11,7 +11,7 @@ PenningTrap::PenningTrap(double B0, double V0, double d, double ke, int n, mat R
     ke_ = ke;
     n_ = n;
 
-    // making lis/contatiner for particle objects
+    // making list/contatiner for particle objects
 
     for (int i = 0; i < n_; i++){
         particles_.push_back(Particle(q_vec(i), m_vec(i), R.col(i), V.col(i)));

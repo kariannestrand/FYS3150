@@ -20,7 +20,6 @@ public:
     PenningTrap(double B0, double V0, double d, double ke, int n, arma::mat R, arma::mat V, arma::vec q_vec, arma::vec m_vec);
 
     // class methods to be made
-    //void add_particle(Particle p_in);           // add a particle to the trap
     arma::vec external_E_field(int i);      // external electric field at point r=(x,y,z)
     arma::vec external_B_field();      // external magnetic field at point r=(x,y,z)
     arma::vec force_particle(int i, int j);                   // force on particle_i from particle_j
