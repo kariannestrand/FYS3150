@@ -46,7 +46,7 @@ vec PenningTrap::force_particle(int i, int j){
 
     double q_i = particles_[i].q_;
     double q_j = particles_[j].q_;
-    vec dr = abs(r) % abs(r) % abs(r)
+    vec dr = abs(r) % abs(r) % abs(r);
 
     F = ke_*(q_i*q_j)/dr % r;
 
@@ -57,7 +57,7 @@ vec PenningTrap::total_force_external(int i){
     vec F = vec(3).fill(0);
     vec E = external_E_field(i);
     vec B = external_B_field();
-    vec v = particles_[i].v_
+    vec v = particles_[i].v_;
 
     double q = particles_[i].q_;
 
@@ -66,7 +66,7 @@ vec PenningTrap::total_force_external(int i){
     return F;
 }
 
-}
+
 
 vec PenningTrap::total_force_particles(int i){
     vec F = vec(3).fill(0);
