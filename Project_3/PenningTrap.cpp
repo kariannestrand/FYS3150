@@ -94,12 +94,27 @@ vec PenningTrap::total_force(int i){
 
 }
 
-/*
+
 void PenningTrap::evolve_RK4(double dt){
+
+    for (int i = 0; i < n_; i++){
+        Particle& p_i = particles_[i];
+        vec F = total_force(i);
+
+        K1
+        K2
+        K3
+        K4
+
+        vec a = F/p_i.m_;
+        p_i.r_ = p_i.r_ + p_i.v_*dt;
+        p_i.v_ = p_i.v_ + a*dt;
+        
+    }
 
 }
 
-*/
+
 
 void PenningTrap::evolve_forward_Euler(double dt){
 
@@ -107,9 +122,9 @@ void PenningTrap::evolve_forward_Euler(double dt){
         Particle& p_i = particles_[i];
         vec F = total_force(i);
 
-        double a = F/p_i.m;
-        p_i.r = p_i.r + p_i.v*dt;
-        p_i.v = p_i.v + a*dt;
-        }
+        vec a = F/p_i.m_;
+        p_i.r_ = p_i.r_ + p_i.v_*dt;
+        p_i.v_ = p_i.v_ + a*dt;
+        
     }
 }
