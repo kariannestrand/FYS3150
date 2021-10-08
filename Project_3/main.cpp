@@ -6,7 +6,7 @@ using namespace std;
 
 int main(int argc, char const *argv[])
 {
-    double q = 20;                // charge of Ca+ particle [e]
+    double q = 1;                // charge of Ca+ particle [e]
     double m = 40.078;            // atomic mass of Ca+ [u]
 
     double B0 = 9.65e1;           // magnetic field strength
@@ -15,12 +15,12 @@ int main(int argc, char const *argv[])
 
     double ke = 1.38935333e5;     // Couloumb constant
 
-    int n = 2;                    // number of particles
+    int n = 1;                    // number of particles
     int dim = 3;                  // dimension (x,y,z)
 
     int t = 100;
-    int N = 1000;
-    double dt = t/N;
+    int N = 100000;
+    double dt = t*(1./N);
 
 
     vec r = vec(3).fill(0);      // initial condition for position (filled with zeros for now)
@@ -33,14 +33,16 @@ int main(int argc, char const *argv[])
 
     PenningTrap penningtrap = PenningTrap(B0, V0, d, ke, n, R, V, q_vec, m_vec);    // calling penningtrap
 
-    // evolving euler and RK4
+    bool write = true;
     for (int i = 0; i < N; i++){
-        penningtrap.write_to_file(euler);
-        penningtrap.evolve_forward_Euler(dt);
-        penningtrap.write_to_file(RK4);
-        penningtrap.evolve_RK4(dt);
+        penningtrap.evolve_forward_Euler(dt, write);
+        
     }
 
+     for (int i = 0; i < N; i++){
+        penningtrap.evolve_RK4(dt, write);
+        
+    }
 
     return 0;
 
