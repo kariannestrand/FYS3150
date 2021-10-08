@@ -19,6 +19,7 @@ PenningTrap::PenningTrap(double B0, double V0, double d, double ke, int n, mat R
 
 }
 
+
 vec PenningTrap::external_B_field(){
     vec B = vec(3).fill(0.);
     B(2) = B0_;
@@ -94,12 +95,79 @@ vec PenningTrap::total_force(int i){
 
 }
 
-/*
+
 void PenningTrap::evolve_RK4(double dt){
 
+    for (int i = 0; i < n_; i++){
+        Particle& p_i = particles_[i];
+
+
+        // K1
+        vec F = total_force(i);
+        vec a = F/p_i.m_;
+
+        vec K1_v = a*dt;
+        vec K1_r = p_i.v_*dt;
+
+        vec v_old = p_i.v_;
+        vec r_old = p_i.r_;
+
+        p_i.v_ = v_old + K1_v/2;
+        p_i.r_ = r_old + K1_r/2;
+
+
+        // K2
+        F = total_force(i);
+        a = F/p_i.m_;
+
+        vec K2_v = v_old + K1_v/2;
+        vec K2_r = r_old + K1_r/2;
+
+        v_old = p_i.v_;
+        r_old = p_i.r_;
+
+        p_i.v_ = v_old + K2_v/2;
+        p_i.r_ = r_old + K2_r/2;
+
+
+        // K3
+        F = total_force(i);
+        a = F/p_i.m_;
+
+        vec K3_v = v_old + K2_v/2;
+        vec K3_r = r_old + K2_r/2;
+
+        v_old = p_i.v_;
+        r_old = p_i.r_;
+
+        p_i.v_ = v_old + K3_v/2;
+        p_i.r_ = r_old + K3_r/2;
+
+
+        // K4
+        F = total_force(i);
+        a = F/p_i.m_;
+
+        vec K4_v = v_old + K3_v;
+        vec K4_r = r_old + K3_r;
+
+        v_old = p_i.v_;
+        r_old = p_i.r_;
+
+        p_i.v_ = v_old + K4_v;
+        p_i.r_ = r_old + K4_r;
+
+
+        // last step
+        p_i.v_ = p_i.v_ + (K1_v + 2*K2_v + 2*K3_v + K4_v)/6;
+        p_i.r_ = p_i.r_ + (K1_r + 2*K2_r + 2*K3_r + K4_r)/6;
+
+        p_i.v_ = v_old;
+        p_i.r_ = r_old;
+
+        }
 }
 
-*/
 
 void PenningTrap::evolve_forward_Euler(double dt){
 
@@ -107,9 +175,8 @@ void PenningTrap::evolve_forward_Euler(double dt){
         Particle& p_i = particles_[i];
         vec F = total_force(i);
 
-        double a = F/p_i.m;
-        p_i.r = p_i.r + p_i.v*dt;
-        p_i.v = p_i.v + a*dt;
+        vec a = F/p_i.m_;
+        p_i.r_ = p_i.r_ + p_i.v_*dt;
+        p_i.v_ = p_i.v_ + a*dt;
         }
-    }
 }

@@ -32,8 +32,14 @@ int main(int argc, char const *argv[])
     mat V = mat(dim, n).randn() - 1/2*d;        // fill in initial conditions for position here, just have random values for now
 
     PenningTrap penningtrap = PenningTrap(B0, V0, d, ke, n, R, V, q_vec, m_vec);    // calling penningtrap
-    penningtrap.evolve_forward_Euler(dt);
 
+    for (int i = 0; i < N; i++){
+        penningtrap.evolve_forward_Euler(dt);
+        // penningtrap.write_to_file(Euler);
+
+        penningtrap.evolve_RK4(dt);
+        // penningtrap.write_to_file(RK4);
+    }
 
     return 0;
 
