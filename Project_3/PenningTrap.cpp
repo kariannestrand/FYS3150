@@ -4,7 +4,7 @@
 using namespace arma;
 using namespace std;
 
-PenningTrap::PenningTrap(double B0, double V0, double d, double ke, int n, mat R, mat V, vec q_vec, vec m_vec){
+PenningTrap::PenningTrap(double B0, double V0, double d, double ke, int n, int N, mat R, mat V, vec q_vec, vec m_vec){
     B0_ = B0;                   // magnetic field strength
     V0_ = V0;                   // applied potential
     d_ = d;                     // characteristic dimension
@@ -78,9 +78,10 @@ vec PenningTrap::total_force_particles(int i){
     vec F = vec(3).fill(0);
     for (int j = 0; j < n_; j++){
         if (i != j){
-            F += force_particle(i, j);
+            F = F + force_particle(i, j);
         }
     }
+    cout << F << endl;
 
     return F;
 }
@@ -184,22 +185,35 @@ void PenningTrap::evolve_forward_Euler(double dt, bool write){
     mat V = mat(3, n_).fill(0);
 
     for (int i = 0; i < n_; i++){
-        Particle& p_i = particles_[i];
+        for (int j = 0; j < N_; j++){
 
-        vec F = total_force(i);
-        vec a = F/p_i.m_;
+            Particle& p_i = particles_[i];
 
-        V.col(i) = p_i.v_ + a*dt;
-        R.col(i) = p_i.r_ + p_i.v_*dt;
+            vec F = total_force(i);
+            vec a = F/p_i.m_;
+
+            p_i.v_ = p_i.v_ + a*dt;
+            p_i.r_ = p_i.r_ + p_i.v_*dt;
 
 
-        if (write){
-            ofstream file;
-            file.open("Euler_r.txt", ios::app);
-            //file << R << V << endl;
-            file << R << endl;
-            file.close();
-            
+
+            V.col(i) = p_i.v_;
+            if (write){
+                ofstream file;
+                file.open("Euler_v.txt", ios::app);
+                file << V << endl;
+                file.close();
+            }
+
+            R.col(i) = p_i.r_;
+            if (write){
+                ofstream file;
+                file.open("Euler_r.txt", ios::app);
+                //file << R << V << endl;
+                file << R << endl;
+                file.close();
+            }
+
         }
 
 

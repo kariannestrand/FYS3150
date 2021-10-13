@@ -13,12 +13,13 @@ public:
     double B0_;           // magnetic field strength
     double V0_;           // applied potential
     double d_;            // characteristic dimension
-    double ke_;           //coloumbs constant
+    double ke_;           // coloumbs constant
     int n_;               // number of particles
+    int N_;               // number of time steps
     std::vector<Particle> particles_;       // to contain all the Particle objects in the Penning trap
 
     // constructor
-    PenningTrap(double B0, double V0, double d, double ke, int n, arma::mat R, arma::mat V, arma::vec q_vec, arma::vec m_vec);
+    PenningTrap(double B0, double V0, double d, double ke, int n, int N, arma::mat R, arma::mat V, arma::vec q_vec, arma::vec m_vec);
 
     // class methods to be made
     arma::vec external_E_field(int i);      // external electric field at point r=(x,y,z)
