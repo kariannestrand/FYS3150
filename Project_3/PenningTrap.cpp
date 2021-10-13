@@ -77,9 +77,6 @@ vec PenningTrap::total_force_external(int i){
 vec PenningTrap::total_force_particles(int i){
     vec F = vec(3).fill(0);
     for (int j = 0; j < n_; j++){
-        //if (i == j){
-        //   continue;
-        //}
         if (i != j){
             F += force_particle(i, j);
         }
@@ -101,6 +98,7 @@ vec PenningTrap::total_force(int i){
 void PenningTrap::evolve_RK4(double dt, bool write){
     mat R = mat(3, n_).fill(0);
     mat V = mat(3, n_).fill(0);
+
     for (int i = 0; i < n_; i++){
         Particle& p_i = particles_[i];
 
@@ -168,13 +166,14 @@ void PenningTrap::evolve_RK4(double dt, bool write){
         p_i.v_ = v_old;
         p_i.r_ = r_old;
 
-
+    /*
         if (write){
             ofstream file;
-            file.open("RK4_r_v.txt");
-            file << R.col(i) << V.col(i) << endl;
+            file.open("RK4_r_v.txt", ios::app);
+            file << R << V << endl;
             file.close();
         }
+        */
 
     }
 }
@@ -186,20 +185,21 @@ void PenningTrap::evolve_forward_Euler(double dt, bool write){
 
     for (int i = 0; i < n_; i++){
         Particle& p_i = particles_[i];
-        vec F = total_force(i);
 
+        vec F = total_force(i);
         vec a = F/p_i.m_;
 
         V.col(i) = p_i.v_ + a*dt;
         R.col(i) = p_i.r_ + p_i.v_*dt;
 
 
-
         if (write){
             ofstream file;
-            file.open("Euler_r_v.txt");
-            file << R.col(i) << V.col(i) << endl;
+            file.open("Euler_r.txt", ios::app);
+            //file << R << V << endl;
+            file << R << endl;
             file.close();
+            
         }
 
 

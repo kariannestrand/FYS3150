@@ -15,7 +15,7 @@ int main(int argc, char const *argv[])
 
     double ke = 1.38935333e5;     // Couloumb constant
 
-    int n = 4;                    // number of particles
+    int n = 2;                    // number of particles
     int dim = 3;                  // dimension (x,y,z)
 
     int t = 100;
