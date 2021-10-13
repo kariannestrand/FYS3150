@@ -37,18 +37,14 @@ int main(int argc, char const *argv[])
 
     for (int i = 0; i < N; i++){
         penningtrap.evolve_forward_Euler(dt, write);
-        
+
     }
 
     for (int i = 0; i < N; i++){
         penningtrap.evolve_RK4(dt, write);
-        
+
     }
 
     return 0;
 
 }
-
-
-
-

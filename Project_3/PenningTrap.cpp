@@ -189,20 +189,20 @@ void PenningTrap::evolve_forward_Euler(double dt, bool write){
         vec F = total_force(i);
 
         vec a = F/p_i.m_;
-    
+
         V.col(i) = p_i.v_ + a*dt;
         R.col(i) = p_i.r_ + p_i.v_*dt;
-        
+
+
+
         if (write){
             ofstream file;
             file.open("Euler_r_v.txt");
             file << R.col(i) << V.col(i) << endl;
             file.close();
         }
-        
 
-    }   
+
+    }
 
 }
-    
-
