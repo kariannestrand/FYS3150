@@ -193,11 +193,13 @@ void PenningTrap::evolve_forward_Euler(double dt, bool write){
             vec F = total_force(i);
             vec a = F/p_i.m_;
 
+
             p_i.v_ = p_i.v_ + a*dt;
             p_i.r_ = p_i.r_ + p_i.v_*dt;
 
 
             V.col(i) = p_i.v_;
+
             if (write){
                 ofstream file;
                 file.open("Euler_v.txt", ios::app);
@@ -206,6 +208,7 @@ void PenningTrap::evolve_forward_Euler(double dt, bool write){
             }
 
             R.col(i) = p_i.r_;
+
             if (write){
                 ofstream file;
                 file.open("Euler_r.txt", ios::app);
@@ -214,7 +217,6 @@ void PenningTrap::evolve_forward_Euler(double dt, bool write){
                 file.close();
             }
 
-        }
 
         cout << p_i.r_ << endl;
 

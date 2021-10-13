@@ -19,7 +19,7 @@ int main(int argc, char const *argv[])
     int dim = 3;                  // dimension (x,y,z)
 
     int t = 10;
-    int N = 1000;
+    int N = 100;
     double dt = t*(1./N);
 
 
@@ -36,11 +36,17 @@ int main(int argc, char const *argv[])
     bool write = true;
     penningtrap.evolve_forward_Euler(dt, write);
 
+    /*
+    bool write = true;
+    //for (int i = 0; i < N; i++){
+    penningtrap.evolve_forward_Euler(dt, write);
 
+    /*
     for (int i = 0; i < N; i++){
         penningtrap.evolve_RK4(dt, write);
 
     }
+    */
 
     return 0;
 
