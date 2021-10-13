@@ -46,14 +46,14 @@ vec PenningTrap::external_E_field(int i){
 
 vec PenningTrap::force_particle(int i, int j){
     Particle& p_i = particles_[i];
-    vec F;
-    vec r = p_i.r_ - p_i.r_;
+    Particle& p_j = particles_[j];
+    vec r = p_i.r_ - p_j.r_;
 
     double q_i = p_i.q_;
-    double q_j = p_i.q_;
+    double q_j = p_j.q_;
     vec dr = abs(r) % abs(r) % abs(r);
 
-    F = ke_*(q_i*q_j)/dr % r;
+    vec F = ke_*(q_i*q_j)/dr % r;
 
     return F;
 }
@@ -79,7 +79,7 @@ vec PenningTrap::total_force_particles(int i){
     vec F = vec(3).fill(0);
     for (int j = 0; j < n_; j++){
         if (i != j){
-            F += force_particle(i, j);
+            F = F + force_particle(i, j);
         }
     }
 
@@ -180,35 +180,55 @@ void PenningTrap::evolve_RK4(double dt, bool write){
 }
 
 
-void PenningTrap::evolve_forward_Euler(double dt, int i){
+void PenningTrap::evolve_forward_Euler(double dt, bool write){
     mat R = mat(3, n_).fill(0);
     mat V = mat(3, n_).fill(0);
 
-    Particle& p_i = particles_[i];
-
-    vec v_old;
-    vec r_old;
-
-    v_old = p_i.v_;
-    r_old = p_i.r_;
-
-    R.col(i) = p_i.r_;
-    V.col(i) = p_i.v_;
-
-    vec F = total_force(i);
-    vec a = F/p_i.m_;
-
-    V.col(i) = p_i.v_ + a*dt;
-    R.col(i) = p_i.r_ + V.col(i)*dt;
-
-    p_i.r_ = r_old;
-    p_i.v_ = v_old;
-
+    for (int i = 0; i < n_; i++){
+        Particle& p_i = particles_[i];
+        vec v_old = p_i.v_;
+        vec r_old = p_i.r_;
 
     
+        for (int j = 0; j < N_; j++){
+
+            
+
+            vec F = total_force(i);
+            vec a = F/p_i.m_;
 
 
-    
+            p_i.v_ = p_i.v_ + a*dt;
+            p_i.r_ = p_i.r_ + p_i.v_*dt;
+
+            
+            
+
+            V.col(i) = p_i.v_;
+            
+            if (write){
+                ofstream file;
+                file.open("Euler_v.txt", ios::app);
+                file << V << endl;
+                file.close();
+            }
+
+            R.col(i) = p_i.r_;
+            
+            if (write){
+                ofstream file;
+                file.open("Euler_r.txt", ios::app);
+                //file << R << V << endl;
+                file << R << endl;
+                file.close();
+            }
+
+
+        }
+        p_i.r_ = r_old;
+        p_i.r_ = v_old;
+
+    }
 
 }
 
