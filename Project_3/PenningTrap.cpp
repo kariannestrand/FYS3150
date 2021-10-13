@@ -4,17 +4,18 @@
 using namespace arma;
 using namespace std;
 
-PenningTrap::PenningTrap(double B0, double V0, double d, double ke, int n, int N, mat R, mat V, vec q_vec, vec m_vec){
+PenningTrap::PenningTrap(double B0, double V0, double d, double ke, int n, int N, mat pos, mat vel, vec q_vec, vec m_vec){
     B0_ = B0;                   // magnetic field strength
     V0_ = V0;                   // applied potential
     d_ = d;                     // characteristic dimension
     ke_ = ke;
     n_ = n;
+    N_ = N;
 
     // making list/contatiner for particle objects
 
     for (int i = 0; i < n_; i++){
-        particles_.push_back(Particle(q_vec(i), m_vec(i), R.col(i), V.col(i)));
+        particles_.push_back(Particle(q_vec(i), m_vec(i), pos.col(i), vel.col(i)));
     }
 
 }
@@ -45,14 +46,14 @@ vec PenningTrap::external_E_field(int i){
 
 vec PenningTrap::force_particle(int i, int j){
     Particle& p_i = particles_[i];
-    vec F;
-    vec r = p_i.r_ - p_i.r_;
+    Particle& p_j = particles_[j];
+    vec r = p_i.r_ - p_j.r_;
 
     double q_i = p_i.q_;
-    double q_j = p_i.q_;
+    double q_j = p_j.q_;
     vec dr = abs(r) % abs(r) % abs(r);
 
-    F = ke_*(q_i*q_j)/dr % r;
+    vec F = ke_*(q_i*q_j)/dr % r;
 
     return F;
 }
@@ -81,7 +82,6 @@ vec PenningTrap::total_force_particles(int i){
             F = F + force_particle(i, j);
         }
     }
-    cout << F << endl;
 
     return F;
 }
@@ -185,16 +185,16 @@ void PenningTrap::evolve_forward_Euler(double dt, bool write){
     mat V = mat(3, n_).fill(0);
 
     for (int i = 0; i < n_; i++){
+        Particle& p_i = particles_[i];
+        cout << p_i.r_ << endl;
+
+
         for (int j = 0; j < N_; j++){
-
-            Particle& p_i = particles_[i];
-
             vec F = total_force(i);
             vec a = F/p_i.m_;
 
             p_i.v_ = p_i.v_ + a*dt;
             p_i.r_ = p_i.r_ + p_i.v_*dt;
-
 
 
             V.col(i) = p_i.v_;
@@ -215,6 +215,8 @@ void PenningTrap::evolve_forward_Euler(double dt, bool write){
             }
 
         }
+
+        cout << p_i.r_ << endl;
 
 
     }

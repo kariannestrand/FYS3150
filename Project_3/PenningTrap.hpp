@@ -19,7 +19,7 @@ public:
     std::vector<Particle> particles_;       // to contain all the Particle objects in the Penning trap
 
     // constructor
-    PenningTrap(double B0, double V0, double d, double ke, int n, int N, arma::mat R, arma::mat V, arma::vec q_vec, arma::vec m_vec);
+    PenningTrap(double B0, double V0, double d, double ke, int n, int N, arma::mat pos, arma::mat vel, arma::vec q_vec, arma::vec m_vec);
 
     // class methods to be made
     arma::vec external_E_field(int i);      // external electric field at point r=(x,y,z)
