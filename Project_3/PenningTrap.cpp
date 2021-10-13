@@ -4,12 +4,13 @@
 using namespace arma;
 using namespace std;
 
-PenningTrap::PenningTrap(double B0, double V0, double d, double ke, int n, mat R, mat V, vec q_vec, vec m_vec){
+PenningTrap::PenningTrap(double B0, double V0, double d, double ke, int n, int N, mat R, mat V, vec q_vec, vec m_vec){
     B0_ = B0;                   // magnetic field strength
     V0_ = V0;                   // applied potential
     d_ = d;                     // characteristic dimension
     ke_ = ke;
     n_ = n;
+    N_ = N;
 
     // making list/contatiner for particle objects
 
@@ -179,30 +180,37 @@ void PenningTrap::evolve_RK4(double dt, bool write){
 }
 
 
-void PenningTrap::evolve_forward_Euler(double dt, bool write){
+void PenningTrap::evolve_forward_Euler(double dt, int i){
     mat R = mat(3, n_).fill(0);
     mat V = mat(3, n_).fill(0);
 
-    for (int i = 0; i < n_; i++){
-        Particle& p_i = particles_[i];
+    Particle& p_i = particles_[i];
 
-        vec F = total_force(i);
-        vec a = F/p_i.m_;
+    vec v_old;
+    vec r_old;
 
-        V.col(i) = p_i.v_ + a*dt;
-        R.col(i) = p_i.r_ + p_i.v_*dt;
+    v_old = p_i.v_;
+    r_old = p_i.r_;
+
+    R.col(i) = p_i.r_;
+    V.col(i) = p_i.v_;
+
+    vec F = total_force(i);
+    vec a = F/p_i.m_;
+
+    V.col(i) = p_i.v_ + a*dt;
+    R.col(i) = p_i.r_ + V.col(i)*dt;
+
+    p_i.r_ = r_old;
+    p_i.v_ = v_old;
 
 
-        if (write){
-            ofstream file;
-            file.open("Euler_r.txt", ios::app);
-            //file << R << V << endl;
-            file << R << endl;
-            file.close();
-            
-        }
+    
 
 
-    }
+    
 
 }
+
+
+
