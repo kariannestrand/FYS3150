@@ -176,7 +176,6 @@ void PenningTrap::evolve_RK4(double dt, bool write){
             file.close();
         }
 
-
     }
 }
 
@@ -193,8 +192,6 @@ void PenningTrap::evolve_forward_Euler(double dt, bool write){
     
         V.col(i) = p_i.v_ + a*dt;
         R.col(i) = p_i.r_ + p_i.v_*dt;
-        
-        
         
         if (write){
             ofstream file;
