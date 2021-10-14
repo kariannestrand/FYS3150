@@ -18,6 +18,8 @@ PenningTrap::PenningTrap(double B0, double V0, double d, double ke, int n, int N
         particles_.push_back(Particle(q_vec(i), m_vec(i), pos.col(i), vel.col(i)));
     }
 
+    particles_[0].r_.print();
+
 }
 
 
@@ -49,8 +51,9 @@ vec PenningTrap::force_particle(int i, int j){
     Particle& p_j = particles_[j];
     vec r = p_i.r_ - p_j.r_;
 
-    double q_i = p_i.q_;
-    double q_j = p_j.q_;
+    int q_i = p_i.q_;
+    int q_j = p_j.q_;
+    
     vec dr = abs(r) % abs(r) % abs(r);
 
     vec F = ke_*(q_i*q_j)/dr % r;
@@ -67,7 +70,7 @@ vec PenningTrap::total_force_external(int i){
     vec B = external_B_field();
 
     vec v = p_i.v_;
-    double q = p_i.q_;
+    int q = p_i.q_;
 
     F = q*E + cross(q*v, B);
 
@@ -78,7 +81,7 @@ vec PenningTrap::total_force_external(int i){
 vec PenningTrap::total_force_particles(int i){
     vec F = vec(3).fill(0);
     for (int j = 0; j < n_; j++){
-        if (i != j){
+        if (j != i){
             F = F + force_particle(i, j);
         }
     }
@@ -88,7 +91,7 @@ vec PenningTrap::total_force_particles(int i){
 
 
 vec PenningTrap::total_force(int i){
-    vec F;
+    vec F = vec(3).fill(0);
     F = total_force_particles(i) + total_force_external(i);
 
     return F;
@@ -183,13 +186,13 @@ void PenningTrap::evolve_RK4(double dt, bool write){
 void PenningTrap::evolve_forward_Euler(double dt, bool write){
     mat R = mat(3, n_).fill(0);
     mat V = mat(3, n_).fill(0);
+    
+    for (int j = 0; j < N_; j++){
 
-    for (int i = 0; i < n_; i++){
-        Particle& p_i = particles_[i];
-        cout << p_i.r_ << endl;
-
-
-        for (int j = 0; j < N_; j++){
+        for (int i = 0; i < n_; i++){
+            Particle& p_i = particles_[i];
+            
+            //cout << p_i.r_ << endl;
             vec F = total_force(i);
             vec a = F/p_i.m_;
 
@@ -217,8 +220,10 @@ void PenningTrap::evolve_forward_Euler(double dt, bool write){
                 file.close();
             }
 
+            
+        }
+        
 
-        cout << p_i.r_ << endl;
 
 
     }
