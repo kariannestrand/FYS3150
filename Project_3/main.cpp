@@ -15,15 +15,12 @@ int main(int argc, char const *argv[])
 
     double ke = 1.38935333e5;     // Couloumb constant
 
-    int n = 1;                    // number of particles
+    int n = 2;                    // number of particles
     int dim = 3;                  // dimension (x,y,z)
 
     int t = 10;
     int N = 100;
     double dt = t*(1./N);
-
-
-    // vec r = vec(3).fill(0);      // initial condition for position (filled with zeros for now)
 
     vec q_vec = vec(n).fill(q);     // vector with charges
     vec m_vec = vec(n).fill(m);     // vector with masses
@@ -36,17 +33,6 @@ int main(int argc, char const *argv[])
     bool write = true;
     penningtrap.evolve_forward_Euler(dt, write);
 
-    /*
-    bool write = true;
-    //for (int i = 0; i < N; i++){
-    penningtrap.evolve_forward_Euler(dt, write);
-
-    /*
-    for (int i = 0; i < N; i++){
-        penningtrap.evolve_RK4(dt, write);
-
-    }
-    */
 
     return 0;
 

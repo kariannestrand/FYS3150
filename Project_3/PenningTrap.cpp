@@ -18,8 +18,6 @@ PenningTrap::PenningTrap(double B0, double V0, double d, double ke, int n, int N
         particles_.push_back(Particle(q_vec(i), m_vec(i), pos.col(i), vel.col(i)));
     }
 
-    particles_[0].r_.print();
-
 }
 
 
@@ -203,26 +201,26 @@ void PenningTrap::evolve_forward_Euler(double dt, bool write){
 
             V.col(i) = p_i.v_;
 
-            if (write){
-                ofstream file;
-                file.open("Euler_v.txt", ios::app);
-                file << V << endl;
-                file.close();
-            }
 
             R.col(i) = p_i.r_;
 
-            if (write){
+             
+        }
+        
+        if (write){
                 ofstream file;
                 file.open("Euler_r.txt", ios::app);
                 //file << R << V << endl;
                 file << R << endl;
                 file.close();
-            }
-
-            
         }
-        
+
+        if (write){
+                ofstream file;
+                file.open("Euler_v.txt", ios::app);
+                file << V << endl;
+                file.close();
+        }
 
 
 
