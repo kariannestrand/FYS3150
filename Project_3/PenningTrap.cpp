@@ -21,24 +21,38 @@ PenningTrap::PenningTrap(double B0, double V0, double d, double ke, int n, int N
 }
 
 
-vec PenningTrap::external_B_field(){
+vec PenningTrap::external_B_field(int i){
+    Particle& p_i = particles_[i];
+    vec r = p_i.r_;
+
     vec B = vec(3).fill(0.);
-    B(2) = B0_;
+    if ((r(0) > d_) && (r(1) > d_) && (r(2) > d_)){
+        B(2) = B0_;
+    }
+
     return B;
 }
 
 
 vec PenningTrap::external_E_field(int i){
     Particle& p_i = particles_[i];
+    vec r = p_i.r_;
+
     vec F = vec(3).fill(0);
     // position of E-field
     F(0) = -1.;
     F(1) = -1.;
     F(2) = 2.;
 
-    vec r = p_i.r_;
-
-    vec E = - V0_/(d_*d_)*F % r;      // E-field
+    vec E;
+    if ((r(0) > d_) && (r(1) > d_) && (r(2) > d_)){
+        E = - V0_/(d_*d_)*F % r;
+    }
+    else{
+        E(0) = 0;
+        E(1) = 0;
+        E(2) = 0;
+    }
 
     return E;
 }
@@ -65,7 +79,7 @@ vec PenningTrap::total_force_external(int i){
 
     vec F = vec(3).fill(0);
     vec E = external_E_field(i);
-    vec B = external_B_field();
+    vec B = external_B_field(i);
 
     vec v = p_i.v_;
     int q = p_i.q_;
@@ -104,10 +118,6 @@ void PenningTrap::evolve_RK4(double dt, bool write){
     for (int j = 0; j < N_; j++){
         for (int i = 0; i < n_; i++){
             Particle& p_i = particles_[i];
-            if (j == 0){
-                cout << p_i.r_ << endl;
-            }
-
 
             // K1
             vec F = total_force(i);
@@ -199,9 +209,6 @@ void PenningTrap::evolve_forward_Euler(double dt, bool write){
     for (int j = 0; j < N_; j++){
         for (int i = 0; i < n_; i++){
             Particle& p_i = particles_[i];
-            if (j == 0){
-                cout << p_i.r_ << endl;
-            }
 
             //cout << p_i.r_ << endl;
             vec F = total_force(i);
@@ -229,7 +236,6 @@ void PenningTrap::evolve_forward_Euler(double dt, bool write){
             file << R << endl;
             file.close();
         }
-
     }
 
 }

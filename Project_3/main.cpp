@@ -20,15 +20,15 @@ int main(int argc, char const *argv[])
 
     double t = 100.;                            // total time, [mu*s]
     double dt = 0.1;                            // time step, [mu*s]
-    int N = t/dt;                            // number of time steps
+    int N = t/dt;                               // number of time steps
 
     bool write = true;                          // creates txt-files if true
 
     vec q_vec = vec(n).fill(q);                 // vector with charges
     vec m_vec = vec(n).fill(m);                 // vector with masses
 
-    mat pos = mat(dim, n).randn();      // fill in initial conditions for position here, just have random values for now
-    mat vel = mat(dim, n).randn();      // fill in initial conditions for position here, just have random values for now
+    mat pos = mat(dim, n).randn() - 0.5*d;      // fill in initial conditions for position here, just have random values for now
+    mat vel = mat(dim, n).randn() - 0.5*d;      // fill in initial conditions for position here, just have random values for now
 
 
     /*
