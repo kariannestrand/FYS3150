@@ -18,8 +18,6 @@ PenningTrap::PenningTrap(double B0, double V0, double d, double ke, int n, int N
         particles_.push_back(Particle(q_vec(i), m_vec(i), pos.col(i), vel.col(i)));
     }
 
-    particles_[0].r_.print();
-
 }
 
 
@@ -53,7 +51,7 @@ vec PenningTrap::force_particle(int i, int j){
 
     int q_i = p_i.q_;
     int q_j = p_j.q_;
-    
+
     vec dr = abs(r) % abs(r) % abs(r);
 
     vec F = ke_*(q_i*q_j)/dr % r;
@@ -105,6 +103,9 @@ void PenningTrap::evolve_RK4(double dt, bool write){
 
     for (int i = 0; i < n_; i++){
         Particle& p_i = particles_[i];
+        if (int i = 0){
+            cout << p_i.r_ << endl;
+        }
 
 
         // K1
@@ -170,62 +171,59 @@ void PenningTrap::evolve_RK4(double dt, bool write){
         p_i.v_ = v_old;
         p_i.r_ = r_old;
 
-    /*
-        if (write){
-            ofstream file;
-            file.open("RK4_r_v.txt", ios::app);
-            file << R << V << endl;
-            file.close();
-        }
-        */
-
     }
+
+    if (write){
+        ofstream file;
+        file.open("RK4_v.txt", ios::app);
+        file << V << endl;
+        file.close();
+    }
+
+    if (write){
+        ofstream file;
+        file.open("RK4_r.txt", ios::app);
+        file << R << endl;
+        file.close();
+        }
 }
 
 
 void PenningTrap::evolve_forward_Euler(double dt, bool write){
     mat R = mat(3, n_).fill(0);
     mat V = mat(3, n_).fill(0);
-    
-    for (int j = 0; j < N_; j++){
 
-        for (int i = 0; i < n_; i++){
-            Particle& p_i = particles_[i];
-            
-            //cout << p_i.r_ << endl;
-            vec F = total_force(i);
-            vec a = F/p_i.m_;
-
-
-            p_i.v_ = p_i.v_ + a*dt;
-            p_i.r_ = p_i.r_ + p_i.v_*dt;
-
-
-            V.col(i) = p_i.v_;
-
-            if (write){
-                ofstream file;
-                file.open("Euler_v.txt", ios::app);
-                file << V << endl;
-                file.close();
-            }
-
-            R.col(i) = p_i.r_;
-
-            if (write){
-                ofstream file;
-                file.open("Euler_r.txt", ios::app);
-                //file << R << V << endl;
-                file << R << endl;
-                file.close();
-            }
-
-            
+    for (int i = 0; i < n_; i++){
+        Particle& p_i = particles_[i];
+        if (int i = 0){
+            cout << p_i.r_ << endl;
         }
-        
+
+        //cout << p_i.r_ << endl;
+        vec F = total_force(i);
+        vec a = F/p_i.m_;
 
 
+        p_i.v_ = p_i.v_ + a*dt;
+        p_i.r_ = p_i.r_ + p_i.v_*dt;
 
+
+        V.col(i) = p_i.v_;
+        R.col(i) = p_i.r_;
+    }
+
+    if (write){
+        ofstream file;
+        file.open("Euler_v.txt", ios::app);
+        file << V << endl;
+        file.close();
+    }
+
+    if (write){
+        ofstream file;
+        file.open("Euler_r.txt", ios::app);
+        file << R << endl;
+        file.close();
     }
 
 }
