@@ -32,5 +32,3 @@ for i in range(n_particles):
 
     Rz = np.array(Rz)
     t = np.linspace(0,100,len(Rz))
-
-
