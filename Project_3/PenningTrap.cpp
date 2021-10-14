@@ -119,12 +119,10 @@ void PenningTrap::evolve_RK4(double dt, bool write){
     for (int j = 0; j < N_; j++){
         for (int i = 0; i < n_; i++){
             Particle& p_i = particles_[i];
-    
+
             // K1
             vec F = total_force(i);
             vec a = F/p_i.m_;
-
-            //a.print();
 
             vec K1_v = a*dt;
             vec K1_r = p_i.v_*dt;
@@ -132,8 +130,13 @@ void PenningTrap::evolve_RK4(double dt, bool write){
             vec v_old = p_i.v_;
             vec r_old = p_i.r_;
 
-            p_i.v_ = v_old + K1_v/2;
-            p_i.r_ = r_old + K1_r/2;
+            p_i.v_ = v_old + K1_v/2.;
+            p_i.r_ = r_old + K1_r/2.;
+
+
+            // K2
+            F = total_force(i);
+            a = F/p_i.m_;
 
             vec K2_v = v_old + K1_v/2.;
             vec K2_r = r_old + K1_r/2.;
@@ -144,6 +147,8 @@ void PenningTrap::evolve_RK4(double dt, bool write){
             p_i.v_ = v_old + K2_v/2.;
             p_i.r_ = r_old + K2_r/2.;
 
+
+            // K3
             F = total_force(i);
             a = F/p_i.m_;
 
@@ -156,6 +161,8 @@ void PenningTrap::evolve_RK4(double dt, bool write){
             p_i.v_ = v_old + K3_v/2.;
             p_i.r_ = r_old + K3_r/2.;
 
+
+            // K4
             F = total_force(i);
             a = F/p_i.m_;
 
@@ -170,13 +177,11 @@ void PenningTrap::evolve_RK4(double dt, bool write){
 
 
             // last step
-            V.col(i) = p_i.v_ + (K1_v + 2*K2_v + 2*K3_v + K4_v)/6;
-            R.col(i) = p_i.r_ + (K1_r + 2*K2_r + 2*K3_r + K4_r)/6;
+            V.col(i) = p_i.v_ + (K1_v + 2.*K2_v + 2.*K3_v + K4_v)/6.;
+            R.col(i) = p_i.r_ + (K1_r + 2.*K2_r + 2.*K3_r + K4_r)/6.;
 
             p_i.v_ = v_old;
             p_i.r_ = r_old;
-
-            
 
         }
 
@@ -193,8 +198,8 @@ void PenningTrap::evolve_RK4(double dt, bool write){
             file << R << endl;
             file.close();
         }
-
     }
+
 }
 
 

@@ -58,17 +58,12 @@ int main(int argc, char const *argv[])
     
 
     PenningTrap penningtrap0 = PenningTrap(B0, V0, d, ke, n, N, pos, vel, q_vec, m_vec);     // calling penningtrap
-    for (int j = 0; j < N; j++){
-        penningtrap0.evolve_forward_Euler(dt, write);
-    }
+    penningtrap0.evolve_forward_Euler(dt, write);
 
-    PenningTrap penningtrap1 = PenningTrap(B0, V0, d, ke, n, N, pos, vel, q_vec, m_vec);    // calling penningtrap
-    for (int j = 0; j < N; j++){
-        penningtrap1.evolve_RK4(dt, write);
-    }
-    */
+    PenningTrap penningtrap1 = PenningTrap(B0, V0, d, ke, n, N, pos, vel, q_vec, m_vec);     // calling penningtrap
+    penningtrap1.evolve_RK4(dt, write);
 
-
+*/
     return 0;
 
 }

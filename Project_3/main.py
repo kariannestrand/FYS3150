@@ -76,6 +76,7 @@ for i in range(n_particles):
                 Rz.append(cols[0])
 
     Rz = np.array(Rz)
+<<<<<<< HEAD
     #t = np.linspace(0,100,len(Rz))
 
     #plt.plot(t,Rx)
@@ -84,3 +85,6 @@ for i in range(n_particles):
 '''
 
 
+=======
+    t = np.linspace(0,100,len(Rz))
+>>>>>>> de1470db56a9e7bb16a6e3f4d2d70c5309bfde68
