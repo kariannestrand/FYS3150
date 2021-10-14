@@ -15,12 +15,12 @@ int main(int argc, char const *argv[])
 
     double ke = 1.38935333e5;                   // Couloumb constant, [u*(mu*m)^3/(mu*s*e)^2]
 
-    int n = 1;                                  // number of particles
-    int dim = 3;                                // dimension (x, y, z)
+    int n = 2;                    // number of particles
+    int dim = 3;                  // dimension (x,y,z)
 
-    double t = 100.;                            // total time, [mu*s]
-    double dt = 1.;                            // time step, [mu*s]
-    double N = t/dt;                               // number of time steps
+    int t = 100;
+    int N = 1000;
+    double dt = t*(1./N);
 
     bool write = true;                          // creates txt-files if true
 
@@ -31,8 +31,11 @@ int main(int argc, char const *argv[])
     mat vel = mat(dim, n).randn() - 0.5*d;      // fill in initial conditions for position here, just have random values for now
 
 
-    PenningTrap penningtrap = PenningTrap(B0, V0, d, ke, n, N, pos, vel, q_vec, m_vec);     // calling penningtrap
-    penningtrap.evolve_forward_Euler(dt, write);
+    PenningTrap penningtrap0 = PenningTrap(B0, V0, d, ke, n, N, pos, vel, q_vec, m_vec);     // calling penningtrap
+    penningtrap0.evolve_forward_Euler(dt, write);
+
+    PenningTrap penningtrap1 = PenningTrap(B0, V0, d, ke, n, N, pos, vel, q_vec, m_vec);     // calling penningtrap
+    penningtrap1.evolve_RK4(dt, write);
 
     /*
     mat pos =  mat(dim, n);

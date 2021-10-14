@@ -23,7 +23,7 @@ public:
 
     // class methods to be made
     arma::vec external_E_field(int i);      // external electric field at point r=(x,y,z)
-    arma::vec external_B_field();      // external magnetic field at point r=(x,y,z)
+    arma::vec external_B_field(int i);      // external magnetic field at point r=(x,y,z)
     arma::vec force_particle(int i, int j);                   // force on particle_i from particle_j
     arma::vec total_force_external(int i);             // the total force on particle_i from the external fields
     arma::vec total_force_particles(int i);     // the total force on particle_i from the other particles
