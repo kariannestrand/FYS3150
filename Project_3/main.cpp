@@ -15,11 +15,11 @@ int main(int argc, char const *argv[])
 
     double ke = 1.38935333e5;     // Couloumb constant
 
-    int n = 1;                    // number of particles
+    int n = 2;                    // number of particles
     int dim = 3;                  // dimension (x,y,z)
 
     int t = 10;
-    int N = 100;
+    int N = 1000;
     double dt = t*(1./N);
 
 
@@ -31,10 +31,16 @@ int main(int argc, char const *argv[])
     mat pos = mat(dim, n).randn() - 1/2*d;        // fill in initial conditions for position here, just have random values for now
     mat vel = mat(dim, n).randn() - 1/2*d;        // fill in initial conditions for position here, just have random values for now
 
-    PenningTrap penningtrap = PenningTrap(B0, V0, d, ke, n, N, pos, vel, q_vec, m_vec);    // calling penningtrap
-
     bool write = true;
-    penningtrap.evolve_forward_Euler(dt, write);
+
+    PenningTrap penningtrap0 = PenningTrap(B0, V0, d, ke, n, N, pos, vel, q_vec, m_vec);    // calling penningtrap
+
+    
+    penningtrap0.evolve_forward_Euler(dt, write);
+
+    PenningTrap penningtrap1 = PenningTrap(B0, V0, d, ke, n, N, pos, vel, q_vec, m_vec);    // calling penningtrap
+    penningtrap1.evolve_RK4(dt, write);
+
 
     /*
     bool write = true;
