@@ -98,7 +98,3 @@ for i in range(n_particles):
                 Rz.append(cols[0])
 
     Rz = np.array(Rz)
-
-
-
-

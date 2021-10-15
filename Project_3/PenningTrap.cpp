@@ -4,6 +4,7 @@
 using namespace arma;
 using namespace std;
 
+
 PenningTrap::PenningTrap(double B0, double V0, double d, double ke, int n, double N, mat pos, mat vel, vec q_vec, vec m_vec, bool write, bool interaction){
     B0_ = B0;                   // magnetic field strength
     V0_ = V0;                   // applied potential
@@ -78,6 +79,7 @@ vec PenningTrap::force_particle(int i, int j){
 
     vec dr = abs(r) % abs(r) % abs(r);
 
+
     vec F;
     if (interaction_){
         F = ke_*(q_i*q_j)/dr % r;
@@ -87,6 +89,7 @@ vec PenningTrap::force_particle(int i, int j){
         F(1) = 0;
         F(2) = 0;
     }
+
 
     return F;
 }
@@ -143,9 +146,6 @@ void PenningTrap::evolve_RK4(double dt){
     for (int j = 0; j < N_; j++){
         for (int i = 0; i < n_; i++){
             Particle& p_i = particles_[i];
-            if (j == 0){
-                cout << p_i.r_ << endl;
-            }
 
             // K1
             vec F = total_force(i);
@@ -189,6 +189,7 @@ void PenningTrap::evolve_RK4(double dt){
 
             p_i.v_ = p_i.v_ + K4_v;
             p_i.r_ = p_i.r_ + K4_r;
+
 
             // last step
             V.col(i) = p_i.v_ + (1/6.)*(K1_v + 2.*K2_v + 2.*K3_v + K4_v);
@@ -248,5 +249,26 @@ void PenningTrap::evolve_forward_Euler(double dt){
             file.close();
         }
     }
+
+}
+
+
+void PenningTrap::analytical_solution(double dt, double Ap, double Am, double omega_p, double omega_m){
+    /*
+    double x;
+    double y;
+    double z_Re;
+    double z_Im;
+
+    for (int i = 0; i < N_; i++){
+        x = Ap*cos(omega_p*dt) + Am*cos(omega_m*dt);
+        y = - Ap*sin(omega_p*dt) - Am*sin(omega_m*dt);
+        complex<double> f(x, y);
+
+        z_Re = z_0 + cos(omega_z*dt);
+        z_Im = sin(omega_z*dt);
+        complex<double> z(z_Re, z_Im);
+    }
+    */
 
 }
