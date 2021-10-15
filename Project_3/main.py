@@ -4,6 +4,62 @@ from mpl_toolkits import mplot3d
 
 #two particles, velocity
 
+filename = "RK4_v.txt"
+Vx1 = []
+Vy1 = []
+Vz1 = []
+with open(filename) as f:
+        for line in f.read().split("\n")[0::4]:
+            particles = line.split()
+            if particles:
+                Vx1.append(particles[0])
+
+Vx1 = np.array([float(x) for x in Vx1])
+
+with open(filename) as f:
+        for line in f.read().split("\n")[1::4]:
+            particles = line.split()
+            if particles:
+                Vy1.append(particles[0])
+
+Vy1 = np.array([float(x) for x in Vy1])
+
+with open(filename) as f:
+        for line in f.read().split("\n")[2::4]:
+            particles = line.split()
+            if particles:
+                Vz1.append(particles[0])
+
+Vz1 = np.array([float(x) for x in Vz1])
+
+Vx2 = []
+Vy2 = []
+Vz2 = []
+with open(filename) as f:
+        for line in f.read().split("\n")[0::4]:
+            particles = line.split()
+            if particles:
+                Vx2.append(particles[1])
+
+
+Vx2 = np.array([float(x) for x in Vx2])
+
+with open(filename) as f:
+        for line in f.read().split("\n")[1::4]:
+            particles = line.split()
+            if particles:
+                Vy2.append(particles[1])
+
+Vy2 = np.array([float(x) for x in Vy2])
+
+with open(filename) as f:
+        for line in f.read().split("\n")[2::4]:
+            particles = line.split()
+            if particles:
+                Vz2.append(particles[1])
+
+Vz2 = np.array([float(x) for x in Vz2])
+
 #two particles, position
 
 filename = "RK4_r.txt"
@@ -62,6 +118,7 @@ with open(filename) as f:
 
 Rz2 = np.array([float(x) for x in Rz2])
 
+
 # plotting for 1 and 2 particles in problem 9
 
 fig = plt.figure()
@@ -78,14 +135,29 @@ plt.plot(Rx2, Ry2)
 plt.savefig('xy_movement_2part.pdf')
 plt.show()
 
-
-
 t = np.linspace(0,100,len(Rz1))
 fig = plt.figure()
 plt.plot(t, Rz1)
 plt.savefig('z_movement.pdf')
 plt.show()
 
+fig = plt.figure()
+plt.plot(Rx1, Vx1)
+plt.plot(Rx2, Vx2)
+plt.savefig('phase_space_x.pdf')
+plt.show()
+
+fig = plt.figure()
+plt.plot(Ry1, Vy1)
+plt.plot(Ry2, Vy2)
+plt.savefig('phase_space_y.pdf')
+plt.show()
+
+fig = plt.figure()
+plt.plot(Rz1, Vz1)
+plt.plot(Rz2, Vz2)
+plt.savefig('phase_space_z.pdf')
+plt.show()
 
 '''
 #several particles in loop
