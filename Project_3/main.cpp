@@ -31,11 +31,7 @@ int main(int argc, char const *argv[]){
 
     bool write = true;                          // creates txt-files if true
     bool interaction = false;                   // accounts for particle interactions if true
-<<<<<<< HEAD
     bool euler = false;                         // runs evolve_forward_Euler method if true
-=======
-    bool euler = true;                         // runs evolve_forward_Euler method if true
->>>>>>> a89da90812433904e5296bfb08939ee86ca0fe2a
     bool rk4 = true;                            // runs evolve_RK4 method if true
 
 
