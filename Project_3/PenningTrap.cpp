@@ -26,9 +26,14 @@ vec PenningTrap::external_B_field(int i){
     vec r = p_i.r_;
 
     vec B = vec(3).fill(0.);
+
+    B(2) = B0_;
+
+    /*
     if ((r(0) > d_) && (r(1) > d_) && (r(2) > d_)){
         B(2) = B0_;
     }
+    */
 
     return B;
 }
@@ -44,6 +49,9 @@ vec PenningTrap::external_E_field(int i){
     F(1) = -1.;
     F(2) = 2.;
 
+    vec E = - V0_/(d_*d_)*F % r;
+
+    /*
     vec E;
     if ((r(0) > d_) && (r(1) > d_) && (r(2) > d_)){
         E = - V0_/(d_*d_)*F % r;
@@ -53,7 +61,7 @@ vec PenningTrap::external_E_field(int i){
         E(1) = 0;
         E(2) = 0;
     }
-
+    */
     return E;
 }
 
