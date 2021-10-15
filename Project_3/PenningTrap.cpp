@@ -134,17 +134,18 @@ void PenningTrap::evolve_RK4(double dt, bool write){
 
             vec K1_v = a*dt;
             vec K1_r = p_i.v_*dt;
-
-            p_i.v_ = p_i.v_ + (1/2.)*K1_v;
+            
             p_i.r_ = p_i.r_ + (1/2.)*K1_r;
+            p_i.v_ = p_i.v_ + (1/2.)*K1_v;
+            
 
 
             // K2
             F = total_force(i);
             a = F/p_i.m_;
 
-            vec K2_v = p_i.v_ + (1/2.)*K1_v;
-            vec K2_r = p_i.r_ + (1/2.)*K1_r;
+            vec K2_v = a*dt;
+            vec K2_r = p_i.v_*dt;
 
             p_i.v_ = p_i.v_ + (1/2.)*K2_v;
             p_i.r_ = p_i.r_ + (1/2.)*K2_r;
@@ -154,8 +155,8 @@ void PenningTrap::evolve_RK4(double dt, bool write){
             F = total_force(i);
             a = F/p_i.m_;
 
-            vec K3_v = p_i.v_ + (1/2.)*K2_v;
-            vec K3_r = p_i.r_ + (1/2.)*K2_r;
+            vec K3_v = a*dt;
+            vec K3_r = p_i.v_*dt;
 
             p_i.v_ = p_i.v_ + (1/2.)*K3_v;
             p_i.r_ = p_i.r_ + (1/2.)*K3_r;
@@ -164,8 +165,8 @@ void PenningTrap::evolve_RK4(double dt, bool write){
             F = total_force(i);
             a = F/p_i.m_;
 
-            vec K4_v = p_i.v_ + K3_v;
-            vec K4_r = p_i.r_ + K3_r;
+            vec K4_v = a*dt;
+            vec K4_r = p_i.v_*dt;
 
             p_i.v_ = p_i.v_ + K4_v;
             p_i.r_ = p_i.r_ + K4_r;
@@ -173,8 +174,6 @@ void PenningTrap::evolve_RK4(double dt, bool write){
             // last step
             V.col(i) = p_i.v_ + (1/6.)*(K1_v + 2.*K2_v + 2.*K3_v + K4_v);
             R.col(i) = p_i.r_ + (1/6.)*(K1_r + 2.*K2_r + 2.*K3_r + K4_r);
-
-            
 
         }
 
