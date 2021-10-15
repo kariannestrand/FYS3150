@@ -39,7 +39,6 @@ vec PenningTrap::external_B_field(int i){
 }
 
 
-
 vec PenningTrap::external_E_field(int i){
     Particle& p_i = particles_[i];
     vec r = p_i.r_;
@@ -67,6 +66,7 @@ vec PenningTrap::external_E_field(int i){
     return E;
 }
 
+
 vec PenningTrap::force_particle(int i, int j){
     Particle& p_i = particles_[i];
     Particle& p_j = particles_[j];
@@ -82,6 +82,7 @@ vec PenningTrap::force_particle(int i, int j){
     return F;
 }
 
+
 vec PenningTrap::total_force_external(int i){
     Particle& p_i = particles_[i];
 
@@ -96,8 +97,6 @@ vec PenningTrap::total_force_external(int i){
 
     return F;
 }
-
-
 
 
 vec PenningTrap::total_force_particles(int i){
