@@ -18,10 +18,8 @@ int main(int argc, char const *argv[]){
     int dim = 3;                                // dimension (x,y,z)
 
     double t = 100.;                            // total time, [mu*s]
-    double dt = 0.01;                          // time step, [mu*s]
+    double dt = 0.01;                           // time step, [mu*s]
     int N = t/dt;                               // number of time steps
-
-    bool write = true;                          // creates txt-files if true
 
     vec q_vec = vec(n).fill(q);                 // vector with charges
     vec m_vec = vec(n).fill(m);                 // vector with masses
@@ -30,16 +28,21 @@ int main(int argc, char const *argv[]){
     mat vel = mat(dim, n).randn() - 0.5*d;      // fill in initial conditions for position here, just have random values for now
 
 
-    bool euler = false;
-    if (euler){
-        PenningTrap penningtrap0 = PenningTrap(B0, V0, d, ke, n, N, pos, vel, q_vec, m_vec);     // calling penningtrap
-        penningtrap0.evolve_forward_Euler(dt, write);
-    }
 
-    bool rk4 = true;
+    bool write = true;                          // creates txt-files if true
+    bool interaction = false;                   // accounts for particle interactions if true
+    bool euler = false;                         // runs evolve_forward_Euler method if true
+    bool rk4 = true;                            // runs evolve_RK4 method if true
+
+
+
+    if (euler){
+        PenningTrap penningtrap0 = PenningTrap(B0, V0, d, ke, n, N, pos, vel, q_vec, m_vec, write, interaction);     // calling penningtrap
+        penningtrap0.evolve_forward_Euler(dt);
+    }
     if (rk4){
-        PenningTrap penningtrap1 = PenningTrap(B0, V0, d, ke, n, N, pos, vel, q_vec, m_vec);     // calling penningtrap
-        penningtrap1.evolve_RK4(dt, write);
+        PenningTrap penningtrap1 = PenningTrap(B0, V0, d, ke, n, N, pos, vel, q_vec, m_vec, write, interaction);     // calling penningtrap
+        penningtrap1.evolve_RK4(dt);
     }
 
     return 0;
