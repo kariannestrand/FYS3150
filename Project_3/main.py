@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 
 
+
 #one particle
 
 filename = "Euler_r.txt"
@@ -12,6 +13,7 @@ Rz = []
 with open(filename) as f:
         for line in f.read().split("\n")[0::4]:
             Rx.append(line)
+
 
 Rx = np.array([float(x) for x in Rx[:-1]])
 
@@ -28,17 +30,37 @@ with open(filename) as f:
 Rz = np.array([float(x) for x in Rz])
 
 
-
-
-
 fig = plt.figure()
 ax = plt.axes(projection="3d")
 ax.plot3D(Rx, Ry, Rz, 'gray')
 
 plt.savefig('3d.pdf')
+plt.show()
 
 
-'''
+t = np.linspace(0, 100, len(Rz))
+
+q = 1.
+V0 = 9.65*10e8
+m = 40.078
+d = 10e4
+omega_z = np.sqrt(2*q*V0/(m*d**2))
+print(omega_z)
+
+
+fig = plt.figure()
+plt.plot(Rx, Ry)
+plt.savefig('xy_movement.pdf')
+plt.show()
+
+fig = plt.figure()
+plt.plot(t, Rz)
+plt.savefig('z_movement.pdf')
+plt.show()
+
+
+
+
 #several particles
 n_particles = 2 # number of particles
 
@@ -76,15 +98,7 @@ for i in range(n_particles):
                 Rz.append(cols[0])
 
     Rz = np.array(Rz)
-<<<<<<< HEAD
-    #t = np.linspace(0,100,len(Rz))
-
-    #plt.plot(t,Rx)
-    #plt.savefig('x_movement.pdf')
-
-'''
 
 
-=======
-    t = np.linspace(0,100,len(Rz))
->>>>>>> de1470db56a9e7bb16a6e3f4d2d70c5309bfde68
+
+

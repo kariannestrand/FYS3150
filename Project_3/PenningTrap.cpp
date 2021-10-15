@@ -26,9 +26,9 @@ vec PenningTrap::external_B_field(int i){
     vec r = p_i.r_;
 
     vec B = vec(3).fill(0.);
-    if ((r(0) > d_) && (r(1) > d_) && (r(2) > d_)){
-        B(2) = B0_;
-    }
+    //if ((r(0) > d_) && (r(1) > d_) && (r(2) > d_)){
+    B(2) = B0_;
+    //}
 
     return B;
 }
@@ -46,14 +46,16 @@ vec PenningTrap::external_E_field(int i){
     F(2) = 2.;
 
     vec E;
-    if ((r(0) > d_) && (r(1) > d_) && (r(2) > d_)){
-        E = - V0_/(d_*d_)*F % r;
-    }
+    //if ((r(0) > d_) && (r(1) > d_) && (r(2) > d_)){
+    E = - V0_/(d_*d_)*F % r;
+    //}
+    /*
     else{
         E(0) = 0;
         E(1) = 0;
         E(2) = 0;
     }
+    */
 
     return E;
 }
@@ -130,36 +132,36 @@ void PenningTrap::evolve_RK4(double dt, bool write){
             vec v_old = p_i.v_;
             vec r_old = p_i.r_;
 
-            p_i.v_ = v_old + K1_v/2.;
-            p_i.r_ = r_old + K1_r/2.;
+            p_i.v_ = v_old + (1/2.)*K1_v;
+            p_i.r_ = r_old + (1/2.)*K1_r;
 
 
             // K2
             F = total_force(i);
             a = F/p_i.m_;
 
-            vec K2_v = v_old + K1_v/2.;
-            vec K2_r = r_old + K1_r/2.;
+            vec K2_v = v_old + (1/2.)*K1_v;
+            vec K2_r = r_old + (1/2.)*K1_r;
 
             v_old = p_i.v_;
             r_old = p_i.r_;
 
-            p_i.v_ = v_old + K2_v/2.;
-            p_i.r_ = r_old + K2_r/2.;
+            p_i.v_ = v_old + (1/2.)*K2_v;
+            p_i.r_ = r_old + (1/2.)*K2_r;
 
 
             // K3
             F = total_force(i);
             a = F/p_i.m_;
 
-            vec K3_v = v_old + K2_v/2.;
-            vec K3_r = r_old + K2_r/2.;
+            vec K3_v = v_old + (1/2.)*K2_v;
+            vec K3_r = r_old + (1/2.)*K2_r;
 
             v_old = p_i.v_;
             r_old = p_i.r_;
 
-            p_i.v_ = v_old + K3_v/2.;
-            p_i.r_ = r_old + K3_r/2.;
+            p_i.v_ = v_old + (1/2.)*K3_v;
+            p_i.r_ = r_old + (1/2.)*K3_r;
 
 
             // K4
@@ -177,8 +179,8 @@ void PenningTrap::evolve_RK4(double dt, bool write){
 
 
             // last step
-            V.col(i) = p_i.v_ + (K1_v + 2.*K2_v + 2.*K3_v + K4_v)/6.;
-            R.col(i) = p_i.r_ + (K1_r + 2.*K2_r + 2.*K3_r + K4_r)/6.;
+            V.col(i) = p_i.v_ + (1/6.)*(K1_v + 2.*K2_v + 2.*K3_v + K4_v);
+            R.col(i) = p_i.r_ + (1/6.)*(K1_r + 2.*K2_r + 2.*K3_r + K4_r);
 
             p_i.v_ = v_old;
             p_i.r_ = r_old;
