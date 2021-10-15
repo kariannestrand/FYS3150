@@ -4,13 +4,15 @@
 using namespace arma;
 using namespace std;
 
-PenningTrap::PenningTrap(double B0, double V0, double d, double ke, int n, double N, mat pos, mat vel, vec q_vec, vec m_vec){
+PenningTrap::PenningTrap(double B0, double V0, double d, double ke, int n, double N, mat pos, mat vel, vec q_vec, vec m_vec, bool write, bool interaction){
     B0_ = B0;                   // magnetic field strength
     V0_ = V0;                   // applied potential
     d_ = d;                     // characteristic dimension
     ke_ = ke;
     n_ = n;
     N_ = N;
+    write_ = write;
+    interaction_ = interaction;
 
     // making list/contatiner for particle objects
 
@@ -76,7 +78,15 @@ vec PenningTrap::force_particle(int i, int j){
 
     vec dr = abs(r) % abs(r) % abs(r);
 
-    vec F = ke_*(q_i*q_j)/dr % r;
+    vec F;
+    if (interaction_){
+        F = ke_*(q_i*q_j)/dr % r;
+    }
+    else{
+        F(0) = 0;
+        F(1) = 0;
+        F(2) = 0;
+    }
 
     return F;
 }
@@ -100,6 +110,7 @@ vec PenningTrap::total_force_external(int i){
 
 vec PenningTrap::total_force_particles(int i){
     vec F = vec(3).fill(0);
+
     for (int j = 0; j < n_; j++){
         if (j != i){
             F = F + force_particle(i, j);
@@ -112,20 +123,29 @@ vec PenningTrap::total_force_particles(int i){
 
 vec PenningTrap::total_force(int i){
     vec F = vec(3).fill(0);
-    F = total_force_external(i) + total_force_particles(i);
+
+    if (interaction_){
+        F = total_force_external(i) + total_force_particles(i);
+    }
+    else{
+        F = total_force_external(i);
+    }
 
     return F;
 
 }
 
 
-void PenningTrap::evolve_RK4(double dt, bool write){
+void PenningTrap::evolve_RK4(double dt){
     mat R = mat(3, n_).fill(0);
     mat V = mat(3, n_).fill(0);
 
     for (int j = 0; j < N_; j++){
         for (int i = 0; i < n_; i++){
             Particle& p_i = particles_[i];
+            if (j == 0){
+                cout << p_i.r_ << endl;
+            }
 
             // K1
             vec F = total_force(i);
@@ -136,7 +156,6 @@ void PenningTrap::evolve_RK4(double dt, bool write){
 
             p_i.r_ = p_i.r_ + (1/2.)*K1_r;
             p_i.v_ = p_i.v_ + (1/2.)*K1_v;
-
 
 
             // K2
@@ -177,14 +196,14 @@ void PenningTrap::evolve_RK4(double dt, bool write){
 
         }
 
-        if (write){
+        if (write_){
             ofstream file;
             file.open("RK4_v.txt", ios::app);
             file << V << endl;
             file.close();
         }
 
-        if (write){
+        if (write_){
             ofstream file;
             file.open("RK4_r.txt", ios::app);
             file << R << endl;
@@ -195,7 +214,7 @@ void PenningTrap::evolve_RK4(double dt, bool write){
 }
 
 
-void PenningTrap::evolve_forward_Euler(double dt, bool write){
+void PenningTrap::evolve_forward_Euler(double dt){
     mat R = mat(3, n_).fill(0);
     mat V = mat(3, n_).fill(0);
     for (int j = 0; j < N_; j++){
@@ -215,14 +234,14 @@ void PenningTrap::evolve_forward_Euler(double dt, bool write){
             R.col(i) = p_i.r_;
         }
 
-        if (write){
+        if (write_){
             ofstream file;
             file.open("Euler_v.txt", ios::app);
             file << V << endl;
             file.close();
         }
 
-        if (write){
+        if (write_){
             ofstream file;
             file.open("Euler_r.txt", ios::app);
             file << R << endl;
