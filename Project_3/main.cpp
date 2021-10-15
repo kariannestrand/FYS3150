@@ -4,9 +4,8 @@
 using namespace arma;
 using namespace std;
 
-int main(int argc, char const *argv[])
-{
-    int q = 1;                              // charge of Ca+ particle, [e]
+int main(int argc, char const *argv[]){
+    double q = 1.;                              // charge of Ca+ particle, [e]
     double m = 40.078;                          // atomic mass of Ca+, [u]
 
     double B0 = 9.65e1;                         // magnetic field strength, [u/mu*s*e]
@@ -18,9 +17,9 @@ int main(int argc, char const *argv[])
     int n = 1;                    // number of particles
     int dim = 3;                  // dimension (x,y,z)
 
-    int t = 100;
-    int N = 100000;
-    double dt = t*(1./N);
+    double t = 100.;                            // total time, [mu*s]
+    double dt = 0.001;                          // time step, [mu*s]
+    int N = t/dt;                               // number of time steps
 
     bool write = true;                          // creates txt-files if true
 
@@ -31,39 +30,17 @@ int main(int argc, char const *argv[])
     mat vel = mat(dim, n).randn() - 0.5*d;      // fill in initial conditions for position here, just have random values for now
 
 
-    PenningTrap penningtrap0 = PenningTrap(B0, V0, d, ke, n, N, pos, vel, q_vec, m_vec);     // calling penningtrap
-    penningtrap0.evolve_forward_Euler(dt, write);
-
-    //PenningTrap penningtrap1 = PenningTrap(B0, V0, d, ke, n, N, pos, vel, q_vec, m_vec);     // calling penningtrap
-    //penningtrap1.evolve_RK4(dt, write);
-
-    /*
-    mat pos =  mat(dim, n);
-    mat vel =  mat(dim, n);
-
-    double x_0 = 1 - 0.5*d;
-    double z_0 = 1 - 0.5*d;
-    double v_0 = 1 - 0.5*d;
-
-
-    for (int i = 0; i < n; i++){
-        pos(0, i) = x_0;
-        pos(1, i) = 0;
-        pos(2, i) = z_0;
-
-        vel(0, i) = 0;
-        vel(1, i) = v_0;
-        vel(2, i) = 0;
+    bool euler = false;
+    if (euler){
+        PenningTrap penningtrap0 = PenningTrap(B0, V0, d, ke, n, N, pos, vel, q_vec, m_vec);     // calling penningtrap
+        penningtrap0.evolve_forward_Euler(dt, write);
     }
-    
 
-    PenningTrap penningtrap0 = PenningTrap(B0, V0, d, ke, n, N, pos, vel, q_vec, m_vec);     // calling penningtrap
-    penningtrap0.evolve_forward_Euler(dt, write);
+    bool rk4 = true;
+    if (rk4){
+        PenningTrap penningtrap1 = PenningTrap(B0, V0, d, ke, n, N, pos, vel, q_vec, m_vec);     // calling penningtrap
+        penningtrap1.evolve_RK4(dt, write);
+    }
 
-    PenningTrap penningtrap1 = PenningTrap(B0, V0, d, ke, n, N, pos, vel, q_vec, m_vec);     // calling penningtrap
-    penningtrap1.evolve_RK4(dt, write);
-
-*/
     return 0;
-
 }
