@@ -53,10 +53,9 @@ vec PenningTrap::external_E_field(int i){
 
     /*
     vec E;
-    //if ((r(0) > d_) && (r(1) > d_) && (r(2) > d_)){
-    E = - V0_/(d_*d_)*F % r;
-    //}
-    /*
+    if ((r(0) > d_) && (r(1) > d_) && (r(2) > d_)){
+        E = - V0_/(d_*d_)*F % r;
+    }
     else{
         E(0) = 0;
         E(1) = 0;
@@ -160,6 +159,7 @@ void PenningTrap::evolve_RK4(double dt, bool write){
             p_i.v_ = p_i.v_ + (1/2.)*K3_v;
             p_i.r_ = p_i.r_ + (1/2.)*K3_r;
 
+
             // K4
             F = total_force(i);
             a = F/p_i.m_;
@@ -174,7 +174,7 @@ void PenningTrap::evolve_RK4(double dt, bool write){
             V.col(i) = p_i.v_ + (1/6.)*(K1_v + 2.*K2_v + 2.*K3_v + K4_v);
             R.col(i) = p_i.r_ + (1/6.)*(K1_r + 2.*K2_r + 2.*K3_r + K4_r);
 
-            
+
 
         }
 

@@ -18,7 +18,7 @@ int main(int argc, char const *argv[]){
     int dim = 3;                                // dimension (x,y,z)
 
     double t = 100.;                            // total time, [mu*s]
-    double dt = 0.1;                          // time step, [mu*s]
+    double dt = 0.01;                          // time step, [mu*s]
     int N = t/dt;                               // number of time steps
 
     bool write = true;                          // creates txt-files if true
