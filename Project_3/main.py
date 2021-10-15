@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 
+
 #two particles, velocity
 
 filename = "RK4_v.txt"
@@ -123,12 +124,15 @@ Rz2 = np.array([float(x) for x in Rz2])
 
 fig = plt.figure()
 ax = plt.axes(projection="3d")
-ax.plot3D(Rx1, Ry1, Rz1, 'blue')
-ax.plot3D(Rx2, Ry2, Rz2, 'red')
+plt.tight_layout()
+ax.plot3D(Rx1, Ry1, Rz1, 'blue', label='Trajectory of particle 1 with interactions')
+ax.plot3D(Rx2, Ry2, Rz2, 'red', label ='Trajectory of particle 2 with interactions')
+plt.legend()
 
 plt.savefig('3d_2particles.pdf')
 plt.show()
 
+'''
 fig = plt.figure()
 plt.plot(Rx1, Ry1)
 plt.plot(Rx2, Ry2)
@@ -159,8 +163,71 @@ plt.plot(Rz2, Vz2)
 plt.savefig('phase_space_z.pdf')
 plt.show()
 
-'''
-#several particles in loop
+
+#everything below here not working
+
+# plotting relative errors, have to import the data from file in the right way 
+
+relative_error_euler = False
+if relative_error_euler:
+
+    # function calculating relative error:
+    def rel_error(exact, euler):
+        return np.abs((exact - euler)/euler)
+
+    n = [1, 2, 3, 4, 5]  #change this to the value of dt in the different cases
+    for i in range(len(n)):
+        # reading from files, extracting x, u from exact_n.txt and v from approx_n.txt:
+        filename_exact = "exact_" + str(n[i]) + ".txt"
+        #import the 5 different exact solutions here
+        
+        filename_approx = "euler_" + str(n[i]) + ".txt"
+        #import the 5 different euler solutions here
+
+        filename_approx = "time_" + str(n[i]) + ".txt"
+        #import the 5 different time-arrays here
+
+        # plotting relative error by calling function rel_error with euler and exact:
+        plt.plot(t, rel_error(exact, euler), "--", label = "dt = " + str(n[i]))
+        plt.title("Relative error", fontsize = 20)
+        plt.xlabel("t", size = 20); plt.xticks(size = 15)
+        plt.ylabel("$\epsilon$", size = 20); plt.yticks(size = 15)
+        plt.legend(loc = "upper left", fontsize = 10)
+        plt.tight_layout()
+        plt.savefig("relative_error_euler.pdf")
+    plt.show()
+
+
+relative_error_rk4 = False
+if relative_error_rk4:
+
+    # function calculating relative error:
+    def rel_error(exact, rk4):
+        return np.abs((exact - rk4)/rk4)
+
+    n = [1, 2, 3, 4, 5]  #change this to the value of dt in the different cases
+    for i in range(len(n)):
+        # reading from files, extracting x, u from exact_n.txt and v from approx_n.txt:
+        filename_exact = "exact_" + str(n[i]) + ".txt"
+        #import the 5 different exact solutions here
+        
+        filename_approx = "rk4_" + str(n[i]) + ".txt"
+        #import the 5 different rk4 solutions here
+
+        filename_approx = "time_" + str(n[i]) + ".txt"
+        #import the 5 different time-arrays here  
+
+        # plotting relative error by calling function rel_error with exact and rk4:
+        plt.plot(t, rel_error(exact, rk4), "--", label = "dt = " + str(n[i]))
+        plt.title("Relative error", fontsize = 20)
+        plt.xlabel("t", size = 20); plt.xticks(size = 15)
+        plt.ylabel("$\epsilon$", size = 20); plt.yticks(size = 15)
+        plt.legend(loc = "upper left", fontsize = 10)
+        plt.tight_layout()
+        plt.savefig("relative_error_rk4.pdf")
+    plt.show()
+
+#several particles in loop, not working
 n_particles = 2 # number of particles
 
 for i in range(n_particles):
@@ -195,8 +262,6 @@ for i in range(n_particles):
     print(Rz)
 
 '''
-
-    
     
 
     
