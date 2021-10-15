@@ -253,22 +253,45 @@ void PenningTrap::evolve_forward_Euler(double dt){
 }
 
 
-void PenningTrap::analytical_solution(double dt, double Ap, double Am, double omega_p, double omega_m){
-    /*
+void PenningTrap::analytical_solution(double dt){
+    Particle& p_i = particles_[0];
+
+    double x_0 = p_i.r_[0];
+    double v_0 = p_i.v_[1];
+    double z_0 = p_i.r_[2];
+
+    double q = p_i.q_;
+    double m = p_i.m_;
+
+    double omega_0 = q*B0_/m;
+    double omega_z = sqrt(2*q*V0_/(m*d_*d_));
+
+    double omega_p = (1/2.)*(omega_0 + sqrt(omega_0*omega_0 - 2*omega_z*omega_z));
+    double omega_m = (1/2.)*(omega_0 - sqrt(omega_0*omega_0 - 2*omega_z*omega_z));
+
+    double Ap = (v_0 + omega_p*x_0)/(omega_p - omega_m);
+    double Am = - (v_0 + omega_m*x_0)/(omega_p - omega_m);
+
     double x;
     double y;
     double z_Re;
     double z_Im;
 
     for (int i = 0; i < N_; i++){
-        x = Ap*cos(omega_p*dt) + Am*cos(omega_m*dt);
-        y = - Ap*sin(omega_p*dt) - Am*sin(omega_m*dt);
-        complex<double> f(x, y);
+        x = Ap*cos(omega_p*i*dt) + Am*cos(omega_m*i*dt);
+        y = - Ap*sin(omega_p*i*dt) - Am*sin(omega_m*i*dt);
 
-        z_Re = z_0 + cos(omega_z*dt);
+        z_Re = z_0 + cos(omega_z*i*dt);
         z_Im = sin(omega_z*dt);
         complex<double> z(z_Re, z_Im);
+
+        if (write_){
+            ofstream file;
+            file.open("analytical.txt", ios::app);
+            file << x << " " << y << " " << z << endl;
+            file.close();
+        }
+
     }
-    */
 
 }
