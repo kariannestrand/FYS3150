@@ -127,6 +127,9 @@ void PenningTrap::evolve_RK4(double dt, bool write){
     for (int j = 0; j < N_; j++){
         for (int i = 0; i < n_; i++){
             Particle& p_i = particles_[i];
+            if (j == 0){
+                p_i.r_.print();
+            }
 
             // K1
             vec F = total_force(i);
