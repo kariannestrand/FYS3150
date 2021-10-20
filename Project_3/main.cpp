@@ -17,8 +17,8 @@ int main(int argc, char const *argv[]){
     int n = 1;                                  // number of particles
     int dim = 3;                                // dimension (x,y,z)
 
-    double t = 100.;                           // total time, [mu*s]
-    double dt = 0.0001;                           // time step, [mu*s]
+    double t = 100.;                            // total time, [mu*s]
+    double dt = 1.0;                            // time step, [mu*s]
     int N = t/dt;                               // number of time steps
 
     vec q_vec = vec(n).fill(q);                 // vector with charges
@@ -29,8 +29,8 @@ int main(int argc, char const *argv[]){
 
     bool write = true;                          // creates txt-files if true
     bool interaction = false;                   // accounts for particle interactions if true
-    bool euler = true;                          // runs evolve_forward_Euler method if true
     bool rk4 = true;                            // runs evolve_RK4 method if true
+    bool euler = true;                          // runs evolve_forward_Euler method if true
 
 
     if (euler){

@@ -143,15 +143,14 @@ void PenningTrap::evolve_RK4(double dt){
     mat R = mat(3, n_).fill(0);
     mat V = mat(3, n_).fill(0);
 
-    for (int j = 0; j < N_; j++){
-        for (int i = 0; i < n_; i++){
-            Particle& p_i = particles_[i];
-            /*
-            if (j == 0){
-                p_i.r_.print();
-            }
-            */
 
+    for (int i = 0; i < n_; i++){
+        Particle& p_i = particles_[i];
+
+        vec r_old = p_i.r_;
+        vec v_old = p_i.v_;
+
+        for (int j = 0; j < N_; j++){
             // K1
             vec F = total_force(i);
             vec a = F/p_i.m_;
@@ -197,41 +196,46 @@ void PenningTrap::evolve_RK4(double dt){
 
 
             // last step
-            V.col(i) = p_i.v_ + (1/6.)*(K1_v + 2.*K2_v + 2.*K3_v + K4_v);
-            R.col(i) = p_i.r_ + (1/6.)*(K1_r + 2.*K2_r + 2.*K3_r + K4_r);
+            p_i.v_ = p_i.v_ + (1/6.)*(K1_v + 2.*K2_v + 2.*K3_v + K4_v);
+            p_i.r_ = p_i.r_ + (1/6.)*(K1_r + 2.*K2_r + 2.*K3_r + K4_r);
+
+            V.col(i) = p_i.v_;
+            R.col(i) = p_i.r_;
 
 
             if (i == 0){
                 if (write_){
                     ofstream file;
-                    file.open("RK4_v_1_00001dt.txt", ios::app);
+                    file.open("RK4_v_1_1dt.txt", ios::app);
                     file << V(0, i) << " " << V(1, i) << " " << V(2, i) << endl;
                     file.close();
                 }
 
                 if (write_){
                     ofstream file;
-                    file.open("RK4_r_1_00001dt.txt", ios::app);
+                    file.open("RK4_r_1_1dt.txt", ios::app);
                     file << R(0, i) << " " << R(1, i) << " " << R(2, i) << endl;
                     file.close();
                 }
             }
-            else if (i == 1){
+            if (i == 1){
                 if (write_){
                     ofstream file;
-                    file.open("RK4_v_2_00001dt.txt", ios::app);
+                    file.open("RK4_v_2_1dt.txt", ios::app);
                     file << V(0, i) << " " << V(1, i) << " " << V(2, i) << endl;
                     file.close();
                 }
 
                 if (write_){
                     ofstream file;
-                    file.open("RK4_r_2_00001dt.txt", ios::app);
+                    file.open("RK4_r_2_1dt.txt", ios::app);
                     file << R(0, i) << " " << R(1, i) << " " << R(2, i) << endl;
                     file.close();
                 }
             }
         }
+        p_i.r_ = r_old;
+        p_i.v_ = v_old;
     }
 }
 
@@ -240,11 +244,15 @@ void PenningTrap::evolve_forward_Euler(double dt){
     mat R = mat(3, n_).fill(0);
     mat V = mat(3, n_).fill(0);
 
-    for (int j = 0; j < N_; j++){
-        for (int i = 0; i < n_; i++){
-            Particle& p_i = particles_[i];
+    for (int i = 0; i < n_; i++){
+        Particle& p_i = particles_[i];
 
-            //cout << p_i.r_ << endl;
+        vec r_old = p_i.r_;
+        vec v_old = p_i.v_;
+
+
+        for (int j = 0; j < N_; j++){
+
             vec F = total_force(i);
             vec a = F/p_i.m_;
 
@@ -259,14 +267,14 @@ void PenningTrap::evolve_forward_Euler(double dt){
             if (i == 0){
                 if (write_){
                     ofstream file;
-                    file.open("Euler_v_1_00001dt.txt", ios::app);
+                    file.open("Euler_v_1_1dt.txt", ios::app);
                     file << V(0, i) << " " << V(1, i) << " " << V(2, i) << endl;
                     file.close();
                 }
 
                 if (write_){
                     ofstream file;
-                    file.open("Euler_r_1_00001dt.txt", ios::app);
+                    file.open("Euler_r_1_1dt.txt", ios::app);
                     file << R(0, i) << " " << R(1, i) << " " << R(2, i) << endl;
                     file.close();
                 }
@@ -274,18 +282,21 @@ void PenningTrap::evolve_forward_Euler(double dt){
             else if (i == 1){
                 if (write_){
                     ofstream file;
-                    file.open("Euler_v_2_00001dt.txt", ios::app);
+                    file.open("Euler_v_2_1dt.txt", ios::app);
                     file << V(0, i) << " " << V(1, i) << " " << V(2, i) << endl;
                     file.close();
                 }
 
                 if (write_){
                     ofstream file;
-                    file.open("Euler_r_2_00001dt.txt", ios::app);
+                    file.open("Euler_r_2_1dt.txt", ios::app);
                     file << R(0, i) << " " << R(1, i) << " " << R(2, i) << endl;
                     file.close();
                 }
             }
         }
+
+        p_i.r_ = r_old;
+        p_i.v_ = v_old;
     }
 }
