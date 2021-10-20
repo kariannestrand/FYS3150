@@ -33,7 +33,6 @@ public:
     arma::vec total_force(int i);               // the total force on particle_i from both external fields and other particles
     void evolve_RK4(double dt);                 // evolve the system one time step (dt) using Runge-Kutta 4th order
     void evolve_forward_Euler(double dt);       // evolve the system one time step (dt) using Forward Euler
-    void analytical_solution(double dt);
 };
 
 #endif
