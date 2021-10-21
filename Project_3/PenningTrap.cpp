@@ -199,21 +199,15 @@ void PenningTrap::evolve_RK4(double dt){
             vec K4_v = a*dt;
             vec K4_r = p_i.v_*dt;
 
-
             // last step
             p_i.v_ = v_old + (1/6.)*(K1_v + 2.*K2_v + 2.*K3_v + K4_v);
             p_i.r_ = r_old + (1/6.)*(K1_r + 2.*K2_r + 2.*K3_r + K4_r);
 
-            // cout << "size v: " << size(p_i.v_) << endl;
-            // cout << "size slice v: " << size(V_total.slice(j).col(i)) << endl;
             V_total.slice(j).col(i) = p_i.v_;
             R_total.slice(j).col(i) = p_i.r_;
 
             p_i.r_ = r_old;
             p_i.v_ = v_old;
-
-            //R.save("test_r.bin");
-            //V.save("test_v.bin");
 
             /*
             if (i == 0){
@@ -253,16 +247,18 @@ void PenningTrap::evolve_RK4(double dt){
       
     }
 
-
+    
     if (write_){
         for (int i = 0; i < n_; i++){
             mat R = mat(3, n_);
+            mat V = mat(3, n_);
             R = R_total.col(i);
-            R.save("bin_files/r_" + to_string(i) + ".bin");
+            V = V_total.col(i);
+            R.save("bin_files/r_" + to_string(i) + "_0001" + ".bin");
+            V.save("bin_files/v_" + to_string(i) + "_0001" + ".bin");
+
         }
-    }
-    
-    
+    } 
 }
 
 
