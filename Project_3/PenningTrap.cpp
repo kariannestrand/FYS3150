@@ -258,7 +258,7 @@ void PenningTrap::evolve_RK4(double dt){
         for (int i = 0; i < n_; i++){
             mat R = mat(3, n_);
             R = R_total.col(i);
-            R.save("r_" + to_string(i) + ".bin");
+            R.save("bin_files/r_" + to_string(i) + ".bin");
         }
     }
     
