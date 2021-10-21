@@ -208,8 +208,8 @@ void PenningTrap::evolve_RK4(double dt){
             V_total.slice(j).col(i) = p_i.v_;
             R_total.slice(j).col(i) = p_i.r_;
 
-            p_i.r_ = r_old;
-            p_i.v_ = v_old;
+            // p_i.r_ = r_old;
+            // p_i.v_ = v_old;
 
             /*
             if (i == 0){
@@ -262,7 +262,6 @@ void PenningTrap::evolve_RK4(double dt){
         }
     }
 }
-
 
 
 void PenningTrap::evolve_forward_Euler(double dt){

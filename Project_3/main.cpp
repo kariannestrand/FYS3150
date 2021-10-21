@@ -14,7 +14,7 @@ int main(int argc, char const *argv[]){
 
     double ke = 1.38935333e5;                   // Couloumb constant, [u*(mu*m)^3/(mu*s*e)^2]
 
-    int n = 1;                                  // number of particles
+    int n = 2;                                  // number of particles
     int dim = 3;                                // dimension (x,y,z)
 
     double t = 100.;                            // total time, [mu*s]
