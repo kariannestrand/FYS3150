@@ -158,6 +158,9 @@ void PenningTrap::evolve_RK4(double dt){
             vec r_old = R_total.slice(j-1).col(i);
             vec v_old = V_total.slice(j-1).col(i);
 
+            //vec r_old = R_total.slice(j).col(i);
+            //vec v_old = V_total.slice(j).col(i);
+
             // K1
             vec F = total_force(i);
             vec a = F/p_i.m_;
