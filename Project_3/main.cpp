@@ -18,7 +18,7 @@ int main(int argc, char const *argv[]){
     int dim = 3;                                // dimension (x,y,z)
 
     double t = 100.;                            // total time, [mu*s]
-    double dt = 1.0;                            // time step, [mu*s]
+    double dt = 0.001;                          // time step, [mu*s]
     int N = t/dt;                               // number of time steps
 
     vec q_vec = vec(n).fill(q);                 // vector with charges

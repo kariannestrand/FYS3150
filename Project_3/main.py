@@ -17,10 +17,10 @@ v_x = False
 v_y = False
 v_z = False
 
-trajectory = False
+trajectory = True
 
-relative_error_RK4 = False
-relative_error_Euler = False
+relative_error_RK4 = True
+relative_error_Euler = True
 
 error_convergence_rate_RK4 = False
 error_convergence_rate_Euler = False
@@ -54,8 +54,8 @@ def r_analytical(filename_r, filename_v, h):
     v_0 = Vy1[0]
     z_0 = Rz1[0]
 
-    Ap = (v_0 + omega_p*x_0)/(omega_p - omega_m)
-    Am = - (v_0 + omega_m*x_0)/(omega_p - omega_m)
+    Ap = (v_0 + omega_m*x_0)/(omega_m - omega_p)
+    Am = - (v_0 + omega_p*x_0)/(omega_m - omega_p)
 
 
     # analytical solution, r_exact
@@ -74,8 +74,27 @@ def r_analytical(filename_r, filename_v, h):
         # append length of r, or vector r (x, y, z) ?? anf z_Re or what??
         r_exact[i] = np.sqrt(x[i]**2 + y[i]**2 + z_Re[i]**2)
 
+    """
     t = np.linspace(0, 100, len(Rx1))
     plt.plot(t, r_exact)
+    plt.show()
+    """
+
+    fig = plt.figure()
+    ax = plt.axes(projection="3d")
+    plt.tight_layout()
+    ax.plot3D(x, y, z_Re, 'blue', label='Trajectory of particle 1')
+
+    plt.plot(x[0], y[0], z_Re[0], "ro")
+
+    ax.set_xlabel("x/[$\mu$m]", size = 12)
+    ax.set_ylabel("y/[$\mu$m]", size = 12)
+    ax.set_zlabel("z/[$\mu$m]", size = 12)
+
+    plt.ticklabel_format(axis="both", style="sci", scilimits=(0,0))
+
+    plt.legend()
+    plt.savefig('pdf/3D_1_analytical.pdf')
     plt.show()
 
     return r_exact
@@ -316,7 +335,7 @@ if trajectory:
     ax = plt.axes(projection="3d")
     plt.tight_layout()
     ax.plot3D(Rx1, Ry1, Rz1, 'blue', label='Trajectory of particle 1')
-
+    plt.plot(Rx1[0], Ry1[0], Rz1[0], "ro")
 
     if n == 1:
         plt.title("Trajectory of one particle", size = 12)
@@ -436,4 +455,4 @@ filename_r = "RK4_r_1_0001dt.txt"
 filename_v = "RK4_v_1_0001dt.txt"
 h = 0.001
 r_analytical(filename_r, filename_v, h)
-r_numerical(filename_r)
+#r_numerical(filename_r)
