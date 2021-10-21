@@ -10,7 +10,7 @@ interaction = False
 read_velocity = True             # must always be True
 read_position = True             # must always be True
 
-z_t = True
+z_t = False
 x_y = False
 
 v_x = False
@@ -41,7 +41,7 @@ omega_p = 0.5*(omega_0 + np.sqrt(omega_0**2 - 2*omega_z**2));
 omega_m = 0.5*(omega_0 - np.sqrt(omega_0**2 - 2*omega_z**2));
 
 
-def r_analytical(filename_r, filename_v):
+def r_analytical(filename_r, filename_v, h):
 
     pos = np.loadtxt(filename_r, skiprows = 1)
     Rx1 = pos[:, 0]
@@ -59,19 +59,24 @@ def r_analytical(filename_r, filename_v):
 
 
     # analytical solution, r_exact
-    r_exact_list = []
-    for i in range(len(Rx1)):
-        dt = 0.001
-        x = Ap*np.cos(omega_p*i*dt) + Am*np.cos(omega_m*i*dt)
-        y = - Ap*np.sin(omega_p*i*dt) - Am*np.sin(omega_m*i*dt)
+    x = np.empty(len(Rx1))
+    y = np.empty(len(Rx1))
+    z_Re = np.empty(len(Rx1))
 
-        z_Re = z_0 + np.cos(omega_z*i*dt)
-        z_Im = np.sin(omega_z*dt)
+    r_exact = np.empty(len(Rx1))
+    for i in range(len(Rx1)):
+        x[i] = Ap*np.cos(omega_p*i*h) + Am*np.cos(omega_m*i*h)
+        y[i] = - Ap*np.sin(omega_p*i*h) - Am*np.sin(omega_m*i*h)
+
+        z_Re[i] = z_0 + np.cos(omega_z*i*h)
+        z_Im = np.sin(omega_z*i*h)
 
         # append length of r, or vector r (x, y, z) ?? anf z_Re or what??
-        r_exact_list.append(np.sqrt(x**2 + y**2 + z_Re**2))
+        r_exact[i] = np.sqrt(x[i]**2 + y[i]**2 + z_Re[i]**2)
 
-    r_exact = np.array(r_exact_list)
+    t = np.linspace(0, 100, len(Rx1))
+    plt.plot(t, r_exact)
+    plt.show()
 
     return r_exact
 
@@ -86,14 +91,17 @@ def r_numerical(filename_r):
     for i in range(len(Rx1)):
         r_num[i] = np.sqrt(Rx1[i]**2 + Ry1[i]**2 + Rz1[i]**2)
 
+    t = np.linspace(0, 100, len(Rx1))
+    plt.plot(t, r_num)
+    plt.show()
     return r_num
 
 
-def relative_error(filename_r, filename_v):
-    r_exact = r_analytical(filename_r, filename_v)
+def relative_error(filename_r, filename_v, h):
+    r_exact = r_analytical(filename_r, filename_v, h)
     r_num = r_numerical(filename_r)
 
-    rel_err = np.abs((r_exact - r_num)/r_num)
+    rel_err = np.abs((r_exact - r_num)/r_exact)
 
     return rel_err
 
@@ -343,10 +351,11 @@ if trajectory:
 if relative_error_RK4:
     filename_r_RK4 = ["RK4_r_1_1dt.txt", "RK4_r_1_01dt.txt", "RK4_r_1_001dt.txt", "RK4_r_1_0001dt.txt", "RK4_r_1_00001dt.txt"]
     filename_v_RK4 = ["RK4_v_1_1dt.txt", "RK4_v_1_01dt.txt", "RK4_v_1_001dt.txt", "RK4_v_1_0001dt.txt", "RK4_v_1_00001dt.txt"]
+    dt = [1., 0.1, 0.01, 0.001, 0.0001]
 
     h = [1., 0.1, 0.01, 0.001, 0.0001]
     for i in range(len(filename_r_RK4)):
-        plt.plot(time(filename_r_RK4[i]), relative_error(filename_r_RK4[i], filename_v_RK4[i]), label = "h = " + str(h[i]))
+        plt.plot(time(filename_r_RK4[i]), relative_error(filename_r_RK4[i], filename_v_RK4[i], h[i]), label = "h = " + str(h[i]))
 
     plt.title("Relative Error with RK4", size = 12)
 
@@ -367,7 +376,7 @@ if relative_error_Euler:
 
     h = [1., 0.1, 0.01, 0.001, 0.0001]
     for i in range(len(filename_r_Euler)):
-        plt.plot(time(filename_r_Euler[i]), relative_error(filename_r_Euler[i], filename_v_Euler[i]), label = "h = " + str(h[i]))
+        plt.plot(time(filename_r_Euler[i]), relative_error(filename_r_Euler[i], filename_v_Euler[i], h[i]), label = "h = " + str(h[i]))
 
     plt.title("Relative Error with Forward Euler", size = 12)
 
@@ -390,7 +399,7 @@ if error_convergence_rate_RK4:
 
     Delta_max = np.empty(len(h))
     for i in range(len(h)):
-        r_exact = r_analytical(filename_r_RK4[i], filename_v_RK4[i])
+        r_exact = r_analytical(filename_r_RK4[i], filename_v_RK4[i], h[i])
         r_num = r_numerical(filename_r_RK4[i])
 
         Delta_max[i] = np.max(np.abs(r_exact - r_num))
@@ -410,7 +419,7 @@ if error_convergence_rate_Euler:
 
     Delta_max = np.empty(len(h))
     for i in range(len(h)):
-        r_exact = r_analytical(filename_r_Euler[i], filename_v_Euler[i])
+        r_exact = r_analytical(filename_r_Euler[i], filename_v_Euler[i], h[i])
         r_num = r_numerical(filename_r_Euler[i])
 
         Delta_max[i] = np.max(np.abs(r_exact - r_num))
@@ -420,3 +429,11 @@ if error_convergence_rate_Euler:
         r_err += 0.25*np.log10(Delta_max[i]/Delta_max[i-1])/np.log10(h[i]/h[i-1])
 
     print("Error convergence rate with Euler: r_err = {:.2f}".format(r_err))
+
+
+
+filename_r = "RK4_r_1_0001dt.txt"
+filename_v = "RK4_v_1_0001dt.txt"
+h = 0.001
+r_analytical(filename_r, filename_v, h)
+r_numerical(filename_r)
