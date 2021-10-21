@@ -13,17 +13,23 @@ read_position = True             # must always be True
 z_t = False
 x_y = False
 
-v_x = False
-v_y = False
-v_z = False
+phase_space = False
+trajectory = False
+relative_error = True
+error_convergence_rate = True
 
-trajectory = True
 
-relative_error_RK4 = True
-relative_error_Euler = True
 
-error_convergence_rate_RK4 = False
-error_convergence_rate_Euler = False
+v_x = phase_space
+v_y = phase_space
+v_z = phase_space
+
+relative_error_RK4 = relative_error
+relative_error_Euler = relative_error
+
+error_convergence_rate_RK4 = error_convergence_rate
+error_convergence_rate_Euler = error_convergence_rate
+
 
 
 # constants
@@ -32,7 +38,7 @@ m = 40.078
 
 B0 = 9.65e1
 V0 = 9.65e8
-d = 1e4
+d = 1.0e4
 
 omega_0 = q*B0/m
 omega_z = np.sqrt(2*q*V0/(m*d**2))
@@ -50,52 +56,30 @@ def r_analytical(filename_r, filename_v, h):
     vel = np.loadtxt(filename_v, skiprows = 1)
     Vy1 = pos[:, 1]
 
+    N = len(Rx1)
+
     x_0 = Rx1[0]
     v_0 = Vy1[0]
     z_0 = Rz1[0]
+
 
     Ap = (v_0 + omega_m*x_0)/(omega_m - omega_p)
     Am = - (v_0 + omega_p*x_0)/(omega_m - omega_p)
 
 
     # analytical solution, r_exact
-    x = np.empty(len(Rx1))
-    y = np.empty(len(Rx1))
-    z_Re = np.empty(len(Rx1))
+    x = np.empty(N)
+    y = np.empty(N)
+    z = np.empty(N)
 
-    r_exact = np.empty(len(Rx1))
-    for i in range(len(Rx1)):
+    r_exact = np.empty(N)
+
+    for i in range(N):
         x[i] = Ap*np.cos(omega_p*i*h) + Am*np.cos(omega_m*i*h)
         y[i] = - Ap*np.sin(omega_p*i*h) - Am*np.sin(omega_m*i*h)
+        z[i] = z_0*np.cos(omega_z*i*h)
 
-        z_Re[i] = z_0 + np.cos(omega_z*i*h)
-        z_Im = np.sin(omega_z*i*h)
-
-        # append length of r, or vector r (x, y, z) ?? anf z_Re or what??
-        r_exact[i] = np.sqrt(x[i]**2 + y[i]**2 + z_Re[i]**2)
-
-    """
-    t = np.linspace(0, 100, len(Rx1))
-    plt.plot(t, r_exact)
-    plt.show()
-    """
-
-    fig = plt.figure()
-    ax = plt.axes(projection="3d")
-    plt.tight_layout()
-    ax.plot3D(x, y, z_Re, 'blue', label='Trajectory of particle 1')
-
-    plt.plot(x[0], y[0], z_Re[0], "ro")
-
-    ax.set_xlabel("x/[$\mu$m]", size = 12)
-    ax.set_ylabel("y/[$\mu$m]", size = 12)
-    ax.set_zlabel("z/[$\mu$m]", size = 12)
-
-    plt.ticklabel_format(axis="both", style="sci", scilimits=(0,0))
-
-    plt.legend()
-    plt.savefig('pdf/3D_1_analytical.pdf')
-    plt.show()
+        r_exact[i] = np.sqrt(x[i]**2 + y[i]**2 + z[i]**2)
 
     return r_exact
 
@@ -106,13 +90,18 @@ def r_numerical(filename_r):
     Ry1 = pos[:, 1]
     Rz1 = pos[:, 2]
 
-    r_num = np.empty(len(Rx1))
-    for i in range(len(Rx1)):
+    N = len(Rx1)
+
+    r_num = np.empty(N)
+    for i in range(N):
         r_num[i] = np.sqrt(Rx1[i]**2 + Ry1[i]**2 + Rz1[i]**2)
 
-    t = np.linspace(0, 100, len(Rx1))
+    """
+    t = np.linspace(0, 100, N)
     plt.plot(t, r_num)
     plt.show()
+    """
+
     return r_num
 
 
@@ -342,6 +331,7 @@ if trajectory:
 
     if n == 2:
         ax.plot3D(Rx2, Ry2, Rz2, 'red', label ='Trajectory of particle 2')
+        plt.plot(Rx2[0], Ry2[0], Rz2[0], "ro")
 
         if interaction:
             plt.title("Trajectory of two particles w/ interaction", size = 12)
@@ -370,7 +360,6 @@ if trajectory:
 if relative_error_RK4:
     filename_r_RK4 = ["RK4_r_1_1dt.txt", "RK4_r_1_01dt.txt", "RK4_r_1_001dt.txt", "RK4_r_1_0001dt.txt", "RK4_r_1_00001dt.txt"]
     filename_v_RK4 = ["RK4_v_1_1dt.txt", "RK4_v_1_01dt.txt", "RK4_v_1_001dt.txt", "RK4_v_1_0001dt.txt", "RK4_v_1_00001dt.txt"]
-    dt = [1., 0.1, 0.01, 0.001, 0.0001]
 
     h = [1., 0.1, 0.01, 0.001, 0.0001]
     for i in range(len(filename_r_RK4)):
@@ -427,7 +416,7 @@ if error_convergence_rate_RK4:
     for i in range(1, len(h)):
         r_err += 0.25*np.log10(Delta_max[i]/Delta_max[i-1])/np.log10(h[i]/h[i-1])
 
-    print("Error convergence rate with RK4: r_err = {:.2f}".format(r_err))
+    print("Error convergence rate with RK4: r_err = {}".format(r_err))
 
 
 if error_convergence_rate_Euler:
@@ -447,12 +436,12 @@ if error_convergence_rate_Euler:
     for i in range(1, len(h)):
         r_err += 0.25*np.log10(Delta_max[i]/Delta_max[i-1])/np.log10(h[i]/h[i-1])
 
-    print("Error convergence rate with Euler: r_err = {:.2f}".format(r_err))
+    print("Error convergence rate with Euler: r_err = {}".format(r_err))
 
 
+#filename_r = "RK4_r_1_0001dt.txt"
+#filename_v = "RK4_v_1_0001dt.txt"
+#h = 0.001
 
-filename_r = "RK4_r_1_0001dt.txt"
-filename_v = "RK4_v_1_0001dt.txt"
-h = 0.001
-r_analytical(filename_r, filename_v, h)
+#r_analytical(filename_r, filename_v, h)
 #r_numerical(filename_r)
