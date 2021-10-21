@@ -16,7 +16,7 @@ x_y = False
 phase_space = False
 trajectory = False
 relative_error = True
-error_convergence_rate = False
+error_convergence_rate = True
 
 
 
@@ -439,9 +439,9 @@ if error_convergence_rate_Euler:
     print("Error convergence rate with Euler: r_err = {}".format(r_err))
 
 
-filename_r = "RK4_r_1_0001dt.txt"
-filename_v = "RK4_v_1_0001dt.txt"
-h = 0.001
+#filename_r = "RK4_r_1_0001dt.txt"
+#filename_v = "RK4_v_1_0001dt.txt"
+#h = 0.001
 
-r_analytical(filename_r, filename_v, h)
+#r_analytical(filename_r, filename_v, h)
 #r_numerical(filename_r)
