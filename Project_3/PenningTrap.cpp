@@ -1,3 +1,4 @@
+
 #include "PenningTrap.hpp"
 #include "Particle.hpp"
 
@@ -147,10 +148,12 @@ void PenningTrap::evolve_RK4(double dt){
     for (int i = 0; i < n_; i++){
         Particle& p_i = particles_[i];
 
-        vec r_old = p_i.r_;
-        vec v_old = p_i.v_;
-
         for (int j = 0; j < N_; j++){
+
+            vec r_old = p_i.r_;
+            vec v_old = p_i.v_;
+
+
             // K1
             vec F = total_force(i);
             vec a = F/p_i.m_;
@@ -158,46 +161,43 @@ void PenningTrap::evolve_RK4(double dt){
             vec K1_v = a*dt;
             vec K1_r = p_i.v_*dt;
 
-            p_i.r_ = p_i.r_ + (1/2.)*K1_r;
-            p_i.v_ = p_i.v_ + (1/2.)*K1_v;
-
 
             // K2
+            p_i.v_ = v_old + (1/2.)*K1_v;
+            p_i.r_ = r_old + (1/2.)*K1_r;
+
             F = total_force(i);
             a = F/p_i.m_;
 
             vec K2_v = a*dt;
             vec K2_r = p_i.v_*dt;
 
-            p_i.v_ = p_i.v_ + (1/2.)*K2_v;
-            p_i.r_ = p_i.r_ + (1/2.)*K2_r;
-
 
             // K3
+            p_i.v_ = v_old + (1/2.)*K2_v;
+            p_i.r_ = r_old + (1/2.)*K2_r;
+
             F = total_force(i);
             a = F/p_i.m_;
 
             vec K3_v = a*dt;
             vec K3_r = p_i.v_*dt;
 
-            p_i.v_ = p_i.v_ + (1/2.)*K3_v;
-            p_i.r_ = p_i.r_ + (1/2.)*K3_r;
-
 
             // K4
+            p_i.v_ = v_old + (1/2.)*K3_v;
+            p_i.r_ = r_old + (1/2.)*K3_r;
+
             F = total_force(i);
             a = F/p_i.m_;
 
             vec K4_v = a*dt;
             vec K4_r = p_i.v_*dt;
 
-            p_i.v_ = p_i.v_ + K4_v;
-            p_i.r_ = p_i.r_ + K4_r;
-
 
             // last step
-            p_i.v_ = p_i.v_ + (1/6.)*(K1_v + 2.*K2_v + 2.*K3_v + K4_v);
-            p_i.r_ = p_i.r_ + (1/6.)*(K1_r + 2.*K2_r + 2.*K3_r + K4_r);
+            p_i.v_ = v_old + (1/6.)*(K1_v + 2.*K2_v + 2.*K3_v + K4_v);
+            p_i.r_ = r_old + (1/6.)*(K1_r + 2.*K2_r + 2.*K3_r + K4_r);
 
             V.col(i) = p_i.v_;
             R.col(i) = p_i.r_;
@@ -206,14 +206,14 @@ void PenningTrap::evolve_RK4(double dt){
             if (i == 0){
                 if (write_){
                     ofstream file;
-                    file.open("RK4_v_1_1dt.txt", ios::app);
+                    file.open("RK4_v_1_0001dt.txt", ios::app);
                     file << V(0, i) << " " << V(1, i) << " " << V(2, i) << endl;
                     file.close();
                 }
 
                 if (write_){
                     ofstream file;
-                    file.open("RK4_r_1_1dt.txt", ios::app);
+                    file.open("RK4_r_1_0001dt.txt", ios::app);
                     file << R(0, i) << " " << R(1, i) << " " << R(2, i) << endl;
                     file.close();
                 }
@@ -221,21 +221,21 @@ void PenningTrap::evolve_RK4(double dt){
             if (i == 1){
                 if (write_){
                     ofstream file;
-                    file.open("RK4_v_2_1dt.txt", ios::app);
+                    file.open("RK4_v_2_0001dt.txt", ios::app);
                     file << V(0, i) << " " << V(1, i) << " " << V(2, i) << endl;
                     file.close();
                 }
 
                 if (write_){
                     ofstream file;
-                    file.open("RK4_r_2_1dt.txt", ios::app);
+                    file.open("RK4_r_2_0001dt.txt", ios::app);
                     file << R(0, i) << " " << R(1, i) << " " << R(2, i) << endl;
                     file.close();
                 }
             }
         }
-        p_i.r_ = r_old;
-        p_i.v_ = v_old;
+
+
     }
 }
 
@@ -247,11 +247,11 @@ void PenningTrap::evolve_forward_Euler(double dt){
     for (int i = 0; i < n_; i++){
         Particle& p_i = particles_[i];
 
-        vec r_old = p_i.r_;
-        vec v_old = p_i.v_;
-
 
         for (int j = 0; j < N_; j++){
+
+            vec r_old = p_i.r_;
+            vec v_old = p_i.v_;
 
             vec F = total_force(i);
             vec a = F/p_i.m_;
@@ -267,14 +267,14 @@ void PenningTrap::evolve_forward_Euler(double dt){
             if (i == 0){
                 if (write_){
                     ofstream file;
-                    file.open("Euler_v_1_1dt.txt", ios::app);
+                    file.open("Euler_v_1_0001dt.txt", ios::app);
                     file << V(0, i) << " " << V(1, i) << " " << V(2, i) << endl;
                     file.close();
                 }
 
                 if (write_){
                     ofstream file;
-                    file.open("Euler_r_1_1dt.txt", ios::app);
+                    file.open("Euler_r_1_0001dt.txt", ios::app);
                     file << R(0, i) << " " << R(1, i) << " " << R(2, i) << endl;
                     file.close();
                 }
@@ -282,21 +282,18 @@ void PenningTrap::evolve_forward_Euler(double dt){
             else if (i == 1){
                 if (write_){
                     ofstream file;
-                    file.open("Euler_v_2_1dt.txt", ios::app);
+                    file.open("Euler_v_2_0001dt.txt", ios::app);
                     file << V(0, i) << " " << V(1, i) << " " << V(2, i) << endl;
                     file.close();
                 }
 
                 if (write_){
                     ofstream file;
-                    file.open("Euler_r_2_1dt.txt", ios::app);
+                    file.open("Euler_r_2_0001dt.txt", ios::app);
                     file << R(0, i) << " " << R(1, i) << " " << R(2, i) << endl;
                     file.close();
                 }
             }
         }
-
-        p_i.r_ = r_old;
-        p_i.v_ = v_old;
     }
 }
