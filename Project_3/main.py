@@ -32,7 +32,7 @@ m = 40.078
 
 B0 = 9.65e1
 V0 = 9.65e8
-d = 10e4
+d = 1e4
 
 omega_0 = q*B0/m
 omega_z = np.sqrt(2*q*V0/(m*d**2))
