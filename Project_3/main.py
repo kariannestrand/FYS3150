@@ -93,7 +93,7 @@ def relative_error(filename_r, filename_v):
     r_exact = r_analytical(filename_r, filename_v)
     r_num = r_numerical(filename_r)
 
-    rel_err = np.abs((r_exact - r_num)/r_num)
+    rel_err = np.abs((r_exact - r_num)/r_exact)
 
     return rel_err
 
