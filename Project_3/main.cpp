@@ -28,9 +28,9 @@ int main(int argc, char const *argv[]){
     mat vel = mat(dim, n).randn()*0.1*d;        // fill in initial conditions for position here, just have random values for now
 
     bool write = true;                          // creates txt-files if true
-    bool interaction = true;                    // accounts for particle interactions if true
+    bool interaction = false;                   // accounts for particle interactions if true
     bool rk4 = true;                            // runs evolve_RK4 method if true
-    bool euler = false;                         // runs evolve_forward_Euler method if true
+    bool euler = true;                          // runs evolve_forward_Euler method if true
 
 
     if (euler){
