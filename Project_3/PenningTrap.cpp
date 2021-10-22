@@ -144,11 +144,13 @@ void PenningTrap::evolve_RK4(double dt){
     cube R_total = cube(3, n_, N_);
     cube V_total = cube(3, n_, N_);
 
+
     for (int i = 0; i < n_; i++){
         Particle& p_i = particles_[i];
         R_total.slice(0).col(i) = p_i.r_;
         V_total.slice(0).col(i) = p_i.v_;
     }
+
 
     for (int j = 1; j < N_; j++){
 
@@ -157,9 +159,6 @@ void PenningTrap::evolve_RK4(double dt){
 
             vec r_old = R_total.slice(j-1).col(i);
             vec v_old = V_total.slice(j-1).col(i);
-
-            //vec r_old = R_total.slice(j).col(i);
-            //vec v_old = V_total.slice(j).col(i);
 
             // K1
             vec F = total_force(i);
@@ -245,11 +244,9 @@ void PenningTrap::evolve_RK4(double dt){
             */
 
         }
-
-      
+       
     }
 
-    
     if (write_){
         for (int i = 0; i < n_; i++){
             mat R = mat(3, n_);
@@ -257,10 +254,12 @@ void PenningTrap::evolve_RK4(double dt){
             R = R_total.col(i);
             V = V_total.col(i);
             R.save("bin_files/r_" + to_string(i) + "_0001" + ".bin");
-            V.save("bin_files/v_" + to_string(i) + "_0001" + ".bin");
+            //V.save("bin_files/v_" + to_string(i) + "_0001" + ".bin");
 
         }
     } 
+
+
 }
 
 
