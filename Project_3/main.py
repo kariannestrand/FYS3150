@@ -376,7 +376,7 @@ if relative_error_RK4:
 
     plt.title("Relative Error with RK4", size = 12)
     plt.xlabel("t/[$\mu$s]", size = 12)
-    plt.ylabel("$|(r_{exact} - r_{numerical})/r_{numerical}|$", size = 12)
+    plt.ylabel("$|(r_{exact} - r_{numerical})/r_{exact}|$", size = 12)
     plt.legend()
     plt.savefig('pdf/rel_err_RK4.pdf')
     plt.show()
@@ -395,7 +395,7 @@ if relative_error_Euler:
 
     plt.title("Relative Error with Forward Euler", size = 12)
     plt.xlabel("t/[$\mu$s]", size = 12)
-    plt.ylabel("$|(r_{exact} - r_{numerical})/r_{numerical}|$", size = 12)
+    plt.ylabel("$|(r_{exact} - r_{numerical})/r_{exact}|$", size = 12)
     plt.legend()
     plt.savefig('pdf/rel_err_Euler.pdf')
     plt.show()
