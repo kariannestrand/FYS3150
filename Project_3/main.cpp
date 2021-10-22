@@ -9,8 +9,8 @@ int main(int argc, char const *argv[]){
     double m = 40.078;                          // atomic mass of Ca+, [u]
 
     double B0 = 9.65e1;                         // magnetic field strength, [u/mu*s*e]
-    double V0 = 9.65e8;                         // applied potential, [u*(mu*s)^2/(mu*s)^2*e]
-    double d = 1e4;                             // characteristic dimension, [mu*m]
+    double V0 = 9.65e8;                         // applied potential, [u*(mu*m)^2/(mu*s)^2*e]
+    double d = 1.0e4;                           // characteristic dimension, [mu*m]
 
     double ke = 1.38935333e5;                   // Couloumb constant, [u*(mu*m)^3/(mu*s*e)^2]
 
@@ -30,7 +30,7 @@ int main(int argc, char const *argv[]){
     bool write = true;                          // creates txt-files if true
     bool interaction = false;                   // accounts for particle interactions if true
     bool rk4 = true;                            // runs evolve_RK4 method if true
-    bool euler = false;                         // runs evolve_forward_Euler method if true
+    bool euler = true;                          // runs evolve_forward_Euler method if true
 
 
     if (euler){
