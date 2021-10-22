@@ -207,8 +207,8 @@ void PenningTrap::evolve_RK4(double dt){
             V_total.slice(j).col(i) = p_i.v_;
             R_total.slice(j).col(i) = p_i.r_;
 
-            p_i.r_ = r_old;
-            p_i.v_ = v_old;
+            // p_i.r_ = r_old;
+            // p_i.v_ = v_old;
 
             /*
             if (i == 0){
@@ -244,8 +244,10 @@ void PenningTrap::evolve_RK4(double dt){
             */
 
         }
-       
+
+
     }
+
 
     if (write_){
         for (int i = 0; i < n_; i++){
@@ -253,15 +255,12 @@ void PenningTrap::evolve_RK4(double dt){
             mat V = mat(3, n_);
             R = R_total.col(i);
             V = V_total.col(i);
-            R.save("bin_files/r_" + to_string(i) + "_0001" + ".bin");
-            //V.save("bin_files/v_" + to_string(i) + "_0001" + ".bin");
+            R.save("r_" + to_string(i) + "_0001" + ".bin");
+            V.save("v_" + to_string(i) + "_0001" + ".bin");
 
         }
-    } 
-
-
+    }
 }
-
 
 
 void PenningTrap::evolve_forward_Euler(double dt){
@@ -321,4 +320,3 @@ void PenningTrap::evolve_forward_Euler(double dt){
         }
     }
 }
-
