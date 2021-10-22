@@ -343,14 +343,12 @@ if trajectory:
 
     plt.show()
 
-
-filename_r_list = ["r_0_0001.bin", "r_0_0001.bin", "r_0_0001.bin", "r_0_0001.bin", "r_0_0001.bin"]
-filename_v_list = ["v_0_0001.bin", "v_0_0001.bin", "v_0_0001.bin", "v_0_0001.bin", "v_0_0001.bin"]
-h_list = [1., 0.1, 0.01, 0.001, 0.0001]
-
-
-""" This runs even if I put False??? """
 if relative_error:
+    filename_r_list = ["r_0_0001.bin", "r_0_0001.bin", "r_0_0001.bin", "r_0_0001.bin", "r_0_0001.bin"]
+    filename_v_list = ["v_0_0001.bin", "v_0_0001.bin", "v_0_0001.bin", "v_0_0001.bin", "v_0_0001.bin"]
+    h_list = [1., 0.1, 0.01, 0.001, 0.0001]
+
+
     N = len(h_list)
     for i in range(N):
         t = time(filename_r_list[i])
@@ -365,5 +363,9 @@ if relative_error:
     plt.show()
 
 if error_convergence_rate:
+    filename_r_list = ["r_0_0001.bin", "r_0_0001.bin", "r_0_0001.bin", "r_0_0001.bin", "r_0_0001.bin"]
+    filename_v_list = ["v_0_0001.bin", "v_0_0001.bin", "v_0_0001.bin", "v_0_0001.bin", "v_0_0001.bin"]
+    h_list = [1., 0.1, 0.01, 0.001, 0.0001]
+
     r_err = error_convergence_rate(filename_r_list, filename_v_list, h_list)
     print("Error convergence rate with RK4: r_err = {}".format(r_err))
