@@ -33,7 +33,7 @@ int main(int argc, char const *argv[]){
 
     bool write = true;                          // creates txt-files if true
     bool interaction = false;                   // accounts for particle interactions if true
-    bool modified = true;
+    bool modified = false;
 
 
     bool euler = false;                         // runs evolve_forward_Euler method if true
@@ -47,7 +47,7 @@ int main(int argc, char const *argv[]){
         PenningTrap penningtrap_rk4 = PenningTrap(B0, V0, d, ke, f, omega_v, n, N, pos, vel, q_vec, m_vec, write, interaction, modified);
         penningtrap_rk4.evolve_RK4(dt);
         int count = penningtrap_rk4.particles_trapped();
-        cout << count << endl; // should have only counted maximum two particles since n = 2 right now, so something is wrong :p 
+        cout << count << endl; // should have only counted maximum two particles since n = 2 right now, so something is wrong :p
     }
 
 

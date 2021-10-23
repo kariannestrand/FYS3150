@@ -33,9 +33,13 @@ vec PenningTrap::external_B_field(int i){
 
     vec B = vec(3).fill(0.);
 
+    /*
     if (norm(r) < d_){
         B(2) = B0_;
     }
+    */
+
+    B(2) = B0_;
 
     return B;
 }
@@ -52,6 +56,7 @@ vec PenningTrap::external_E_field(int i, double dt){
     F(2) = 2.;
 
     vec E = vec(3).fill(0);
+    /*
     if (norm(r) < d_){
         if (modified_){
             double V0t = V0_*(1 + f_*cos(omega_v_*i*dt));
@@ -60,6 +65,15 @@ vec PenningTrap::external_E_field(int i, double dt){
         else{
             E = - V0_/(d_*d_)*F % r;
         }
+    }
+    */
+
+    if (modified_){
+        double V0t = V0_*(1 + f_*cos(omega_v_*i*dt));
+        E = - V0t/(d_*d_)*F % r;
+    }
+    else{
+        E = - V0_/(d_*d_)*F % r;
     }
 
     return E;
@@ -210,13 +224,6 @@ void PenningTrap::evolve_RK4(double dt){
 
             V_total.slice(j).col(i) = p_i.v_;
             R_total.slice(j).col(i) = p_i.r_;
-
-            /*
-            int count;
-            count += (norm(p_i.r_) <= d_);      // bool statement, returns 1 if true, returns 0 if false
-
-            cout << count << endl;
-            */
         }
     }
 
