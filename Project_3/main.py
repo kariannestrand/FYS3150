@@ -39,8 +39,8 @@ d = 1.0e4
 omega_0 = q*B0/m
 omega_z = np.sqrt(2*q*V0/(m*d**2))
 
-omega_p = 0.5*(omega_0 + np.sqrt(omega_0**2 - 2*omega_z**2));
-omega_m = 0.5*(omega_0 - np.sqrt(omega_0**2 - 2*omega_z**2));
+omega_p = 0.5*(omega_0 + np.sqrt(omega_0**2 - 2*omega_z**2))
+omega_m = 0.5*(omega_0 - np.sqrt(omega_0**2 - 2*omega_z**2))
 
 
 def V(filename_v):
