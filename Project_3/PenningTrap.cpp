@@ -5,7 +5,7 @@ using namespace arma;
 using namespace std;
 
 
-PenningTrap::PenningTrap(double B0, double V0, double d, double ke, double f, double omega_v, int n, double N, mat pos, mat vel, vec q_vec, vec m_vec, bool write, bool interaction, bool modified){
+PenningTrap::PenningTrap(double B0, double V0, double d, double ke, double f, vec omega_v, int n, double N, mat pos, mat vel, vec q_vec, vec m_vec, bool write, bool interaction, bool modified){
     B0_ = B0;                   // magnetic field strength
     V0_ = V0;                   // applied potential
     d_ = d;                     // characteristic dimension
@@ -33,19 +33,19 @@ vec PenningTrap::external_B_field(int i){
 
     vec B = vec(3).fill(0.);
 
-    /*
-    if (norm(r) < d_){
+    if (norm(r) <= d_){
         B(2) = B0_;
     }
     */
 
     B(2) = B0_;
 
+
     return B;
 }
 
 
-vec PenningTrap::external_E_field(int i, double dt){
+vec PenningTrap::external_E_field(int i, int k, double dt){
     Particle& p_i = particles_[i];
     vec r = p_i.r_;
 
@@ -56,21 +56,17 @@ vec PenningTrap::external_E_field(int i, double dt){
     F(2) = 2.;
 
     vec E = vec(3).fill(0);
-    /*
-    if (norm(r) < d_){
-        if (modified_){
-            double V0t = V0_*(1 + f_*cos(omega_v_*i*dt));
+    if (modified_){
+        if (norm(r) <= d_){
+            double V0t = V0_*(1 + f_*cos(omega_v_(k)*i*dt));
             E = - V0t/(d_*d_)*F % r;
         }
         else{
-            E = - V0_/(d_*d_)*F % r;
+            //E = - V0_/(d_*d_)*F % r;
+            E(0) = 0;
+            E(1) = 0;
+            E(2) = 0;
         }
-    }
-    */
-
-    if (modified_){
-        double V0t = V0_*(1 + f_*cos(omega_v_*i*dt));
-        E = - V0t/(d_*d_)*F % r;
     }
     else{
         E = - V0_/(d_*d_)*F % r;
@@ -106,11 +102,11 @@ vec PenningTrap::force_particle(int i, int j){
 }
 
 
-vec PenningTrap::total_force_external(int i, double dt){
+vec PenningTrap::total_force_external(int i, int k, double dt){
     Particle& p_i = particles_[i];
 
     vec F = vec(3).fill(0);
-    vec E = external_E_field(i, dt);
+    vec E = external_E_field(i, k, dt);
     vec B = external_B_field(i);
 
     vec v = p_i.v_;
@@ -135,40 +131,59 @@ vec PenningTrap::total_force_particles(int i){
 }
 
 
-vec PenningTrap::total_force(int i, double dt){
+vec PenningTrap::total_force(int i, int k, double dt){
     vec F = vec(3).fill(0);
 
     if (interaction_){
-        F = total_force_external(i, dt) + total_force_particles(i);
+        F = total_force_external(i, k, dt) + total_force_particles(i);
     }
     else{
-        F = total_force_external(i, dt);
+        F = total_force_external(i, k, dt);
     }
 
     return F;
 
 }
 
+void PenningTrap::particles_trapped(){
+    int count = 0;
+    for (int i=0; i < particles_.size(); i++){
+        vec r = particles_[i].r_;
+        if (norm(r) <= d_){
+        count = count + 1;
+        }
+    }
 
+    cout << "number of particles still in trap = " << count << endl;
+
+}
+
+
+
+/*
 int PenningTrap::particles_trapped(){
     int count;
     for (int i = 0; i < n_; i++){
         vec r = particles_[i].r_;
         count += (arma::norm(r) <= d_);      // bool statement, returns 1 if true, returns 0 if false
     }
+
     return count;
 }
+*/
 
 
-void PenningTrap::evolve_RK4(double dt){
+void PenningTrap::evolve_RK4(double dt, int k){
     cube R_total = cube(3, n_, N_);
     cube V_total = cube(3, n_, N_);
+
 
     for (int i = 0; i < n_; i++){
         Particle& p_i = particles_[i];
         R_total.slice(0).col(i) = p_i.r_;
         V_total.slice(0).col(i) = p_i.v_;
     }
+
 
     for (int j = 1; j < N_; j++){
         for (int i = 0; i < n_; i++){
@@ -177,9 +192,8 @@ void PenningTrap::evolve_RK4(double dt){
             vec r_old = R_total.slice(j-1).col(i);
             vec v_old = V_total.slice(j-1).col(i);
 
-
             // K1
-            vec F = total_force(i, dt);
+            vec F = total_force(i, k, dt);
             vec a = F/p_i.m_;
 
             vec K1_v = a*dt;
@@ -190,7 +204,7 @@ void PenningTrap::evolve_RK4(double dt){
             p_i.v_ = v_old + (1/2.)*K1_v;
             p_i.r_ = r_old + (1/2.)*K1_r;
 
-            F = total_force(i, dt);
+            F = total_force(i, k, 0.5*dt);
             a = F/p_i.m_;
 
             vec K2_v = a*dt;
@@ -201,7 +215,7 @@ void PenningTrap::evolve_RK4(double dt){
             p_i.v_ = v_old + (1/2.)*K2_v;
             p_i.r_ = r_old + (1/2.)*K2_r;
 
-            F = total_force(i, dt);
+            F = total_force(i, k, 0.5*dt);
             a = F/p_i.m_;
 
             vec K3_v = a*dt;
@@ -212,7 +226,7 @@ void PenningTrap::evolve_RK4(double dt){
             p_i.v_ = v_old + (1/2.)*K3_v;
             p_i.r_ = r_old + (1/2.)*K3_r;
 
-            F = total_force(i, dt);
+            F = total_force(i, k, dt);
             a = F/p_i.m_;
 
             vec K4_v = a*dt;
@@ -227,21 +241,33 @@ void PenningTrap::evolve_RK4(double dt){
         }
     }
 
+    particles_trapped();
+
+    /*
+    ofstream file;
+    file.open("remaining_particles_0.1.txt", ios::out);
+    file << setw(25) << N << endl;
+    cout << N << endl;
+    file.close();
+    */
+
+
     if (write_){
         for (int i = 0; i < n_; i++){
             mat R = mat(3, n_);
             mat V = mat(3, n_);
             R = R_total.col(i);
             V = V_total.col(i);
-            R.save("RK4_r_" + to_string(i) + "_0001dt" + ".bin");
-            V.save("RK4_v_" + to_string(i) + "_0001dt" + ".bin");
+            R.save("RK4_r_" + to_string(i) + "_1dt" + ".bin");
+            V.save("RK4_v_" + to_string(i) + "_1dt" + ".bin");
         }
     }
 
 }
 
 
-void PenningTrap::evolve_forward_Euler(double dt){
+
+void PenningTrap::evolve_forward_Euler(double dt, int k){
     cube R_total = cube(3, n_, N_);
     cube V_total = cube(3, n_, N_);
 
@@ -258,7 +284,7 @@ void PenningTrap::evolve_forward_Euler(double dt){
             vec r_old = R_total.slice(j-1).col(i);
             vec v_old = V_total.slice(j-1).col(i);
 
-            vec F = total_force(i, dt);
+            vec F = total_force(i, k, dt);
             vec a = F/p_i.m_;
 
 

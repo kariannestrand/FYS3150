@@ -4,13 +4,14 @@ from mpl_toolkits import mplot3d
 import pyarma as pa
 
 
-n = 2                            # number of particles
+n = 1                            # number of particles
+
 interaction = False
 
 z_t = False
-x_y = True
-phase_space = True
-trajectory = True
+x_y = False
+phase_space = False
+trajectory = False
 relative_error = False
 error_convergence_rate = False
 
@@ -23,6 +24,7 @@ relative_error_Euler = relative_error
 
 error_convergence_rate_RK4 = error_convergence_rate
 error_convergence_rate_Euler = error_convergence_rate
+
 
 # constants
 q = 1.
@@ -49,6 +51,7 @@ def V(filename_v):
     z = vel[:, 2]
 
     return x, y, z
+
 
 def R(filename_r):
     R = pa.mat()
@@ -79,20 +82,23 @@ def r_analytical(filename_r, filename_v, h):
 
 
     # analytical solution, r_exact
-    x = np.empty(N)
-    y = np.empty(N)
-    z = np.empty(N)
+    x_ex = np.empty(N)
+    y_ex = np.empty(N)
+    z_ex = np.empty(N)
 
     r_exact = np.empty(N)
 
     for i in range(N):
-        x[i] = Ap*np.cos(omega_p*i*h) + Am*np.cos(omega_m*i*h)
-        y[i] = - Ap*np.sin(omega_p*i*h) - Am*np.sin(omega_m*i*h)
-        z[i] = z_0*np.cos(omega_z*i*h)
+        x_ex[i] = Ap*np.cos(omega_p*i*h) + Am*np.cos(omega_m*i*h)
+        y_ex[i] = - Ap*np.sin(omega_p*i*h) - Am*np.sin(omega_m*i*h)
+        z_ex[i] = z_0*np.cos(omega_z*i*h)
 
-        r_exact[i] = np.sqrt(x[i]**2 + y[i]**2 + z[i]**2)
+        r_exact[i] = np.sqrt(x_ex[i]**2 + y_ex[i]**2 + z_ex[i]**2)
 
+
+    
     return r_exact
+
 
 def r_numerical(filename_r):
     Rx = R(filename_r)[0]
@@ -114,6 +120,7 @@ def relative_error(filename_r, filename_v, h):
     rel_err = np.abs((r_exact - r_num)/r_exact)
 
     return rel_err
+
 
 def error_convergence_rate(filename_r_list, filename_v_list, h_list):
     N = len(h_list)
@@ -376,7 +383,7 @@ if relative_error_RK4:
 
     plt.title("Relative Error with RK4", size = 12)
     plt.xlabel("t/[$\mu$s]", size = 12)
-    plt.ylabel("$|(r_{exact} - r_{numerical})/r_{numerical}|$", size = 12)
+    plt.ylabel("$|(r_{exact} - r_{numerical})/r_{exact}|$", size = 12)
     plt.legend()
     plt.savefig('pdf/rel_err_RK4.pdf')
     plt.show()
@@ -395,7 +402,7 @@ if relative_error_Euler:
 
     plt.title("Relative Error with Forward Euler", size = 12)
     plt.xlabel("t/[$\mu$s]", size = 12)
-    plt.ylabel("$|(r_{exact} - r_{numerical})/r_{numerical}|$", size = 12)
+    plt.ylabel("$|(r_{exact} - r_{numerical})/r_{exact}|$", size = 12)
     plt.legend()
     plt.savefig('pdf/rel_err_Euler.pdf')
     plt.show()
@@ -415,3 +422,5 @@ if error_convergence_rate_Euler:
 
     r_err = error_convergence_rate(filename_r_list, filename_v_list, h_list)
     print("Error convergence rate with Euler: r_err = {}".format(r_err))
+
+
