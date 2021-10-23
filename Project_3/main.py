@@ -4,7 +4,7 @@ from mpl_toolkits import mplot3d
 import pyarma as pa
 
 
-n = 1                            # number of particles
+n = 100                            # number of particles
 
 interaction = False
 
@@ -14,6 +14,8 @@ phase_space = False
 trajectory = False
 relative_error = False
 error_convergence_rate = False
+
+particles_trapped = True
 
 v_x = phase_space
 v_y = phase_space
@@ -96,7 +98,7 @@ def r_analytical(filename_r, filename_v, h):
         r_exact[i] = np.sqrt(x_ex[i]**2 + y_ex[i]**2 + z_ex[i]**2)
 
 
-    
+
     return r_exact
 
 
@@ -142,6 +144,14 @@ def time(filename_r):
     N = len(r_numerical(filename_r))
     t = np.linspace(0, 100, N)
     return t
+
+
+def particles_trapped(filename):
+    pt = np.loadtxt(filename, skiprows = 1)
+    n_trapped = pt[:, 0]
+    omega_v = pt[:, 1]
+
+    return omega_v, n_trapped
 
 
 filename_r = "RK4_r_0_0001dt.bin"
@@ -424,3 +434,15 @@ if error_convergence_rate_Euler:
     print("Error convergence rate with Euler: r_err = {}".format(r_err))
 
 
+if particles_trapped:
+    filename_list = ["trapped_01f.txt", "trapped_04f.txt", "trapped_07f.txt"]
+    f_list = [0.1, 0.4, 0.7]
+
+    for i in range(len(filename_list)):
+        filename = filename_list[i]
+        omega_v = particles_trapped(filename)[0]
+        n_trapped = particles_trapped(filename)[1]
+        plt.plot(omega_v, n_trapped/n, label = "f = " + str(f_list[i]))
+
+    plt.legend()
+    plt.show()
