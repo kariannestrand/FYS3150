@@ -31,7 +31,7 @@ public:
     arma::vec external_E_field(int i, int k, double dt);       // external electric field at point r=(x,y,z)
     arma::vec external_B_field(int i);                  // external magnetic field at point r=(x,y,z)
     arma::vec force_particle(int i, int j);             // force on particle_i from particle_j
-    arma::vec total_force_external(int i, int k, double dt);   // the total force on particle_i from the external fields
+    arma::vec total_force_external(int i, int k, double t);   // the total force on particle_i from the external fields
     arma::vec total_force_particles(int i);             // the total force on particle_i from the other particles
     arma::vec total_force(int i, int k, double dt);            // the total force on particle_i from both external fields and other particles
     void particles_trapped();
