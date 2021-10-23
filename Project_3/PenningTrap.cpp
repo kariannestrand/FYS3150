@@ -230,7 +230,7 @@ void PenningTrap::evolve_RK4(double dt, int k){
         int N = particles_trapped();
 
         ofstream file;
-        file.open("trapped_01f.txt", ios::app);
+        file.open("trapped_07f.txt", ios::app);
         file << setw(25) << N << " " << omega_v_(k) << endl;
         file.close();
     }

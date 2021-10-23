@@ -20,7 +20,7 @@ int main(int argc, char const *argv[]){
     double V0 = (2.5e-4)*9.65e8;                  // applied potential, [u*(mu*m)^2/(mu*s)^2*e]
     double d = 0.05*1.0e4;                        // characteristic dimension, [mu*m]
 
-    double f = 0.1;                               // amplitudes
+    double f = 0.7;                               // amplitudes
     double No = 115;                              // number of steps in omega_v vector
     vec omega_v = linspace(0.2, 2.5, No);         // angular frequency, [MHz]
 

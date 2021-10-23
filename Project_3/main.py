@@ -7,7 +7,7 @@ import pyarma as pa
 n = 100                            # number of particles
 
 interaction = False
-save_fig = False
+save_fig = True
 
 z_t = False
 x_y = False
@@ -451,4 +451,6 @@ if particles_trapped:
         plt.plot(omega_v, n_trapped/n, label = "f = " + str(f_list[i]))
 
     plt.legend()
+    if save_fig:
+        plt.savefig('pdf/particles_trapped.pdf')
     plt.show()
