@@ -7,7 +7,7 @@ using namespace std;
 int main(int argc, char const *argv[]){
     bool write = false;                           // creates txt-files if true
     bool interaction = false;                     // accounts for particle interactions if true
-    bool modified = true;                         // runs the program with time-dependent electrical field if true
+    bool modified = true;                         // runs the program with time-dependent electrical field if true (time-independent if false)
     bool euler = false;                           // runs evolve_forward_Euler method if true
     bool rk4 = true;                              // runs evolve_RK4 method if true
 
@@ -21,7 +21,7 @@ int main(int argc, char const *argv[]){
     double d = 0.05*1.0e4;                        // characteristic dimension, [mu*m]
 
     double f = 0.1;                               // amplitudes
-    double No = 2;                                // number of steps in omega_v vector
+    double No = 115;                              // number of steps in omega_v vector
     vec omega_v = linspace(0.2, 2.5, No);         // angular frequency, [MHz]
 
     double q = 1.;                                // charge of Ca+ particle, [e]
@@ -39,7 +39,20 @@ int main(int argc, char const *argv[]){
     mat vel = mat(dim, n).randn()*0.1*d;          // initial conditions for velocity
 
 
-    for (int k = 0; k < omega_v.size(); k++){
+    if (modified){
+        for (int k = 0; k < omega_v.size(); k++){
+            if (euler){
+                PenningTrap penningtrap_euler = PenningTrap(B0, V0, d, ke, f, omega_v, n, N, pos, vel, q_vec, m_vec, write, interaction, modified);
+                penningtrap_euler.evolve_forward_Euler(dt, k);
+            }
+            if (rk4){
+                PenningTrap penningtrap_rk4 = PenningTrap(B0, V0, d, ke, f, omega_v, n, N, pos, vel, q_vec, m_vec, write, interaction, modified);
+                penningtrap_rk4.evolve_RK4(dt, k);
+            }
+        }
+    }
+    else{
+        int k = 0;
         if (euler){
             PenningTrap penningtrap_euler = PenningTrap(B0, V0, d, ke, f, omega_v, n, N, pos, vel, q_vec, m_vec, write, interaction, modified);
             penningtrap_euler.evolve_forward_Euler(dt, k);

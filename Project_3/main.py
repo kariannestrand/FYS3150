@@ -7,6 +7,7 @@ import pyarma as pa
 n = 100                            # number of particles
 
 interaction = False
+save_fig = False
 
 z_t = False
 x_y = False
@@ -14,16 +15,13 @@ phase_space = False
 trajectory = False
 relative_error = False
 error_convergence_rate = False
-
 particles_trapped = True
 
 v_x = phase_space
 v_y = phase_space
 v_z = phase_space
-
 relative_error_RK4 = relative_error
 relative_error_Euler = relative_error
-
 error_convergence_rate_RK4 = error_convergence_rate
 error_convergence_rate_Euler = error_convergence_rate
 
@@ -183,13 +181,14 @@ if z_t:
 
     plt.ticklabel_format(axis="y", style="sci", scilimits=(0,0))
 
-    if n == 1:
-        plt.savefig('pdf/zt_1.pdf')
-    if n == 2:
-        if interaction:
-            plt.savefig('pdf/zt_2_w.pdf')
-        else:
-            plt.savefig('pdf/zt_2_wo.pdf')
+    if save_fig:
+        if n == 1:
+            plt.savefig('pdf/zt_1.pdf')
+        if n == 2:
+            if interaction:
+                plt.savefig('pdf/zt_2_w.pdf')
+            else:
+                plt.savefig('pdf/zt_2_wo.pdf')
 
     plt.show()
 
@@ -217,13 +216,14 @@ if x_y:
 
     plt.ticklabel_format(axis="both", style="sci", scilimits=(0,0))
 
-    if n == 1:
-        plt.savefig('pdf/xy_1.pdf')
-    if n == 2:
-        if interaction:
-            plt.savefig('pdf/xy_2_w.pdf')
-        else:
-            plt.savefig('pdf/xy_2_wo.pdf')
+    if save_fig:
+        if n == 1:
+            plt.savefig('pdf/xy_1.pdf')
+        if n == 2:
+            if interaction:
+                plt.savefig('pdf/xy_2_w.pdf')
+            else:
+                plt.savefig('pdf/xy_2_wo.pdf')
 
     plt.show()
 
@@ -252,13 +252,14 @@ if v_x:
 
     plt.ticklabel_format(axis="both", style="sci", scilimits=(0,0))
 
-    if n == 1:
-        plt.savefig('pdf/vx_1.pdf')
-    if n == 2:
-        if interaction:
-            plt.savefig('pdf/vx_2_w.pdf')
-        else:
-            plt.savefig('pdf/vx_2_wo.pdf')
+    if save_fig:
+        if n == 1:
+            plt.savefig('pdf/vx_1.pdf')
+        if n == 2:
+            if interaction:
+                plt.savefig('pdf/vx_2_w.pdf')
+            else:
+                plt.savefig('pdf/vx_2_wo.pdf')
 
     plt.show()
 
@@ -287,13 +288,14 @@ if v_y:
 
     plt.ticklabel_format(axis="both", style="sci", scilimits=(0,0))
 
-    if n == 1:
-        plt.savefig('pdf/vy_1.pdf')
-    if n == 2:
-        if interaction:
-            plt.savefig('pdf/vy_2_w.pdf')
-        else:
-            plt.savefig('pdf/vy_2_wo.pdf')
+    if save_fig:
+        if n == 1:
+            plt.savefig('pdf/vy_1.pdf')
+        if n == 2:
+            if interaction:
+                plt.savefig('pdf/vy_2_w.pdf')
+            else:
+                plt.savefig('pdf/vy_2_wo.pdf')
     plt.show()
 
 if v_z:
@@ -321,13 +323,14 @@ if v_z:
 
     plt.ticklabel_format(axis="both", style="sci", scilimits=(0,0))
 
-    if n == 1:
-        plt.savefig('pdf/vz_1.pdf')
-    if n == 2:
-        if interaction:
-            plt.savefig('pdf/vz_2_w.pdf')
-        else:
-            plt.savefig('pdf/vz_2_wo.pdf')
+    if save_fig:
+        if n == 1:
+            plt.savefig('pdf/vz_1.pdf')
+        if n == 2:
+            if interaction:
+                plt.savefig('pdf/vz_2_w.pdf')
+            else:
+                plt.savefig('pdf/vz_2_wo.pdf')
 
     plt.show()
 
@@ -367,14 +370,15 @@ if trajectory:
     plt.ticklabel_format(axis="both", style="sci", scilimits=(0,0))
 
     plt.legend()
-    if n == 1:
-        plt.savefig('pdf/3D_1.pdf')
 
-    if n == 2:
-        if interaction:
-            plt.savefig('pdf/3D_2_w.pdf')
-        else:
-            plt.savefig('pdf/3D_2_wo.pdf')
+    if save_fig:
+        if n == 1:
+            plt.savefig('pdf/3D_1.pdf')
+        if n == 2:
+            if interaction:
+                plt.savefig('pdf/3D_2_w.pdf')
+            else:
+                plt.savefig('pdf/3D_2_wo.pdf')
 
     plt.show()
 
@@ -395,7 +399,8 @@ if relative_error_RK4:
     plt.xlabel("t/[$\mu$s]", size = 12)
     plt.ylabel("$|(r_{exact} - r_{numerical})/r_{exact}|$", size = 12)
     plt.legend()
-    plt.savefig('pdf/rel_err_RK4.pdf')
+    if save_fig:
+        plt.savefig('pdf/rel_err_RK4.pdf')
     plt.show()
 
 if relative_error_Euler:
@@ -414,7 +419,8 @@ if relative_error_Euler:
     plt.xlabel("t/[$\mu$s]", size = 12)
     plt.ylabel("$|(r_{exact} - r_{numerical})/r_{exact}|$", size = 12)
     plt.legend()
-    plt.savefig('pdf/rel_err_Euler.pdf')
+    if save_fig:
+        plt.savefig('pdf/rel_err_Euler.pdf')
     plt.show()
 
 if error_convergence_rate_RK4:

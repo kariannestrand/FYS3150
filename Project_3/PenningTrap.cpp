@@ -232,7 +232,6 @@ void PenningTrap::evolve_RK4(double dt, int k){
         ofstream file;
         file.open("trapped_01f.txt", ios::app);
         file << setw(25) << N << " " << omega_v_(k) << endl;
-        cout << N << endl;
         file.close();
     }
 
