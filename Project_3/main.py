@@ -4,7 +4,8 @@ from mpl_toolkits import mplot3d
 import pyarma as pa
 
 
-n = 100                            # number of particles
+n = 100                  # number of particles
+w_step_size = 0.002      # step size of omega_v
 
 interaction = False
 save_fig = True
@@ -160,7 +161,6 @@ if z_t:
         t = time(filename_r)
         Rz = R(filename_r)[2]
         plt.plot(t, Rz)
-        plt.title("Movement of one particle in the z-direction", size = 12)
 
     if n == 2:
         filename_r_list = ["RK4_r_0_0001dt.bin", "RK4_r_1_0001dt.bin"]
@@ -169,12 +169,6 @@ if z_t:
             Rx = R(filename_r_list[i])[0]
             Ry = R(filename_r_list[i])[1]
             plt.plot(Rx, Ry)
-
-            if interaction:
-                plt.title("Movement of two particles in the z-direction w/ interaction", size = 12)
-            else:
-                plt.title("Movement of two particles in the z-direction w/o interaction", size = 12)
-
 
     plt.xlabel("t/[$\mu$s]", size = 12)
     plt.ylabel("z/[$\mu$m]", size = 12)
@@ -197,8 +191,6 @@ if x_y:
         Rx = R(filename_r)[0]
         Ry = R(filename_r)[1]
         plt.plot(Rx, Ry)
-        plt.title("Movement of one particle in the xy-plane", size = 10)
-
     if n == 2:
         filename_r_list = ["RK4_r_0_0001dt.bin", "RK4_r_1_0001dt.bin"]
         for i in range(n):
@@ -206,10 +198,6 @@ if x_y:
             Ry = R(filename_r_list[i])[1]
             plt.plot(Rx, Ry)
 
-        if interaction:
-            plt.title("Movement of two particles in the xy-plane w/ interaction", size = 10)
-        else:
-            plt.title("Movement of two particles in the xy-plane w/o interaction", size = 10)
 
     plt.xlabel("x/[$\mu$m]", size = 12)
     plt.ylabel("y/[$\mu$m]", size = 12)
@@ -232,7 +220,6 @@ if v_x:
         Rx = R(filename_r)[0]
         Vx = V(filename_v)[0]
         plt.plot(Rx, Vx)
-        plt.title("IDK YET", size = 10)
 
     if n == 2:
         filename_r_list = ["RK4_r_0_0001dt.bin", "RK4_r_1_0001dt.bin"]
@@ -241,11 +228,6 @@ if v_x:
             Rx = R(filename_r_list[i])[0]
             Vx = V(filename_v_list[i])[0]
             plt.plot(Rx, Ry)
-
-        if interaction:
-            plt.title("IDK YET", size = 10)
-        else:
-            plt.title("IDK YET", size = 10)
 
     plt.xlabel("x/[$\mu$m]", size = 12)
     plt.ylabel("v$_x$/[$\mu$m/$\mu$s]", size = 12)
@@ -268,7 +250,6 @@ if v_y:
         Ry = R(filename_r)[1]
         Vy = V(filename_v)[1]
         plt.plot(Ry, Vy)
-        plt.title("IDK YET", size = 10)
 
     if n == 2:
         filename_r_list = ["RK4_r_0_0001dt.bin", "RK4_r_1_0001dt.bin"]
@@ -277,11 +258,6 @@ if v_y:
             Ry = R(filename_r_list[i])[1]
             Vy = V(filename_v_list[i])[1]
             plt.plot(Ry, Vy)
-
-        if interaction:
-            plt.title("IDK YET", size = 10)
-        else:
-            plt.title("IDK YET", size = 10)
 
     plt.xlabel("y/[$\mu$m]", size = 12)
     plt.ylabel("v$_y$/[$\mu$m/$\mu$s]", size = 12)
@@ -303,7 +279,6 @@ if v_z:
         Rz = R(filename_r)[2]
         Vz = V(filename_v)[2]
         plt.plot(Rz, Vz)
-        plt.title("IDK YET", size = 10)
 
     if n == 2:
         filename_r_list = ["RK4_r_0_0001dt.bin", "RK4_r_1_0001dt.bin"]
@@ -313,10 +288,6 @@ if v_z:
             Vz = V(filename_v_list[i])[2]
             plt.plot(Rz, Vz)
 
-        if interaction:
-            plt.title("IDK YET", size = 10)
-        else:
-            plt.title("IDK YET", size = 10)
 
     plt.xlabel("z/[$\mu$m]", size = 12)
     plt.ylabel("v$_z$/[$\mu$m/$\mu$s]", size = 12)
@@ -346,8 +317,6 @@ if trajectory:
         ax.plot3D(Rx, Ry, Rz, 'blue', label='Trajectory of particle 1')
         plt.plot(Rx[0], Ry[0], Rz[0], "ro")
 
-        plt.title("Trajectory of one particle", size = 12)
-
     if n == 2:
         filename_r_list = ["RK4_r_0_0001dt.bin", "RK4_r_1_0001dt.bin"]
         for i in range(n):
@@ -357,11 +326,6 @@ if trajectory:
 
             ax.plot3D(Rx, Ry, Rz, label='Trajectory of particle ' + str(i))
             plt.plot(Rx[0], Ry[0], Rz[0], "ro")
-
-        if interaction:
-            plt.title("Trajectory of two particles w/ interaction", size = 12)
-        else:
-            plt.title("Trajectory of two particles w/o interaction", size = 12)
 
     ax.set_xlabel("x/[$\mu$m]", size = 12)
     ax.set_ylabel("y/[$\mu$m]", size = 12)
@@ -395,7 +359,6 @@ if relative_error_RK4:
         rel_err = relative_error(filename_r_list[i], filename_v_list[i], h_list[i])
         plt.plot(t, rel_err, label = "h = " + str(h_list[i]))
 
-    plt.title("Relative Error with RK4", size = 12)
     plt.xlabel("t/[$\mu$s]", size = 12)
     plt.ylabel("$|(r_{exact} - r_{numerical})/r_{exact}|$", size = 12)
     plt.legend()
@@ -415,7 +378,6 @@ if relative_error_Euler:
         rel_err = relative_error(filename_r_list[i], filename_v_list[i], h_list[i])
         plt.plot(t, rel_err, label = "h = " + str(h_list[i]))
 
-    plt.title("Relative Error with Forward Euler", size = 12)
     plt.xlabel("t/[$\mu$s]", size = 12)
     plt.ylabel("$|(r_{exact} - r_{numerical})/r_{exact}|$", size = 12)
     plt.legend()
@@ -441,7 +403,10 @@ if error_convergence_rate_Euler:
 
 
 if particles_trapped:
-    filename_list = ["trapped_01f.txt", "trapped_04f.txt", "trapped_07f.txt"]
+    if w_step_size == 0.02:
+        filename_list = ["trapped_0008dt_002w_01f.txt", "trapped_0008dt_002w_04f.txt", "trapped_0008dt_002w_07f.txt"]
+    elif w_step_size == 0.002:
+        filename_list = ["trapped_0008dt_0002w_01f.txt", "trapped_0008dt_0002w_04f.txt", "trapped_0008dt_0002w_07f.txt"]
     f_list = [0.1, 0.4, 0.7]
 
     for i in range(len(filename_list)):
@@ -450,7 +415,13 @@ if particles_trapped:
         n_trapped = particles_trapped(filename)[1]
         plt.plot(omega_v, n_trapped/n, label = "f = " + str(f_list[i]))
 
+    plt.xlabel("$\omega_v$/[MHz]", size = 12)
+    plt.ylabel("n$_{trapped}/n$", size = 12)
+
     plt.legend()
     if save_fig:
-        plt.savefig('pdf/particles_trapped.pdf')
+        if w_step_size == 0.02:
+            plt.savefig('pdf/particles_trapped_002w.pdf')
+        elif w_step_size == 0.002:
+            plt.savefig('pdf/particles_trapped_0002w.pdf')
     plt.show()

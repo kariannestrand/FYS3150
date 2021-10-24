@@ -86,16 +86,8 @@ vec PenningTrap::force_particle(int i, int j){
     vec dr = abs(r) % abs(r) % abs(r);
 
 
-    vec F;
-    if (interaction_){
-        F = ke_*(q_i*q_j)/dr % r;
-    }
-    else{
-        F(0) = 0;
-        F(1) = 0;
-        F(2) = 0;
-    }
-
+    vec F = vec(3).fill(0);
+    F = ke_*(q_i*q_j)/dr % r;
 
     return F;
 }
@@ -230,7 +222,7 @@ void PenningTrap::evolve_RK4(double dt, int k){
         int N = particles_trapped();
 
         ofstream file;
-        file.open("trapped_07f.txt", ios::app);
+        file.open("trapped_0008dt_0002w_01f.txt", ios::app);
         file << setw(25) << N << " " << omega_v_(k) << endl;
         file.close();
     }
@@ -242,8 +234,8 @@ void PenningTrap::evolve_RK4(double dt, int k){
             mat V = mat(3, n_);
             R = R_total.col(i);
             V = V_total.col(i);
-            R.save("RK4_r_" + to_string(i) + "_0001dt" + ".bin");
-            V.save("RK4_v_" + to_string(i) + "_0001dt" + ".bin");
+            R.save("RK4_r_" + to_string(i) + "_0008dt" + ".bin");
+            V.save("RK4_v_" + to_string(i) + "_0008dt" + ".bin");
         }
     }
 
@@ -288,8 +280,8 @@ void PenningTrap::evolve_forward_Euler(double dt, int k){
             mat V = mat(3, n_);
             R = R_total.col(i);
             V = V_total.col(i);
-            R.save("Euler_r_" + to_string(i) + "_0001dt" + ".bin");
-            V.save("Euler_v_" + to_string(i) + "_0001dt" + ".bin");
+            R.save("Euler_r_" + to_string(i) + "_0008dt" + ".bin");
+            V.save("Euler_v_" + to_string(i) + "_0008dt" + ".bin");
         }
     }
 
