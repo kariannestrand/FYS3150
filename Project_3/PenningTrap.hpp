@@ -16,7 +16,7 @@ public:
     double d_;            // characteristic dimension
     double ke_;           // coloumbs constant
     double f_;            // amplitude
-    arma::vec omega_v_;
+    arma::vec omega_v_;   // angular frequency
     int n_;               // number of particles
     double N_;            // number of time steps
     bool write_;
@@ -28,8 +28,8 @@ public:
     PenningTrap(double B0, double V0, double d, double ke, double f, arma::vec omega_v, int n, double N, arma::mat pos, arma::mat vel, arma::vec q_vec, arma::vec m_vec, bool write, bool interaction, bool modified);
 
     // class methods
-    arma::vec external_E_field(int i, int k, double dt);       // external electric field at point r=(x,y,z)
-    arma::vec external_B_field(int i);                         // external magnetic field at point r=(x,y,z)
+    arma::vec external_E_field(int i, int k, double dt);       // external electric field at point r = (x, y, z)
+    arma::vec external_B_field(int i);                         // external magnetic field at point r = (x, y, z)
     arma::vec force_particle(int i, int j);                    // force on particle_i from particle_j
     arma::vec total_force_external(int i, int k, double t);    // the total force on particle_i from the external fields
     arma::vec total_force_particles(int i);                    // the total force on particle_i from the other particles

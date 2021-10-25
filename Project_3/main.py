@@ -4,8 +4,8 @@ from mpl_toolkits import mplot3d
 import pyarma as pa
 
 
-n = 100                  # number of particles
-w_step_size = 0.002      # step size of omega_v
+n = 1                   # number of particles
+w_step_size = 0.02      # step size of omega_v
 
 interaction = False
 save_fig = True
@@ -16,7 +16,7 @@ phase_space = False
 trajectory = False
 relative_error = False
 error_convergence_rate = False
-particles_trapped = True
+particles_trapped = False
 
 v_x = phase_space
 v_y = phase_space
@@ -96,8 +96,6 @@ def r_analytical(filename_r, filename_v, h):
 
         r_exact[i] = np.sqrt(x_ex[i]**2 + y_ex[i]**2 + z_ex[i]**2)
 
-
-
     return r_exact
 
 
@@ -160,7 +158,8 @@ if z_t:
     if n == 1:
         t = time(filename_r)
         Rz = R(filename_r)[2]
-        plt.plot(t, Rz)
+        plt.plot(t, Rz, label = "Numerical")
+        #plt.plot(t, r_analytical(filename_r, filename_v, 0.001)[0], label = "Analytical")
 
     if n == 2:
         filename_r_list = ["RK4_r_0_0001dt.bin", "RK4_r_1_0001dt.bin"]
@@ -175,6 +174,7 @@ if z_t:
 
     plt.ticklabel_format(axis="y", style="sci", scilimits=(0,0))
 
+    plt.legend()
     if save_fig:
         if n == 1:
             plt.savefig('pdf/zt_1.pdf')
@@ -348,9 +348,9 @@ if trajectory:
 
 
 if relative_error_RK4:
-    filename_r_list = ["RK4_r_0_1dt.bin", "RK4_r_0_01dt.bin", "RK4_r_0_001dt.bin", "RK4_r_0_0001dt.bin", "RK4_r_0_00001dt.bin"]
-    filename_v_list = ["RK4_v_0_1dt.bin", "RK4_v_0_01dt.bin", "RK4_v_0_001dt.bin", "RK4_v_0_0001dt.bin", "RK4_v_0_00001dt.bin"]
-    h_list = [1., 0.1, 0.01, 0.001, 0.0001]
+    filename_r_list = ["RK4_r_0_0016dt.bin", "RK4_r_0_0008dt.bin", "RK4_r_0_0004dt.bin", "RK4_r_0_0002dt.bin", "RK4_r_0_0001dt.bin"]
+    filename_v_list = ["RK4_v_0_0016dt.bin", "RK4_v_0_0008dt.bin", "RK4_v_0_0004dt.bin", "RK4_v_0_0002dt.bin", "RK4_v_0_0001dt.bin"]
+    h_list = [0.016, 0.008, 0.004, 0.002, 0.001]
 
 
     N = len(h_list)
@@ -367,9 +367,9 @@ if relative_error_RK4:
     plt.show()
 
 if relative_error_Euler:
-    filename_r_list = ["Euler_r_0_1dt.bin", "Euler_r_0_01dt.bin", "Euler_r_0_001dt.bin", "Euler_r_0_0001dt.bin", "Euler_r_0_00001dt.bin"]
-    filename_v_list = ["Euler_v_0_1dt.bin", "Euler_v_0_01dt.bin", "Euler_v_0_001dt.bin", "Euler_v_0_0001dt.bin", "Euler_v_0_00001dt.bin"]
-    h_list = [1., 0.1, 0.01, 0.001, 0.0001]
+    filename_r_list = ["Euler_r_0_0016dt.bin", "Euler_r_0_0008dt.bin", "Euler_r_0_0004dt.bin", "Euler_r_0_0002dt.bin", "Euler_r_0_0001dt.bin"]
+    filename_v_list = ["Euler_v_0_0016dt.bin", "Euler_v_0_0008dt.bin", "Euler_v_0_0004dt.bin", "Euler_v_0_0002dt.bin", "Euler_v_0_0001dt.bin"]
+    h_list = [0.016, 0.008, 0.004, 0.002, 0.001]
 
 
     N = len(h_list)
@@ -386,17 +386,17 @@ if relative_error_Euler:
     plt.show()
 
 if error_convergence_rate_RK4:
-    filename_r_list = ["RK4_r_0_1dt.bin", "RK4_r_0_01dt.bin", "RK4_r_0_001dt.bin", "RK4_r_0_0001dt.bin", "RK4_r_0_00001dt.bin"]
-    filename_v_list = ["RK4_v_0_1dt.bin", "RK4_v_0_01dt.bin", "RK4_v_0_001dt.bin", "RK4_v_0_0001dt.bin", "RK4_v_0_00001dt.bin"]
-    h_list = [1., 0.1, 0.01, 0.001, 0.0001]
+    filename_r_list = ["RK4_r_0_0016dt.bin", "RK4_r_0_0008dt.bin", "RK4_r_0_0004dt.bin", "RK4_r_0_0002dt.bin", "RK4_r_0_0001dt.bin"]
+    filename_v_list = ["RK4_v_0_0016dt.bin", "RK4_v_0_0008dt.bin", "RK4_v_0_0004dt.bin", "RK4_v_0_0002dt.bin", "RK4_v_0_0001dt.bin"]
+    h_list = [0.016, 0.008, 0.004, 0.002, 0.001]
 
     r_err = error_convergence_rate(filename_r_list, filename_v_list, h_list)
     print("Error convergence rate with RK4: r_err = {}".format(r_err))
 
 if error_convergence_rate_Euler:
-    filename_r_list = ["Euler_r_0_1dt.bin", "Euler_r_0_01dt.bin", "Euler_r_0_001dt.bin", "Euler_r_0_0001dt.bin", "Euler_r_0_00001dt.bin"]
-    filename_v_list = ["Euler_v_0_1dt.bin", "Euler_v_0_01dt.bin", "Euler_v_0_001dt.bin", "Euler_v_0_0001dt.bin", "Euler_v_0_00001dt.bin"]
-    h_list = [1., 0.1, 0.01, 0.001, 0.0001]
+    filename_r_list = ["Euler_r_0_0016dt.bin", "Euler_r_0_0008dt.bin", "Euler_r_0_0004dt.bin", "Euler_r_0_0002dt.bin", "Euler_r_0_0001dt.bin"]
+    filename_v_list = ["Euler_v_0_0016dt.bin", "Euler_v_0_0008dt.bin", "Euler_v_0_0004dt.bin", "Euler_v_0_0002dt.bin", "Euler_v_0_0001dt.bin"]
+    h_list = [0.016, 0.008, 0.004, 0.002, 0.001]
 
     r_err = error_convergence_rate(filename_r_list, filename_v_list, h_list)
     print("Error convergence rate with Euler: r_err = {}".format(r_err))
