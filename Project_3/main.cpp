@@ -9,9 +9,9 @@ int main(int argc, char const *argv[]){
     bool interaction = false;                     // accounts for particle interactions if true
     bool modified = false;                        // runs the program with time-dependent electrical field if true, and creates txt-files
     bool euler = false;                           // runs evolve_forward_Euler method if true
-    bool rk4 = false;                             // runs evolve_RK4 method if true
+    bool rk4 = true;                              // runs evolve_RK4 method if true
 
-    int n = 2;                                    // number of particles
+    int n = 1;                                    // number of particles
     double dt = 0.001;                            // time step, [mu*s]
 
     double t;

@@ -17,12 +17,12 @@ omega_z = np.sqrt(2*q*V0/(m*d**2))
 omega_p = 0.5*(omega_0 + np.sqrt(omega_0**2 - 2*omega_z**2))
 omega_m = 0.5*(omega_0 - np.sqrt(omega_0**2 - 2*omega_z**2))
 
-analytical = True
+analytical = False
 
 relative_error_RK4 = False
 relative_error_Euler = False
 
-error_convergence_rate_RK4 = True
+error_convergence_rate_RK4 = False
 error_convergence_rate_Euler = True
 
 def V(filename_v):
@@ -96,8 +96,6 @@ def error_convergence_rate(filename_r, filename_v, h):
     for i in range(N):
         r = relative_error(filename_r[i], filename_v[i], h[i])[1]
         delta_max[i] = np.max(r)
-
-    print(delta_max)
 
     sum = 0
     for k in range(1,5):

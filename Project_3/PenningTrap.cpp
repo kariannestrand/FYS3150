@@ -293,8 +293,8 @@ void PenningTrap::evolve_forward_Euler(double dt, int k){
             mat V = mat(3, n_);
             R = R_total.col(i);
             V = V_total.col(i);
-            R.save("Euler_r_" + to_string(i) + "_0001dt" + ".bin");
-            V.save("Euler_v_" + to_string(i) + "_0001dt" + ".bin");
+            R.save("Euler_r_" + to_string(i) + "_00001dt" + ".bin");
+            V.save("Euler_v_" + to_string(i) + "_00001dt" + ".bin");
         }
     }
 
