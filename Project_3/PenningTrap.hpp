@@ -5,7 +5,6 @@
 #include <iostream>
 #include <iomanip>
 #include <vector>
-#include <complex>
 #include "Particle.hpp"
 
 class PenningTrap {
