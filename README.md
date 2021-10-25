@@ -11,5 +11,5 @@ The topic of the second [project](https://github.com/mariaoftedahl/FYS3150/tree/
 
 ## Project 3
 
-In the third [project](https://github.com/mariaoftedahl/FYS3150/tree/main/Project_3) we made a numerical simulation of a Penning trap, using the Runge-Kutta 4 method to solve a system of ordinary differential equations for the Penning trap-system.
+In the third [project](https://github.com/mariaoftedahl/FYS3150/tree/main/Project_3) we made a numerical simulation of a Penning trap, using the Runge-Kutta 4 method to solve a system of ordinary differential equations for the Penning trap.
 
