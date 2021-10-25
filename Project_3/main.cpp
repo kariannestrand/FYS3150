@@ -6,7 +6,7 @@ using namespace std;
 
 int main(int argc, char const *argv[]){
     bool write = false;                           // creates bin-files if true
-    bool interaction = true;                      // accounts for particle interactions if true
+    bool interaction = false;                     // accounts for particle interactions if true
     bool modified = true;                         // runs the program with time-dependent electrical field if true, and creates txt-files
     bool euler = false;                           // runs evolve_forward_Euler method if true
     bool rk4 = true;                              // runs evolve_RK4 method if true
