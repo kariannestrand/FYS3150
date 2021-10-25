@@ -4,26 +4,39 @@
 using namespace arma;
 using namespace std;
 
+PenningTrap::PenningTrap(double B0, double V0, double d, double ke, double f, vec omega_v, int n, double N, vec r1, vec v1, vec r2, vec v2, mat pos, mat vel, vec q_vec, vec m_vec, bool write, bool interaction, bool modified){
+    B0_ = B0;                      // magnetic field strength
+    V0_ = V0;                      // applied potential
+    d_ = d;                        // characteristic dimension
+    ke_ = ke;                      // coulombs constant
+    f_ = f;                        // amplitude
+    omega_v_ = omega_v;            // frequency
+    n_ = n;                        // number of particles
+    N_ = N;                        // number of time steps
+    write_ = write;                // writing to file
+    interaction_ = interaction;    // interactions between particles
+    modified_ = modified;          // modification of applied potential
 
-PenningTrap::PenningTrap(double B0, double V0, double d, double ke, double f, vec omega_v, int n, double N, mat pos, mat vel, vec q_vec, vec m_vec, bool write, bool interaction, bool modified){
-    B0_ = B0;                   // magnetic field strength
-    V0_ = V0;                   // applied potential
-    d_ = d;                     // characteristic dimension
-    ke_ = ke;
-    f_ = f;
-    omega_v_ = omega_v;
-    n_ = n;
-    N_ = N;
-    write_ = write;
-    interaction_ = interaction;
-    modified_ = modified;
-
-    // making list/contatiner for particle objects
-
-    for (int i = 0; i < n_; i++){
-        particles_.push_back(Particle(q_vec(i), m_vec(i), pos.col(i), vel.col(i)));
+    // adding one particle to the trap
+    if (n_ == 1){
+        particles_.push_back(Particle(1., 40.078, r1, v1));
     }
 
+    // adding two particles to the trap
+    if (n_ == 2){
+        Particle p1 = Particle(1., 40.078, r1, v1);
+        particles_.push_back(p1);
+        Particle p2 = Particle(1., 40.078, r2, v2);
+        particles_.push_back(p2);
+    }
+
+    // adding more than one particle to the trap
+    if (n > 2){
+        for (int i = 0; i < n_; i++){
+        particles_.push_back(Particle(q_vec(i), m_vec(i), pos.col(i), vel.col(i)));
+        }
+    }
+    
 }
 
 
