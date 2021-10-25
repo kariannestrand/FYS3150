@@ -4,64 +4,42 @@
 using namespace arma;
 using namespace std;
 
-PenningTrap::PenningTrap(double B0, double V0, double d, double ke, double f, vec omega_v, int n, double N, vec r1, vec v1, vec q_vec, vec m_vec, bool write, bool interaction, bool modified){
-    B0_ = B0;                   // magnetic field strength
-    V0_ = V0;                   // applied potential
-    d_ = d;                     // characteristic dimension
-    ke_ = ke;
-    f_ = f;
-    omega_v_ = omega_v;
-    n_ = n;
-    N_ = N;
-    write_ = write;
-    interaction_ = interaction;
-    modified_ = modified;
+PenningTrap::PenningTrap(double B0, double V0, double d, double ke, double f, vec omega_v, int n, double N, vec r1, vec v1, vec r2, vec v2, mat pos, mat vel, vec q_vec, vec m_vec, bool write, bool interaction, bool modified){
+    B0_ = B0;                      // magnetic field strength
+    V0_ = V0;                      // applied potential
+    d_ = d;                        // characteristic dimension
+    ke_ = ke;                      // coulombs constant
+    f_ = f;                        // amplitude
+    omega_v_ = omega_v;            // frequency
+    n_ = n;                        // number of particles
+    N_ = N;                        // number of time steps
+    write_ = write;                // writing to file
+    interaction_ = interaction;    // interactions between particles
+    modified_ = modified;          // modification of applied potential
 
-    // for one particle
-    for (int i = 0; i < n_; i++){
-        particles_.push_back(Particle(q_vec(i), m_vec(i), r1, v1));
+    // adding one particle to the trap
+    if (n_ == 1){
+        particles_.push_back(Particle(1., 40.078, r1, v1));
     }
-    
 
-}
+    // adding two particles to the trap
+    if (n_ == 2){
+        Particle p1 = Particle(1., 40.078, r1, v1);
+        particles_.push_back(p1);
+        Particle p2 = Particle(1., 40.078, r2, v2);
+        particles_.push_back(p2);
+    }
 
-/*
-PenningTrap::PenningTrap(double B0, double V0, double d, double ke, double f, vec omega_v, int n, double N, mat pos, mat vel, vec q_vec, vec m_vec, bool write, bool interaction, bool modified){
-    B0_ = B0;                   // magnetic field strength
-    V0_ = V0;                   // applied potential
-    d_ = d;                     // characteristic dimension
-    ke_ = ke;
-    f_ = f;
-    omega_v_ = omega_v;
-    n_ = n;
-    N_ = N;
-    write_ = write;
-    interaction_ = interaction;
-    modified_ = modified;
-    
-    // making list/contatiner for particle objects
-
-    for (int i = 0; i < n_; i++){
+    // adding more than one particle to the trap
+    if (n > 2){
+        for (int i = 0; i < n_; i++){
         particles_.push_back(Particle(q_vec(i), m_vec(i), pos.col(i), vel.col(i)));
+        }
     }
     
-
-}
-*/
-
-
-vec PenningTrap::external_B_field(int i){
-    Particle& p_i = particles_[i];
-    vec r = p_i.r_;
-
-    vec B = vec(3).fill(0.);
-
-    B(2) = B0_;
-
-    return B;
 }
 
-/*
+
 vec PenningTrap::external_B_field(int i){
     Particle& p_i = particles_[i];
     vec r = p_i.r_;
@@ -81,28 +59,8 @@ vec PenningTrap::external_B_field(int i){
 
     return B;
 }
-*/
 
-vec PenningTrap::external_E_field(int i){
-    Particle& p_i = particles_[i];
-    vec r = p_i.r_;
 
-    vec F = vec(3).fill(0);
-    // position of E-field
-    F(0) = -1.;
-    F(1) = -1.;
-    F(2) = 2.;
-
-    vec E = vec(3).fill(0);
-
-    
-    E = - V0_/(d_*d_)*F % r;
-    
-
-    return E;
-}
-
-/*
 vec PenningTrap::external_E_field(int i, int k, double dt){
     Particle& p_i = particles_[i];
     vec r = p_i.r_;
@@ -128,9 +86,8 @@ vec PenningTrap::external_E_field(int i, int k, double dt){
 
     return E;
 }
-*/
 
-/*
+
 vec PenningTrap::force_particle(int i, int j){
     Particle& p_i = particles_[i];
     Particle& p_j = particles_[j];
@@ -139,40 +96,16 @@ vec PenningTrap::force_particle(int i, int j){
     int q_i = p_i.q_;
     int q_j = p_j.q_;
 
-    vec dr = abs(r) % abs(r) % abs(r);
+    double dr = norm(r) * norm(r) * norm(r);
 
-
-    vec F;
-    if (interaction_){
-        F = ke_*(q_i*q_j)/dr % r;
-    }
-    else{
-        F(0) = 0;
-        F(1) = 0;
-        F(2) = 0;
-    }
-
-
-    return F;
-}
-*/
-
-vec PenningTrap::total_force_external(int i){
-    Particle& p_i = particles_[i];
 
     vec F = vec(3).fill(0);
-    vec E = external_E_field(i);
-    vec B = external_B_field(i);
-
-    vec v = p_i.v_;
-    int q = p_i.q_;
-
-    F = q*E + cross(q*v, B);
+    F = ke_*(q_i*q_j)/dr * r;
 
     return F;
 }
 
-/*
+
 vec PenningTrap::total_force_external(int i, int k, double dt){
     Particle& p_i = particles_[i];
 
@@ -187,9 +120,8 @@ vec PenningTrap::total_force_external(int i, int k, double dt){
 
     return F;
 }
-*/
 
-/*
+
 vec PenningTrap::total_force_particles(int i){
     vec F = vec(3).fill(0);
 
@@ -201,18 +133,8 @@ vec PenningTrap::total_force_particles(int i){
 
     return F;
 }
-*/
 
-vec PenningTrap::total_force(int i){
-    vec F = vec(3).fill(0);
 
-    F = total_force_external(i);
-
-    return F;
-
-}
-
-/*
 vec PenningTrap::total_force(int i, int k, double dt){
     vec F = vec(3).fill(0);
 
@@ -226,9 +148,8 @@ vec PenningTrap::total_force(int i, int k, double dt){
     return F;
 
 }
-*/
 
-/*
+
 int PenningTrap::particles_trapped(){
     int count = 0;
     for (int i=0; i < particles_.size(); i++){
@@ -240,91 +161,8 @@ int PenningTrap::particles_trapped(){
 
     return count;
 }
-*/
-
-void PenningTrap::evolve_RK4(double dt){
-    cube R_total = cube(3, n_, N_);
-    cube V_total = cube(3, n_, N_);
 
 
-    for (int i = 0; i < n_; i++){
-        Particle& p_i = particles_[i];
-        R_total.slice(0).col(i) = p_i.r_;
-        V_total.slice(0).col(i) = p_i.v_;
-    }
-
-    for (int j = 1; j < N_; j++){
-        for (int i = 0; i < n_; i++){
-            Particle& p_i = particles_[i];
-
-            vec r_old = R_total.slice(j-1).col(i);
-            vec v_old = V_total.slice(j-1).col(i);
-
-            // K1
-            vec F = total_force(i);
-            vec a = F/p_i.m_;
-
-            vec K1_v = a*dt;
-            vec K1_r = p_i.v_*dt;
-
-
-            // K2
-            p_i.v_ = v_old + (1/2.)*K1_v;
-            p_i.r_ = r_old + (1/2.)*K1_r;
-
-            F = total_force(i);
-            a = F/p_i.m_;
-
-            vec K2_v = a*dt;
-            vec K2_r = p_i.v_*dt;
-
-
-            // K3
-            p_i.v_ = v_old + (1/2.)*K2_v;
-            p_i.r_ = r_old + (1/2.)*K2_r;
-
-            F = total_force(i);
-            a = F/p_i.m_;
-
-            vec K3_v = a*dt;
-            vec K3_r = p_i.v_*dt;
-
-
-            // K4
-            p_i.v_ = v_old + (1/2.)*K3_v;
-            p_i.r_ = r_old + (1/2.)*K3_r;
-
-            F = total_force(i);
-            a = F/p_i.m_;
-
-            vec K4_v = a*dt;
-            vec K4_r = p_i.v_*dt;
-
-            // last step
-            p_i.v_ = v_old + (1/6.)*(K1_v + 2.*K2_v + 2.*K3_v + K4_v);
-            p_i.r_ = r_old + (1/6.)*(K1_r + 2.*K2_r + 2.*K3_r + K4_r);
-
-            V_total.slice(j).col(i) = p_i.v_;
-            R_total.slice(j).col(i) = p_i.r_;
-
-        }
-    }
-
-    if (write_){
-        for (int i = 0; i < n_; i++){
-            mat R = mat(3, n_);
-            mat V = mat(3, n_);
-            R = R_total.col(i);
-            V = V_total.col(i);
-            R.save("RK4_r_" + to_string(i) + "_00008dt" + ".bin");
-            V.save("RK4_v_" + to_string(i) + "_00008dt" + ".bin");
-        }
-    }
-
-
-}
-
-/*
 void PenningTrap::evolve_RK4(double dt, int k){
     cube R_total = cube(3, n_, N_);
     cube V_total = cube(3, n_, N_);
@@ -397,9 +235,8 @@ void PenningTrap::evolve_RK4(double dt, int k){
         int N = particles_trapped();
 
         ofstream file;
-        file.open("trapped_01f.txt", ios::app);
+        file.open("trapped_0001dt_002w_01f.txt", ios::app);
         file << setw(25) << N << " " << omega_v_(k) << endl;
-        cout << N << endl;
         file.close();
     }
 
@@ -410,60 +247,15 @@ void PenningTrap::evolve_RK4(double dt, int k){
             mat V = mat(3, n_);
             R = R_total.col(i);
             V = V_total.col(i);
-            R.save("RK4_r_" + to_string(i) + "_0010dt" + ".bin");
+            R.save("RK4_r_" + to_string(i) + "_0001dt" + ".bin");
             V.save("RK4_v_" + to_string(i) + "_0001dt" + ".bin");
         }
     }
 
-
-}
-*/
-
-void PenningTrap::evolve_forward_Euler(double dt){
-    cube R_total = cube(3, n_, N_);
-    cube V_total = cube(3, n_, N_);
-
-    for (int i = 0; i < n_; i++){
-        Particle& p_i = particles_[i];
-        R_total.slice(0).col(i) = p_i.r_;
-        V_total.slice(0).col(i) = p_i.v_;
-    }
-
-    for (int j = 1; j < N_; j++){
-        for (int i = 0; i < n_; i++){
-            Particle& p_i = particles_[i];
-
-            vec r_old = R_total.slice(j-1).col(i);
-            vec v_old = V_total.slice(j-1).col(i);
-
-            vec F = total_force(i);
-            vec a = F/p_i.m_;
-
-
-            p_i.v_ = p_i.v_ + a*dt;
-            p_i.r_ = p_i.r_ + p_i.v_*dt;
-
-
-            V_total.slice(j).col(i) = p_i.v_;
-            R_total.slice(j).col(i) = p_i.r_;
-        }
-    }
-
-
-    if (write_){
-        for (int i = 0; i < n_; i++){
-            mat R = mat(3, n_);
-            mat V = mat(3, n_);
-            R = R_total.col(i);
-            V = V_total.col(i);
-            R.save("Euler_r_" + to_string(i) + "_00002dt" + ".bin");
-            V.save("Euler_v_" + to_string(i) + "_00002dt" + ".bin");
-        }
-    }
-
 }
 
-/*
+
+
 void PenningTrap::evolve_forward_Euler(double dt, int k){
     cube R_total = cube(3, n_, N_);
     cube V_total = cube(3, n_, N_);
@@ -501,10 +293,9 @@ void PenningTrap::evolve_forward_Euler(double dt, int k){
             mat V = mat(3, n_);
             R = R_total.col(i);
             V = V_total.col(i);
-            R.save("Euler_r_" + to_string(i) + "_00001dt" + ".bin");
-            V.save("Euler_v_" + to_string(i) + "_00001dt" + ".bin");
+            R.save("Euler_r_" + to_string(i) + "_0001dt" + ".bin");
+            V.save("Euler_v_" + to_string(i) + "_0001dt" + ".bin");
         }
     }
 
 }
-*/

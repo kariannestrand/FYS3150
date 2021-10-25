@@ -5,26 +5,28 @@ using namespace arma;
 using namespace std;
 
 int main(int argc, char const *argv[]){
-    bool write = true;                           // creates txt-files if true
+    bool write = true;                           // creates bin-files if true
     bool interaction = false;                     // accounts for particle interactions if true
-    bool modified = false;                         // runs the program with time-dependent electrical field if true
-    bool euler = true;                           // runs evolve_forward_Euler method if true
-    bool rk4 = false;                              // runs evolve_RK4 method if true
+    bool modified = false;                         // runs the program with time-dependent electrical field if true, and creates txt-files
+    bool euler = false;                           // runs evolve_forward_Euler method if true
+    bool rk4 = true;                              // runs evolve_RK4 method if true
 
-    int n = 1;                                  // number of particles
+    int n = 2;                                  // number of particles
 
-    double t = 100.;                              // total time, [mu*s]
-    double dt = 0.0002;                             // time step, [mu*s]
+    double t = 100.;                              // total time, [mu*s], choose 500. if modified
+    double dt = 0.001;                            // time step, [mu*s]
     int N = t/dt;                                 // number of time steps
 
+    // Uncomment these if modified
     //double V0 = (2.5e-4)*9.65e8;                  // applied potential, [u*(mu*m)^2/(mu*s)^2*e]
     //double d = 0.05*1.0e4;                        // characteristic dimension, [mu*m]
 
-    double V0 = 9.65e8;
-    double d = 1.0e4;
+    // Uncomment these if not modified
+    double V0 = 9.65e8;                           // applied potential, [u*(mu*m)^2/(mu*s)^2*e]
+    double d = 1.0e4;                             // characteristic dimension, [mu*m]
 
-    double f = 0.1;                               // amplitudes
-    double No = 2;                                // number of steps in omega_v vector
+    double f = 0.1;                               // amplitude
+    double No = 115;                              // number of steps in omega_v vector
     vec omega_v = linspace(0.2, 2.5, No);         // angular frequency, [MHz]
 
     double q = 1.;                                // charge of Ca+ particle, [e]
@@ -36,37 +38,40 @@ int main(int argc, char const *argv[]){
     vec q_vec = vec(n).fill(q);                   // vector with charges
     vec m_vec = vec(n).fill(m);                   // vector with masses
 
-    //arma_rng::set_seed_random();                  // filling initial conditions with random values
+    // initial positions and velocities
 
-    //This is for one particle
-    vec r1 = {1.0,0,1.0}; // Initial position
-    vec v1 = {0,1.,0};   // Initial velocity
+    vec r1 = {1.0,0,1.0};       
+    vec v1 = {0,1.,0};          
 
+    vec r2 = {2.0,0,2.0};
+    vec v2 = {0,1.,0};
+
+    // random positions and velocities
+    
+    arma_rng::set_seed_random();
     mat pos = mat(dim, n).randn()*0.1*d;          // initial conditions for position
     mat vel = mat(dim, n).randn()*0.1*d;          // initial conditions for velocity
 
-    if (euler){
-            PenningTrap penningtrap_euler = PenningTrap(B0, V0, d, ke, f, omega_v, n, N, r1, v1, q_vec, m_vec, write, interaction, modified);
-            penningtrap_euler.evolve_forward_Euler(dt);
+    if (modified){
+        for (int k = 0; k < omega_v.size(); k++){
+            if (rk4){
+                PenningTrap penningtrap_rk4 = PenningTrap(B0, V0, d, ke, f, omega_v, n, N, r1, v1, r2, v2, pos, vel, q_vec, m_vec, write, interaction, modified);
+                penningtrap_rk4.evolve_RK4(dt, k);
+            }
         }
-        if (rk4){
-            PenningTrap penningtrap_rk4 = PenningTrap(B0, V0, d, ke, f, omega_v, n, N, r1, v1, q_vec, m_vec, write, interaction, modified);
-            penningtrap_rk4.evolve_RK4(dt);
-        }
-
-//For problem 10
-/*
-    for (int k = 0; k < omega_v.size(); k++){
+    }
+    else{
+        int k = 0;
         if (euler){
-            PenningTrap penningtrap_euler = PenningTrap(B0, V0, d, ke, f, omega_v, n, N, pos, vel, q_vec, m_vec, write, interaction, modified);
+            PenningTrap penningtrap_euler = PenningTrap(B0, V0, d, ke, f, omega_v, n, N, r1, v1, r2, v2, pos, vel, q_vec, m_vec, write, interaction, modified);
             penningtrap_euler.evolve_forward_Euler(dt, k);
         }
         if (rk4){
-            PenningTrap penningtrap_rk4 = PenningTrap(B0, V0, d, ke, f, omega_v, n, N, pos, vel, q_vec, m_vec, write, interaction, modified);
+            PenningTrap penningtrap_rk4 = PenningTrap(B0, V0, d, ke, f, omega_v, n, N, r1, v1, r2, v2, pos, vel, q_vec, m_vec, write, interaction, modified);
             penningtrap_rk4.evolve_RK4(dt, k);
         }
     }
-*/
+
 
     return 0;
 }
