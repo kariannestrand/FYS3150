@@ -6,7 +6,7 @@ import pyarma as pa
 
 n = 2                           # number of particles
 
-interaction = True
+interaction = False
 
 z_t = False
 x_y = False
@@ -48,6 +48,7 @@ def time(filename_r):
     N = len(R(filename_r))
     t = np.linspace(0, 100, N)
     return t
+
 
 def particles_trapped(filename):
     pt = np.loadtxt(filename, skiprows = 1)
@@ -278,6 +279,7 @@ if trajectory:
             plt.savefig('finished_plots/3D_2_wo.pdf')
 
     plt.show()
+
 
 if particles_trapped:
     filename_list = ["trapped_01f.txt", "trapped_04f.txt", "trapped_07f.txt"]
