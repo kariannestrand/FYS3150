@@ -8,3 +8,8 @@ The topic of the first [project](https://github.com/mariaoftedahl/FYS3150/tree/m
 ## Project 2
 
 The topic of the second [project](https://github.com/mariaoftedahl/FYS3150/tree/main/Project_2) is solving eigenvalue problems, using the Jacobi rotation method. 
+
+## Project 3
+
+In [project 3](https://github.com/mariaoftedahl/FYS3150/tree/main/Project_3) we have made a numerical simulation of a Penning trap, using the Runge-Kutta 4 method to solve a system of ordinary differential equations for the Penning trap-system.
+
