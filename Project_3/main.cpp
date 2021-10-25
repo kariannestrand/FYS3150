@@ -5,32 +5,21 @@ using namespace arma;
 using namespace std;
 
 int main(int argc, char const *argv[]){
-    bool write = true;                           // creates txt-files if true
-    bool interaction = false;                     // accounts for particle interactions if true
-    bool modified = false;                         // runs the program with time-dependent electrical field if true (time-independent if false)
-    bool euler = true;                           // runs evolve_forward_Euler method if true
+    bool write = false;                           // creates bin-files if true
+    bool interaction = true;                      // accounts for particle interactions if true
+    bool modified = true;                         // runs the program with time-dependent electrical field if true, and creates txt-files
+    bool euler = false;                           // runs evolve_forward_Euler method if true
     bool rk4 = true;                              // runs evolve_RK4 method if true
 
-    /*
+
     int n = 100;                                  // number of particles
 
     double t = 500.;                              // total time, [mu*s]
-    double dt = 0.008;                            // time step, [mu*s]
+    double dt = 0.001;                            // time step, [mu*s]
     int N = t/dt;                                 // number of time steps
 
     double V0 = (2.5e-4)*9.65e8;                  // applied potential, [u*(mu*m)^2/(mu*s)^2*e]
     double d = 0.05*1.0e4;                        // characteristic dimension, [mu*m]
-    */
-
-
-    int n = 1;                                    // number of particles
-
-    double t = 100.;                              // total time, [mu*s]
-    double dt = 0.001;                            // time step, [mu*s]
-    int N = t/dt;                                 // number of time steps
-
-    double V0 = 9.65e8;                           // applied potential, [u*(mu*m)^2/(mu*s)^2*e]
-    double d = 1.0e4;                             // characteristic dimension, [mu*m]
 
 
     double f = 0.1;                               // amplitude
@@ -46,7 +35,9 @@ int main(int argc, char const *argv[]){
     vec q_vec = vec(n).fill(q);                   // vector with charges
     vec m_vec = vec(n).fill(m);                   // vector with masses
 
-    // arma_rng::set_seed_random();                  // filling initial conditions with random values
+    if (modified){
+        arma_rng::set_seed_random();              // filling initial conditions with random values
+    }
 
     mat pos = mat(dim, n).randn()*0.1*d;          // initial conditions for position
     mat vel = mat(dim, n).randn()*0.1*d;          // initial conditions for velocity
