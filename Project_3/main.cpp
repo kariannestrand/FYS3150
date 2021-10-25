@@ -5,26 +5,31 @@ using namespace arma;
 using namespace std;
 
 int main(int argc, char const *argv[]){
-    bool write = true;                           // creates bin-files if true
+    bool write = false;                           // creates bin-files if true
     bool interaction = false;                     // accounts for particle interactions if true
-    bool modified = false;                         // runs the program with time-dependent electrical field if true, and creates txt-files
+    bool modified = false;                        // runs the program with time-dependent electrical field if true, and creates txt-files
     bool euler = false;                           // runs evolve_forward_Euler method if true
-    bool rk4 = true;                              // runs evolve_RK4 method if true
+    bool rk4 = false;                             // runs evolve_RK4 method if true
 
-    int n = 2;                                  // number of particles
-
-    double t = 100.;                              // total time, [mu*s], choose 500. if modified
+    int n = 2;                                    // number of particles
     double dt = 0.001;                            // time step, [mu*s]
+
+    double t;
+    double V0;
+    double d;
+
+    if (modified){
+        t = 500.;                                 // total time, [mu*s], choose 500. if modified
+        V0 = (2.5e-4)*9.65e8;                     // applied potential, [u*(mu*m)^2/(mu*s)^2*e]
+        d = 0.05*1.0e4;                           // characteristic dimension, [mu*m]
+    }
+    else{
+        t = 100.;                                 // total time, [mu*s], choose 500. if modified
+        V0 = 9.65e8;                              // applied potential, [u*(mu*m)^2/(mu*s)^2*e]
+        d = 1.0e4;                                // characteristic dimension, [mu*m]
+    }
+
     int N = t/dt;                                 // number of time steps
-
-    // Uncomment these if modified
-    //double V0 = (2.5e-4)*9.65e8;                  // applied potential, [u*(mu*m)^2/(mu*s)^2*e]
-    //double d = 0.05*1.0e4;                        // characteristic dimension, [mu*m]
-
-    // Uncomment these if not modified
-    double V0 = 9.65e8;                           // applied potential, [u*(mu*m)^2/(mu*s)^2*e]
-    double d = 1.0e4;                             // characteristic dimension, [mu*m]
-
     double f = 0.1;                               // amplitude
     double No = 115;                              // number of steps in omega_v vector
     vec omega_v = linspace(0.2, 2.5, No);         // angular frequency, [MHz]
@@ -39,15 +44,13 @@ int main(int argc, char const *argv[]){
     vec m_vec = vec(n).fill(m);                   // vector with masses
 
     // initial positions and velocities
-
-    vec r1 = {1.0,0,1.0};       
-    vec v1 = {0,1.,0};          
+    vec r1 = {1.0,0,1.0};
+    vec v1 = {0,1.,0};
 
     vec r2 = {2.0,0,2.0};
     vec v2 = {0,1.,0};
 
     // random positions and velocities
-    
     arma_rng::set_seed_random();
     mat pos = mat(dim, n).randn()*0.1*d;          // initial conditions for position
     mat vel = mat(dim, n).randn()*0.1*d;          // initial conditions for velocity

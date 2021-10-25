@@ -36,7 +36,7 @@ PenningTrap::PenningTrap(double B0, double V0, double d, double ke, double f, ve
         particles_.push_back(Particle(q_vec(i), m_vec(i), pos.col(i), vel.col(i)));
         }
     }
-    
+
 }
 
 

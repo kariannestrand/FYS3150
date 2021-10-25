@@ -22,8 +22,8 @@ analytical = True
 relative_error_RK4 = False
 relative_error_Euler = False
 
-error_convergence_rate_RK4 = False
-error_convergence_rate_Euler = False
+error_convergence_rate_RK4 = True
+error_convergence_rate_Euler = True
 
 def V(filename_v):
     V = pa.mat()
@@ -35,7 +35,6 @@ def V(filename_v):
     z = vel[:, 2]
 
     return x, y, z
-
 
 def R(filename_r):
     R = pa.mat()
@@ -81,7 +80,6 @@ def r_analytical(filename_r, filename_v, h):
 
     return r_exact, x_ex, y_ex, z_ex
 
-
 def relative_error(filename_r, filename_v, h):
 
     r = np.sqrt((r_analytical(filename_r, filename_v, h)[1]-R(filename_r)[0])**2 + (r_analytical(filename_r, filename_v, h)[2]-R(filename_r)[1])**2 + (r_analytical(filename_r, filename_v, h)[3]-R(filename_r)[2])**2)
@@ -108,12 +106,10 @@ def error_convergence_rate(filename_r, filename_v, h):
 
     return r_err
 
-
 def time(filename_r):
     N = len(R(filename_r)[0])
     t = np.linspace(0, 100, N)
     return t
-
 
 
 
@@ -181,4 +177,3 @@ if error_convergence_rate_Euler:
 
     r_err = error_convergence_rate(filename_r_list, filename_v_list, dt_list)
     print("Error convergence rate with Euler: r_err = {}".format(r_err))
-

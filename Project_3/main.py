@@ -32,7 +32,6 @@ def V(filename_v):
 
     return x, y, z
 
-filename_v = 'RK4_v_0_interaction.bin'
 
 def R(filename_r):
     R = pa.mat()
@@ -45,12 +44,10 @@ def R(filename_r):
 
     return x, y, z
 
-
 def time(filename_r):
     N = len(R(filename_r))
     t = np.linspace(0, 100, N)
     return t
-
 
 def particles_trapped(filename):
     pt = np.loadtxt(filename, skiprows = 1)
@@ -63,37 +60,6 @@ def particles_trapped(filename):
 filename_r = "RK4_r_0_0001dt.bin"
 filename_v = "RK4_v_0_0001dt.bin"
 
-if z_t:
-    if n == 1:
-        t = time(filename_r)
-        Rz = R(filename_r)[2]
-        plt.plot(t, Rz, label = "Numerical")
-        #plt.plot(t, r_analytical(filename_r, filename_v, 0.001)[0], label = "Analytical")
-
-    if n == 2:
-        filename_r_list = ["RK4_r_0_0001dt.bin", "RK4_r_1_0001dt.bin"]
-        for i in range(n):
-            t = time(filename_r_list[i])
-            Rx = R(filename_r_list[i])[0]
-            Ry = R(filename_r_list[i])[1]
-            plt.plot(Rx, Ry)
-
-    plt.xlabel("t/[$\mu$s]", size = 12)
-    plt.ylabel("z/[$\mu$m]", size = 12)
-
-    plt.ticklabel_format(axis="y", style="sci", scilimits=(0,0))
-
-    plt.legend()
-    if save_fig:
-        if n == 1:
-            plt.savefig('pdf/zt_1.pdf')
-        if n == 2:
-            if interaction:
-                plt.savefig('pdf/zt_2_w.pdf')
-            else:
-                plt.savefig('pdf/zt_2_wo.pdf')
-
-    plt.show()
 
 if x_y:
     if n == 1:
@@ -122,7 +88,6 @@ if x_y:
             plt.savefig('xy_2_wo.pdf')
 
     plt.show()
-
 
 if v_x:
     if n == 1:
@@ -215,7 +180,6 @@ if v_z:
 
     plt.show()
 
-
 if trajectory:
     ax = plt.axes(projection="3d")
     plt.tight_layout()
@@ -253,7 +217,6 @@ if trajectory:
 
     plt.show()
 
-
 if particles_trapped:
     if w_step_size == 0.02:
         filename_list = ["trapped_0008dt_002w_01f.txt", "trapped_0008dt_002w_04f.txt", "trapped_0008dt_002w_07f.txt"]
@@ -277,5 +240,3 @@ if particles_trapped:
         elif w_step_size == 0.002:
             plt.savefig('pdf/particles_trapped_0002w.pdf')
     plt.show()
-
-
