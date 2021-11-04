@@ -4,16 +4,16 @@ from mpl_toolkits import mplot3d
 import pyarma as pa
 
 
-n = 2                           # number of particles
-w_step_size = 0.02              # step size of omega_v
+n = 1                             # number of particles
+w_step_size = 0.02                # step size of omega_v
 
 interaction = False
-save_fig = True
+save_fig = False
 
 z_t = False
 x_y = False
 phase_space = False
-trajectory = True
+trajectory = False
 
 particles_trapped = False
 
@@ -80,7 +80,7 @@ if x_y:
     plt.ticklabel_format(axis="both", style="sci", scilimits=(0,0))
 
     if n == 1:
-        plt.savefig('pdf/xy_1.pdf')
+        plt.savefig('xy_1.pdf')
     if n == 2:
         if interaction:
             plt.savefig('xy_2_w.pdf')
@@ -110,12 +110,12 @@ if v_x:
 
     if save_fig:
         if n == 1:
-            plt.savefig('pdf/vx_1.pdf')
+            plt.savefig('vx_1.pdf')
         if n == 2:
             if interaction:
-                plt.savefig('pdf/vx_2_w.pdf')
+                plt.savefig('vx_2_w.pdf')
             else:
-                plt.savefig('pdf/vx_2_wo.pdf')
+                plt.savefig('vx_2_wo.pdf')
 
     plt.show()
 
@@ -140,12 +140,12 @@ if v_y:
 
     if save_fig:
         if n == 1:
-            plt.savefig('pdf/vy_1.pdf')
+            plt.savefig('vy_1.pdf')
         if n == 2:
             if interaction:
-                plt.savefig('pdf/vy_2_w.pdf')
+                plt.savefig('vy_2_w.pdf')
             else:
-                plt.savefig('pdf/vy_2_wo.pdf')
+                plt.savefig('vy_2_wo.pdf')
     plt.show()
 
 if v_z:
@@ -171,7 +171,7 @@ if v_z:
     plt.ticklabel_format(axis="both", style="sci", scilimits=(0,0))
 
     if n == 1:
-        plt.savefig('pdf/vz_1.pdf')
+        plt.savefig('vz_1.pdf')
     if n == 2:
         if interaction:
             plt.savefig('vz_2_w.pdf')
@@ -236,7 +236,7 @@ if particles_trapped:
     plt.legend()
     if save_fig:
         if w_step_size == 0.02:
-            plt.savefig('pdf/particles_trapped_002w.pdf')
+            plt.savefig('particles_trapped_002w.pdf')
         elif w_step_size == 0.002:
-            plt.savefig('pdf/particles_trapped_0002w.pdf')
+            plt.savefig('particles_trapped_0002w.pdf')
     plt.show()

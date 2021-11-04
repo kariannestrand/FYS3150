@@ -23,7 +23,7 @@ relative_error_RK4 = False
 relative_error_Euler = False
 
 error_convergence_rate_RK4 = False
-error_convergence_rate_Euler = True
+error_convergence_rate_Euler = False
 
 def V(filename_v):
     V = pa.mat()
