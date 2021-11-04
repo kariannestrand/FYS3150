@@ -3,7 +3,11 @@
 using namespace arma;
 using namespace std;
 
-int main(int argc, char const *argv[]){
+Ising::Ising(){
 
-    return 0;
+}
+
+
+void Ising::method(){
+
 }
