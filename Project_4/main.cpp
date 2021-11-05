@@ -16,11 +16,5 @@ int main(int argc, char const *argv[]){
 
     Initialize(L, &S, &E, &M);
 
-    /*
-    cout << S << endl;
-    cout << E << endl;
-    cout << M << endl;
-    */
-
     return 0;
 }

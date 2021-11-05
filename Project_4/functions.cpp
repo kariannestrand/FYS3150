@@ -3,9 +3,10 @@
 using namespace arma;
 using namespace std;
 
+
 // function to initialize spin configuration, energy and magnetization
 void Initialize(int L, mat *S, double *E, double *M){
-    for(int i = 0; i < L; i++) {
+    for(int i = 0; i < L; i++){
         for (int j = 0; j < L; j++){
 
             if ((*S)(i, j) >= 0.5){
@@ -23,10 +24,19 @@ void Initialize(int L, mat *S, double *E, double *M){
 }
 
 
-// inline function for periodic boundary conditions
+// inline function for Periodic Boundary Conditions
 inline int PBC(int i, int limit, int add){
     // metropolis sampling is used, periodic boundary conditions
     // i: base index, limit: highest legal index (L), add: number added to i
     // a % b gives the remainder of a/b
     return (i + limit + add) % (limit);
+}
+
+
+void PartitionFunction(){
+    for(int i = 0; i < L; i++){
+        for(int j = 0; j < L; j++){
+
+        }
+    }
 }
