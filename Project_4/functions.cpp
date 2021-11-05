@@ -33,10 +33,7 @@ inline int PBC(int i, int limit, int add){
 }
 
 
-void PartitionFunction(){
-    for(int i = 0; i < L; i++){
-        for(int j = 0; j < L; j++){
 
-        }
-    }
-}
+/* COMMENT FROM KARIANNE */
+// Other people from last year flip spins and stuff, which i guess is part of the Metropolis-thing
+// HOWEVER, I dont know if this is a part of our project or not?
