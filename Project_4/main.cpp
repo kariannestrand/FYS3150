@@ -18,5 +18,7 @@ int main(int argc, char const *argv[]){
     double epsilon = E/N;               // energy per spin
     double m = M/N;                     // magnetization per spin
 
+    cout << m << endl;
+
     return 0;
 }
