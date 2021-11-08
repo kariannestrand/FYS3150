@@ -34,6 +34,7 @@ int main(int argc, char const *argv[]){
     double epsilon = E/N;               // energy per spin
     double m = M/N;                     // magnetization per spin
 
+
     return 0;
 }
 
@@ -60,7 +61,6 @@ void initialize(int L, mat &S, double &E, double &M){
                 if (S(i,j) == 0){
                     S(i,j) += -1;
                 }
-                
                 M += S(i, j);
 
             }
@@ -71,7 +71,6 @@ void initialize(int L, mat &S, double &E, double &M){
         for(int i = 0; i < L; i++){
             for (int j = 0; j < L; j++){
                 S(i,j) = 1.0;           // spin configuration, choose -1 for down, 1 for up
-
                 M += S(i, j);
             }
         }
@@ -84,8 +83,6 @@ void initialize(int L, mat &S, double &E, double &M){
 
         }
     }
-
-    cout << S << endl;
 
 }
 
@@ -104,12 +101,11 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles){
     std::mt19937_64 gen(rd());
     std::uniform_real_distribution<double> distribution(0.0,1.0);
 
-
     //made from mortens lecture notes
-    vec E_vector = zeros<mat>(17);
-
+    vec boltzmann = zeros<mat>(17);
+    
     // possible energies
-    for(int de =-8; de <= 8; de+=4) E_vector(de+8) = exp(-de/T);
+    for(int de =-8; de <= 8; de+=4) boltzmann(de+8) = exp(-de/T);
 
     for (int i = 1; i <= N_cycles; i++){
         for(int i =0; i < L; i++) {
@@ -118,20 +114,23 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles){
                 int y = distribution(gen)*L;
 
                 int dE = delta_E(S, L, x, y);
+
+                if (dE <= 0){
+                    S(x, y) *= (-1);        // flips spin
+                    E += (double) dE;
+                    M += 2*S(x, y);
+                }
             
-                if (distribution(gen) <= E_vector(dE+8) ){
-                    S(x,y) *= -1.0;         // flips spin
-                    M += 2*S(x,y);
-                    E += dE;
+                else if (distribution(gen) <= boltzmann(dE+8) ){
+                    S(x,y) *= (-1);         // flips spin
+                    E += (double) dE;
+                    M += 2*S(x, y);
+                    
 
                 }
-
-
             }
         }
-        
     }
-
 }
 
 
