@@ -5,11 +5,13 @@ using namespace std;
 
 
 int main(int argc, char const *argv[]){
-    int L = 10;                         // lattice length
+    int L = 2;                         // lattice length
     double N = L*L;                     // number of spins
 
-    arma_rng::set_seed_random();        // sets seed for randu
-    mat S = mat(L, L, fill::randu);     // initialize the lattice spin values with random values from 0 to 1
+    //arma_rng::set_seed_random();        // sets seed for randu
+    //mat S = mat(L, L, fill::randu);     // initialize the lattice spin values with random values from 0 to 1
+    //mat S = mat(L, L);
+    mat S = zeros<mat>(L,L);
     double E = 0.;                      // initialize energy
     double M = 0.;                      // initialize magnetization
 
@@ -18,7 +20,6 @@ int main(int argc, char const *argv[]){
     double epsilon = E/N;               // energy per spin
     double m = M/N;                     // magnetization per spin
 
-    cout << m << endl;
-
     return 0;
 }
+
