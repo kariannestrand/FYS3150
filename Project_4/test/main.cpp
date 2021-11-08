@@ -7,8 +7,8 @@ using namespace std;
 
 arma::mat spin_matrix(int L);
 void initialize(int L, mat &S, double &E, double &M);
-//int delta_E(mat &S, int L, int i, int j);
-//void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles);
+int delta_E(mat &S, int L, int i, int j);
+void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles);
 
 // inline function for Periodic Boundary Conditions
 inline int PBC(int i, int limit, int add){
@@ -29,13 +29,10 @@ int main(int argc, char const *argv[]){
     double M = 0.;                      // initialize magnetization
 
     initialize(L, S, E, M);
-    //metropolis(S, L, T, E, M, N_cycles);
+    metropolis(S, L, T, E, M, N_cycles);
 
     double epsilon = E/N;               // energy per spin
     double m = M/N;                     // magnetization per spin
-
-    cout << epsilon << endl;
-    cout << E << endl;
 
     return 0;
 }
@@ -50,7 +47,7 @@ arma::mat spin_matrix(int L){
 
 // function to initialize spin configuration, energy and magnetization
 void initialize(int L, mat &S, double &E, double &M){
-    bool random = true;        // random if true, ordered if false
+    bool random = false;        // random if true, ordered if false
 
     if (random){
         std::random_device rd;
@@ -110,10 +107,11 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles){
 
     //made from mortens lecture notes
     vec E_vector = zeros<mat>(17);
+
     // possible energies
     for(int de =-8; de <= 8; de+=4) E_vector(de+8) = exp(-de/T);
 
-    for (int i = 0; i <= N_cycles; i++){
+    for (int i = 1; i <= N_cycles; i++){
         for(int i =0; i < L; i++) {
             for (int j= 0; j < L; j++){
                 int x = distribution(gen)*L;
@@ -131,6 +129,7 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles){
 
             }
         }
+        
     }
 
 }
