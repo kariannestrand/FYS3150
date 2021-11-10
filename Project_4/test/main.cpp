@@ -106,6 +106,7 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles){
     
     // possible energies
     for(int de =-8; de <= 8; de+=4) boltzmann(de+8) = exp(-de/T);
+    cout << boltzmann << endl;
 
     for (int i = 1; i <= N_cycles; i++){
         for(int i =0; i < L; i++) {
@@ -117,13 +118,13 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles){
 
                 if (dE <= 0){
                     S(x, y) *= (-1);        // flips spin
-                    E += (double) dE;
+                    E += dE;
                     M += 2*S(x, y);
                 }
             
                 else if (distribution(gen) <= boltzmann(dE+8) ){
                     S(x,y) *= (-1);         // flips spin
-                    E += (double) dE;
+                    E += dE;
                     M += 2*S(x, y);
                     
 
