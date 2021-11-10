@@ -6,9 +6,9 @@ using namespace std;
 
 
 arma::mat spin_matrix(int L);
-void initialize(int L, mat &S, double &E, double &M);
+void initialize(int L, mat &S, double &E, double &M, int N);
 int delta_E(mat &S, int L, int i, int j);
-void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles);
+void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int N);
 
 // inline function for Periodic Boundary Conditions
 inline int PBC(int i, int limit, int add){
@@ -20,7 +20,7 @@ int main(int argc, char const *argv[]){
     int L = 2;                         // lattice length
     double N = L*L;                     // number of spins
     double T = 1.0;
-    int N_cycles = 10;
+    int N_cycles = 100000;
     
 
     mat S = spin_matrix(L);
@@ -28,11 +28,8 @@ int main(int argc, char const *argv[]){
     double E = 0.;                      // initialize energy
     double M = 0.;                      // initialize magnetization
 
-    initialize(L, S, E, M);
-    metropolis(S, L, T, E, M, N_cycles);
-
-    double epsilon = E/N;               // energy per spin
-    double m = M/N;                     // magnetization per spin
+    initialize(L, S, E, M, N);
+    metropolis(S, L, T, E, M, N_cycles, N);
 
 
     return 0;
@@ -47,7 +44,7 @@ arma::mat spin_matrix(int L){
 
 
 // function to initialize spin configuration, energy and magnetization
-void initialize(int L, mat &S, double &E, double &M){
+void initialize(int L, mat &S, double &E, double &M, int N){
     bool random = false;        // random if true, ordered if false
 
     if (random){
@@ -95,7 +92,7 @@ int delta_E(mat &S, int L, int i, int j){
 }
 
 // metropolis algorithm
-void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles){
+void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int N){
 
     std::random_device rd;
     std::mt19937_64 gen(rd());
@@ -106,32 +103,52 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles){
     
     // possible energies
     for(int de =-8; de <= 8; de+=4) boltzmann(de+8) = exp(-de/T);
-    cout << boltzmann << endl;
+    
 
-    for (int i = 1; i <= N_cycles; i++){
+    double E_exp = 0;
+    double E_exp_sq = 0;
+    double M_exp = 0;
+    double M_exp_sq = 0;
+
+    for (int i = 0; i <= N_cycles; i++){
         for(int i =0; i < L; i++) {
-            for (int j= 0; j < L; j++){
-                int x = distribution(gen)*L;
-                int y = distribution(gen)*L;
+            int x = distribution(gen)*L;
+            int y = distribution(gen)*L;
 
-                int dE = delta_E(S, L, x, y);
+            int dE = delta_E(S, L, x, y);
 
-                if (dE <= 0){
-                    S(x, y) *= (-1);        // flips spin
-                    E += dE;
-                    M += 2*S(x, y);
-                }
+            if (dE <= 0){
+                S(x, y) *= (-1);        // flips spin
+                E += dE;
+                M += 2*S(x, y);
+            }
             
-                else if (distribution(gen) <= boltzmann(dE+8) ){
-                    S(x,y) *= (-1);         // flips spin
-                    E += dE;
-                    M += 2*S(x, y);
-                    
-
-                }
+            else if (distribution(gen) <= boltzmann(dE+8) ){
+                S(x,y) *= (-1);         // flips spin
+                E += dE;
+                M += 2*S(x, y);
+                
             }
         }
+
+        E_exp += E;
+        E_exp_sq += E*E;
+        M_exp += abs(M);
+        M_exp_sq += M*M;
+        
+    
     }
+
+    E_exp /= N * N_cycles;
+    E_exp_sq /= N * N * N_cycles;
+    M_exp /= N * N_cycles;
+    M_exp_sq /= N * N * N_cycles;
+
+    cout << E_exp << endl;
+    cout << E_exp_sq << endl;
+    cout << M_exp << endl;
+    cout << M_exp_sq << endl;
+    
 }
 
 
