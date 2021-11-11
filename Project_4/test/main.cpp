@@ -20,7 +20,7 @@ int main(int argc, char const *argv[]){
     int L = 2;                         // lattice length
     double N = L*L;                     // number of spins
     double T = 1.0;
-    int N_cycles = 100000;
+    int N_cycles = 100;
     
 
     mat S = spin_matrix(L);
@@ -77,10 +77,11 @@ void initialize(int L, mat &S, double &E, double &M, int N){
     for(int i = 0; i < L; i++){
         for (int j = 0; j < L; j++){
                 E -= S(i, j) * S(PBC(i, L, -1), j) + S(i, j) * S(i, PBC(j, L, -1));
+                
 
         }
     }
-
+    
 }
 
 // delta E
@@ -110,8 +111,11 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
     double M_exp = 0;
     double M_exp_sq = 0;
 
-    for (int i = 0; i <= N_cycles; i++){
-        for(int i =0; i < L; i++) {
+    vec epsilon = vec(N_cycles); 
+
+
+    for (int i = 1; i <= N_cycles; i++){
+        for(int j = 0; j < N; j++) {
             int x = distribution(gen)*L;
             int y = distribution(gen)*L;
 
@@ -131,23 +135,34 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
             }
         }
 
+        
         E_exp += E;
         E_exp_sq += E*E;
         M_exp += abs(M);
         M_exp_sq += M*M;
         
+        double norm = 1./(((double) i)*N);
+        cout << E_exp*norm << endl;
+
+        double norm = 1./(((double) i)*N);
+        epsilon = E_exp*norm;
+        cout << epsilon << endl;
+        
     
     }
 
     E_exp /= N * N_cycles;
-    E_exp_sq /= N * N * N_cycles;
-    M_exp /= N * N_cycles;
-    M_exp_sq /= N * N * N_cycles;
+    E_exp_sq /= N * N * N * N_cycles;
+    M_exp /= N * N * N_cycles;
+    M_exp_sq /= N * N * N * N_cycles;
+    
 
+    /*
     cout << E_exp << endl;
     cout << E_exp_sq << endl;
     cout << M_exp << endl;
     cout << M_exp_sq << endl;
+    */
     
 }
 
