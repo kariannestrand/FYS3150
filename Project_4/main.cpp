@@ -5,18 +5,18 @@ using namespace std;
 
 
 int main(int argc, char const *argv[]){
-    int L = 2;                         // lattice length
-    double N = L*L;                     // number of spins
+    int L = atoi(argv[1]);               // lattice length
+    double N = L*L;                      // number of spins
     double T = 2.1;
-    int NT = 1000;
+    int NT = 100;
     vec T_vec = linspace(2.1, 2.4, NT);
-    int N_cycles = 10000;
+    int N_cycles = 100000;
 
 
     //mat S = spin_matrix(L);
 
-    double E = 0.;                      // initialize energy
-    double M = 0.;                      // initialize magnetization
+    double E = 0.;                       // initialize energy
+    double M = 0.;                       // initialize magnetization
 
     //initialize(L, S, E, M, N);
     //metropolis(S, L, T, E, M, N_cycles, N);

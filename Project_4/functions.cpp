@@ -80,12 +80,13 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
 
     double E_exp = 0; double E_exp_sq = 0; double M_exp = 0; double M_exp_sq = 0;
     double eps_exp = 0; double eps_exp_sq = 0; double m_exp = 0; double m_exp_sq = 0;
+    double cV = 0; double chi = 0;
 
-    vec epsilon_exp = vec(N_cycles);
-    vec epsilon_samples = vec(N_cycles);
+    vec epsilon_exp = vec(N_cycles + 1);
+    vec epsilon_samples = vec(N_cycles + 1);
 
 
-    for (int i = 1; i <= N_cycles; i++){
+    for (int i = 0; i <= N_cycles; i++){
         for(int j = 0; j < N; j++) {
             int x = distribution(gen)*L;
             int y = distribution(gen)*L;
@@ -125,17 +126,45 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
 
     }
 
-
     // problem 4
-    eps_exp = E_exp/(N*N_cycles);
+    eps_exp = E_exp/(N * N_cycles);
     eps_exp_sq = E_exp_sq/(N * N * N_cycles);
+
     m_exp = M_exp/(N * N_cycles);
     m_exp_sq = M_exp_sq/(N * N_cycles);
+
+    cV = 1./(T*T)*(E_exp_sq/N_cycles - E_exp/N_cycles * E_exp/N_cycles)/N;   // kB = 1
+    chi = 1./T*(m_exp_sq/N_cycles - m_exp/N_cycles * m_exp/N_cycles)/N;      // kB = 1
+
+
     /*
     cout << eps_exp << endl;
     cout << eps_exp_sq << endl;
     cout << m_exp << endl;
     cout << m_exp_sq << endl;
     */
+
+
+    ofstream eps_exp_file;
+    eps_exp_file.open("eps_exp.bin", ios::binary | ios::app);
+    eps_exp_file << setw(25) << eps_exp << " " << T << endl;
+    eps_exp_file.close();
+
+    ofstream m_exp_file;
+    m_exp_file.open("m_exp.bin", ios::binary | ios::app);
+    m_exp_file << setw(25) << m_exp << " " << T << endl;
+    m_exp_file.close();
+
+    ofstream cV_file;
+    cV_file.open("cV.bin", ios::binary | ios::app);
+    cV_file << setw(25) << cV << " " << T << endl;
+    cV_file.close();
+
+    ofstream chi_file;
+    chi_file.open("chi.bin", ios::binary | ios::app);
+    chi_file << setw(25) << chi << " " << T << endl;
+    chi_file.close();
+
+
 
 }
