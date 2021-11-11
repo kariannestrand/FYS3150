@@ -5,19 +5,44 @@ using namespace std;
 
 
 int main(int argc, char const *argv[]){
-    int L = 10;                         // lattice length
+    int L = 2;                         // lattice length
     double N = L*L;                     // number of spins
+    double T = 1.0;
+    int NT = 1000;
+    vec T_vec = linspace(2.1, 2.4, NT);
+    int N_cycles = 2000;
 
-    arma_rng::set_seed_random();        // sets seed for randu
-    mat S = mat(L, L, fill::randu);     // initialize the lattice spin values with random values from 0 to 1
+
+    mat S = spin_matrix(L);
+
     double E = 0.;                      // initialize energy
     double M = 0.;                      // initialize magnetization
 
-    Initialize(L, &S, &E, &M);
+    initialize(L, S, E, M, N);
+    metropolis(S, L, T, E, M, N_cycles, N);
 
-    double epsilon = E/N;               // energy per spin
-    double m = M/N;                     // magnetization per spin
+
+    /*
+    bool timing = true;
+    if (timing){
+        auto t0 = std::chrono::high_resolution_clock::now();
+        #pragma omp parallel private(E, M) // Start parallel region
+        {
+            mat S = spin_matrix(L);
+            initialize(L, S, E, M, N);
+            #pragma omp for
+            for(int i = 0; i < NT; i++){
+                metropolis(S, L, T_vec(i), E, M, N_cycles, N);
+            }
+        }
+        auto t = std::chrono::high_resolution_clock::now();
+        double duration_seconds_wo = std::chrono::duration<double>(t - t0).count();
+
+        cout << "time used with OpenMP = " << duration_seconds_wo << " seconds\n";
+    }
+    */
+
+
 
     return 0;
 }
-
