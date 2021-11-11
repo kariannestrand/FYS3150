@@ -1,10 +1,7 @@
-all: compile link run
+all: build run
 
-compile:
-	g++ -c *.cpp -std=c++11 -O3
-
-link:
-	g++ -o main.exe *.o -larmadillo
+build: 
+	g++ -O3 -larmadillo -std=c++11 *.cpp -fopenmp -o *.exe 
 
 run:
 	./main.exe
