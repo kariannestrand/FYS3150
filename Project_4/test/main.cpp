@@ -21,7 +21,7 @@ int main(int argc, char const *argv[]){
     double N = L*L;                     // number of spins
     double T = 1.0;
     int N_cycles = 100000;
-    
+
 
     mat S = spin_matrix(L);
 
@@ -53,8 +53,8 @@ void initialize(int L, mat &S, double &E, double &M, int N){
         std::uniform_int_distribution<int> distribution(0,1);
         for(int i = 0; i < L; i++){
             for (int j = 0; j < L; j++){
-                S(i, j) = distribution(gen);        
-                
+                S(i, j) = distribution(gen);
+
                 if (S(i,j) == 0){
                     S(i,j) += -1;
                 }
@@ -63,7 +63,7 @@ void initialize(int L, mat &S, double &E, double &M, int N){
             }
         }
     }
-    
+
     else{
         for(int i = 0; i < L; i++){
             for (int j = 0; j < L; j++){
@@ -86,9 +86,9 @@ void initialize(int L, mat &S, double &E, double &M, int N){
 // delta E
 int delta_E(mat &S, int L, int i, int j){
     return 2*S(i,j)*(S(i, PBC(j,L,-1))
-            + S(PBC(i,L,-1),j) 
-            + S(i, PBC(j,L,1)) 
-            + S(PBC(i,L,1),j)); 
+            + S(PBC(i,L,-1),j)
+            + S(i, PBC(j,L,1))
+            + S(PBC(i,L,1),j));
 }
 
 // metropolis algorithm
@@ -100,10 +100,10 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
 
     //made from mortens lecture notes
     vec boltzmann = zeros<mat>(17);
-    
+
     // possible energies
     for(int de =-8; de <= 8; de+=4) boltzmann(de+8) = exp(-de/T);
-    
+
 
     double E_exp = 0;
     double E_exp_sq = 0;
@@ -122,12 +122,12 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
                 E += dE;
                 M += 2*S(x, y);
             }
-            
+
             else if (distribution(gen) <= boltzmann(dE+8) ){
                 S(x,y) *= (-1);         // flips spin
                 E += dE;
                 M += 2*S(x, y);
-                
+
             }
         }
 
@@ -135,8 +135,8 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
         E_exp_sq += E*E;
         M_exp += abs(M);
         M_exp_sq += M*M;
-        
-    
+
+
     }
 
     E_exp /= N * N_cycles;
@@ -148,7 +148,5 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
     cout << E_exp_sq << endl;
     cout << M_exp << endl;
     cout << M_exp_sq << endl;
-    
+
 }
-
-
