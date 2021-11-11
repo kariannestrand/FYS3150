@@ -1,6 +1,5 @@
 #include <armadillo>
 #include <iostream>
-#include "omp.h" 
 
 using namespace arma;
 using namespace std;
@@ -18,13 +17,11 @@ inline int PBC(int i, int limit, int add){
 
 
 int main(int argc, char const *argv[]){
-    int L = 20;                         // lattice length
+    int L = 2;                         // lattice length
     double N = L*L;                     // number of spins
-    double T = 2.1;
-    double NT = 1000;
-    vec T_vec = linspace(2.1, 2.4, NT);
-    int N_cycles = 1000;
-    
+    double T = 1.0;
+    int N_cycles = 100;
+
 
     mat S = spin_matrix(L);
 
@@ -32,24 +29,9 @@ int main(int argc, char const *argv[]){
     double M = 0.;                      // initialize magnetization
 
     initialize(L, S, E, M, N);
-    //metropolis(S, L, T, E, M, N_cycles, N);
-    
+    metropolis(S, L, T, E, M, N_cycles, N);
 
-    bool timing = true;
-    if (timing){
-        auto t0 = std::chrono::high_resolution_clock::now();
-        #pragma omp parallel // Start parallel region
-        {
-            #pragma omp for
-            for(int i = 0; i < NT; i++){
-                metropolis(S, L, T_vec(i), E, M, N_cycles, N);
-            }
-        }
-        auto t = std::chrono::high_resolution_clock::now();
-        double duration_seconds_wo = std::chrono::duration<double>(t - t0).count();
 
-        cout << "time used without OpenMP = " << duration_seconds_wo << " seconds\n";
-    }
     return 0;
 }
 
@@ -124,11 +106,12 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
     for(int de =-8; de <= 8; de+=4) boltzmann(de+8) = exp(-de/T);
 
 
-    double E_exp = 0; double E_exp_sq = 0; double M_exp = 0; double M_exp_sq = 0;
-    double eps_exp = 0; double eps_exp_sq = 0; double m_exp = 0; double m_exp_sq = 0;
+    double E_exp = 0;
+    double E_exp_sq = 0;
+    double M_exp = 0;
+    double M_exp_sq = 0;
 
-    vec epsilon_exp = vec(N_cycles); 
-    vec epsilon_samples = vec(N_cycles);
+    vec epsilon = vec(N_cycles);
 
 
     for (int i = 1; i <= N_cycles; i++){
@@ -150,56 +133,38 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
                 M += 2*S(x, y);
 
             }
-
         }
 
-
-        // for histogram in problem 6
-        // write this to file
-        epsilon_samples = E/(N*N);
 
         E_exp += E;
         E_exp_sq += E*E;
         M_exp += abs(M);
         M_exp_sq += M*M;
-        
-        
-        // for problem 5
+
         double norm = 1./(((double) i)*N);
-        // write this to file
-        epsilon_exp = E_exp*norm;
-        
+        cout << E_exp*norm << endl;
+
+        double norm = 1./(((double) i)*N);
+        epsilon = E_exp*norm;
+        cout << epsilon << endl;
+
+
     }
 
-<<<<<<< HEAD
     E_exp /= N * N_cycles;
-<<<<<<< HEAD
     E_exp_sq /= N * N * N_cycles;
     M_exp /= N * N_cycles;
     M_exp_sq /= N * N * N_cycles;
-=======
-    E_exp_sq /= N * N * N * N_cycles;
-    M_exp /= N * N * N_cycles;
-    M_exp_sq /= N * N * N * N_cycles;
->>>>>>> 9397f1bf0f83b66db82cebae4428bfc1386845c5
 
-=======
->>>>>>> 871ab5b28964e09eb531624899f0b5810e8efe0d
 
-    // problem 4
-    eps_exp = E_exp/(N*N_cycles);
-    eps_exp_sq = E_exp_sq/(N * N * N_cycles);
-    m_exp = M_exp/(N * N_cycles);
-    m_exp_sq = M_exp_sq/(N * N_cycles);
     /*
-    cout << eps_exp << endl;
-    cout << eps_exp_sq << endl;
-    cout << m_exp << endl;
-    cout << m_exp_sq << endl;
+    cout << E_exp << endl;
+    cout << E_exp_sq << endl;
+    cout << M_exp << endl;
+    cout << M_exp_sq << endl;
     */
-    
-    
+
 }
 
 
-
+}
