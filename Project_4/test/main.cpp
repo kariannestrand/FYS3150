@@ -152,9 +152,15 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
     }
 
     E_exp /= N * N_cycles;
+<<<<<<< HEAD
     E_exp_sq /= N * N * N_cycles;
     M_exp /= N * N_cycles;
     M_exp_sq /= N * N * N_cycles;
+=======
+    E_exp_sq /= N * N * N * N_cycles;
+    M_exp /= N * N * N_cycles;
+    M_exp_sq /= N * N * N * N_cycles;
+>>>>>>> 9397f1bf0f83b66db82cebae4428bfc1386845c5
 
 
     /*
