@@ -1,6 +1,6 @@
 #include <armadillo>
 #include <iostream>
-#include "omp.h" 
+//#include "omp.h" 
 
 using namespace arma;
 using namespace std;
@@ -33,7 +33,6 @@ int main(int argc, char const *argv[]){
 
     //initialize(L, S, E, M, N);
     //metropolis(S, L, T, E, M, N_cycles, N);
-    
 
     bool timing = true;
     if (timing){
@@ -52,6 +51,7 @@ int main(int argc, char const *argv[]){
 
         cout << "time used with OpenMP = " << duration_seconds_wo << " seconds\n";
     }
+    
     return 0;
 }
 
