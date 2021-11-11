@@ -1,6 +1,6 @@
 #include <armadillo>
 #include <iostream>
-//#include "omp.h" 
+#include "omp.h" 
 
 using namespace arma;
 using namespace std;
@@ -18,22 +18,22 @@ inline int PBC(int i, int limit, int add){
 
 
 int main(int argc, char const *argv[]){
-    int L = 20;                         // lattice length
+    int L = 2;                         // lattice length
     double N = L*L;                     // number of spins
-    double T = 2.1;
+    double T = 1.0;
     int NT = 1000;
     vec T_vec = linspace(2.1, 2.4, NT);
-    int N_cycles = 1000;
+    int N_cycles = 10000;
     
 
-    //mat S = spin_matrix(L);
+    mat S = spin_matrix(L);
 
     double E = 0.;                      // initialize energy
     double M = 0.;                      // initialize magnetization
 
-    //initialize(L, S, E, M, N);
-    //metropolis(S, L, T, E, M, N_cycles, N);
-
+    initialize(L, S, E, M, N);
+    metropolis(S, L, T, E, M, N_cycles, N);
+    /*
     bool timing = true;
     if (timing){
         auto t0 = std::chrono::high_resolution_clock::now();
@@ -51,7 +51,7 @@ int main(int argc, char const *argv[]){
 
         cout << "time used with OpenMP = " << duration_seconds_wo << " seconds\n";
     }
-    
+    */
     return 0;
 }
 
@@ -179,12 +179,12 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
     eps_exp_sq = E_exp_sq/(N * N * N_cycles);
     m_exp = M_exp/(N * N_cycles);
     m_exp_sq = M_exp_sq/(N * N_cycles);
-    /*
+    
     cout << eps_exp << endl;
-    cout << eps_exp_sq << endl;
+    //cout << eps_exp_sq << endl;
     cout << m_exp << endl;
-    cout << m_exp_sq << endl;
-    */
+    //cout << m_exp_sq << endl;
+    
     
     
 }
