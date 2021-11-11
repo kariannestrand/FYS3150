@@ -17,10 +17,10 @@ inline int PBC(int i, int limit, int add){
 
 
 int main(int argc, char const *argv[]){
-    int L = 2;                         // lattice length
+    int L = 20;                         // lattice length
     double N = L*L;                     // number of spins
     double T = 1.0;
-    int N_cycles = 100000;
+    int N_cycles = 1000;
     
 
     mat S = spin_matrix(L);
@@ -77,10 +77,11 @@ void initialize(int L, mat &S, double &E, double &M, int N){
     for(int i = 0; i < L; i++){
         for (int j = 0; j < L; j++){
                 E -= S(i, j) * S(PBC(i, L, -1), j) + S(i, j) * S(i, PBC(j, L, -1));
+                
 
         }
     }
-
+    
 }
 
 // delta E
@@ -105,13 +106,14 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
     for(int de =-8; de <= 8; de+=4) boltzmann(de+8) = exp(-de/T);
     
 
-    double E_exp = 0;
-    double E_exp_sq = 0;
-    double M_exp = 0;
-    double M_exp_sq = 0;
+    double E_exp = 0; double E_exp_sq = 0; double M_exp = 0; double M_exp_sq = 0;
+    double eps_exp 0; double eps_exp_sq 0; double m_exp 0; double m_exp_sq 0;
 
-    for (int i = 0; i <= N_cycles; i++){
-        for(int i =0; i < L; i++) {
+    vec epsilon_exp = vec(N_cycles); 
+
+
+    for (int i = 1; i <= N_cycles; i++){
+        for(int j = 0; j < N; j++) {
             int x = distribution(gen)*L;
             int y = distribution(gen)*L;
 
@@ -129,25 +131,43 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
                 M += 2*S(x, y);
                 
             }
+
         }
+
+
+        // for histogram in problem 6
+        // write this to file
+        epsilon_samples = E/(N*N);
 
         E_exp += E;
         E_exp_sq += E*E;
         M_exp += abs(M);
         M_exp_sq += M*M;
         
+        
+        // for problem 5
+        double norm = 1./(((double) i)*N);
+        // write this to file
+        epsilon_exp = E_exp*norm;
+        
+        
+        
     
     }
 
-    E_exp /= N * N_cycles;
-    E_exp_sq /= N * N * N_cycles;
-    M_exp /= N * N_cycles;
-    M_exp_sq /= N * N * N_cycles;
 
-    cout << E_exp << endl;
-    cout << E_exp_sq << endl;
-    cout << M_exp << endl;
-    cout << M_exp_sq << endl;
+    // problem 4
+    eps_exp /= N * N_cycles;
+    eps_exp_sq /= N * N * N_cycles;
+    m_exp /= N * N_cycles;
+    m_exp_sq /= N * N * N_cycles;
+    
+    /*
+    cout << eps_exp << endl;
+    cout << eps_exp_sq << endl;
+    cout << m_exp << endl;
+    cout << m_exp_sq << endl;
+    */
     
 }
 
