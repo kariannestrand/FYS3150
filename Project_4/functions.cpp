@@ -84,6 +84,7 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
 
     vec epsilon_exp = vec(N_cycles);
     vec epsilon_samples = vec(N_cycles);
+    vec magn_exp = vec(N_cycles);
 
 
     for (int i = 1; i <= N_cycles; i++){
@@ -108,10 +109,13 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
 
         }
 
-
-        // for histogram in problem 6
-        // write this to file
-        epsilon_samples = E/(N*N);
+        // writing to file for problem 6
+        epsilon_samples = E/N;
+        ofstream eps_exp_file;
+        eps_exp_file.open("eps_histo_1.bin", ios::binary | ios::app);
+        eps_exp_file << setw(25) << epsilon_samples << endl;
+        eps_exp_file.close();
+        
 
         E_exp += E;
         E_exp_sq += E*E;
@@ -119,10 +123,17 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
         M_exp_sq += M*M;
 
 
-        // for problem 5
+        // writing to file for problem 5
         double norm = 1./(((double) i)*N);
-        // write this to file
         epsilon_exp = E_exp*norm;
+        magn_exp = M_exp*norm;
+    
+
+        ofstream eps_exp_file;
+        eps_exp_file.open("m_exp_1_unordered.bin", ios::binary | ios::app);
+        eps_exp_file << setw(25) << magn_exp << endl;
+        eps_exp_file.close();
+        
 
     }
 
@@ -131,14 +142,16 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
     eps_exp = E_exp/(N*N_cycles);
     //eps_exp_sq = E_exp_sq/(N * N * N_cycles);
     m_exp = M_exp/(N * N_cycles);
-    //m_exp_sq = M_exp_sq/(N * N_cycles);
+    //m_exp_sq = M_exp_sq/(N *N * N_cycles);
     cV = (E_exp_sq/N_cycles - E_exp/N_cycles * E_exp/N_cycles)/N;
     chi = (M_exp_sq/N_cycles - M_exp/N_cycles * M_exp/N_cycles)/N;
     
+    /*
     cout << setprecision(15) << eps_exp << endl;
     cout << setprecision(15) << m_exp << endl;
     cout << setprecision(15) << cV << endl;
     cout << setprecision(15) << chi << endl;
+    */
     
 
 }

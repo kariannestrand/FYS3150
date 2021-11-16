@@ -5,12 +5,12 @@ using namespace std;
 
 
 int main(int argc, char const *argv[]){
-    int L = 2;                         // lattice length
+    int L = 20;                         // lattice length
     double N = L*L;                     // number of spins
     double T = 1.0;
     int NT = 1000;
     vec T_vec = linspace(2.1, 2.4, NT);
-    int N_cycles = 2000;
+    int N_cycles = 100000;
 
 
     mat S = spin_matrix(L);
