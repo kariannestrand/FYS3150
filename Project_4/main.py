@@ -5,7 +5,7 @@ phace_transition = True
 
 # investigating phace transitions
 if phace_transition:
-    filename = "eps_exp.bin"
+    filename = "eps_exp_100L.bin"
     loadtxt = np.loadtxt(filename, skiprows = 1)
     eps_exp = loadtxt[:, 0]
     T = loadtxt[:, 1]
@@ -13,7 +13,7 @@ if phace_transition:
     plt.show()
 
 
-    filename = "m_exp.bin"
+    filename = "m_exp_100L.bin"
     loadtxt = np.loadtxt(filename, skiprows = 1)
     m_exp = loadtxt[:, 0]
     T = loadtxt[:, 1]
@@ -21,14 +21,14 @@ if phace_transition:
     plt.show()
 
 
-    filename = "cV.bin"
+    filename = "cV_100L.bin"
     loadtxt = np.loadtxt(filename, skiprows = 1)
     cV = loadtxt[:, 0]
     T = loadtxt[:, 1]
     plt.plot(T, cV)
     plt.show()
 
-    filename = "chi.bin"
+    filename = "chi_100L.bin"
     loadtxt = np.loadtxt(filename, skiprows = 1)
     chi = loadtxt[:, 0]
     T = loadtxt[:, 1]

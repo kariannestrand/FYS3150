@@ -82,8 +82,8 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
     double eps_exp = 0; double eps_exp_sq = 0; double m_exp = 0; double m_exp_sq = 0;
     double cV = 0; double chi = 0;
 
-    vec epsilon_exp = vec(N_cycles + 1);
-    vec epsilon_samples = vec(N_cycles + 1);
+    // vec epsilon_exp = vec(N_cycles + 1);
+    // vec epsilon_samples = vec(N_cycles + 1);
 
 
     for (int i = 0; i <= N_cycles; i++){
@@ -111,7 +111,7 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
 
         // for histogram in problem 6
         // write this to file
-        epsilon_samples = E/(N*N);
+        // epsilon_samples = E/(N*N);
 
         E_exp += E;
         E_exp_sq += E*E;
@@ -120,9 +120,9 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
 
 
         // for problem 5
-        double norm = 1./(((double) i)*N);
+        // double norm = 1./(((double) i)*N);
         // write this to file
-        epsilon_exp = E_exp*norm;
+        // epsilon_exp = E_exp*norm;
 
     }
 
@@ -131,10 +131,10 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
     eps_exp_sq = E_exp_sq/(N * N * N_cycles);
 
     m_exp = M_exp/(N * N_cycles);
-    m_exp_sq = M_exp_sq/(N * N_cycles);
+    m_exp_sq = M_exp_sq/(N * N * N_cycles);
 
-    cV = 1./(T*T)*(E_exp_sq/N_cycles - E_exp/N_cycles * E_exp/N_cycles)/N;   // kB = 1
-    chi = 1./T*(m_exp_sq/N_cycles - m_exp/N_cycles * m_exp/N_cycles)/N;      // kB = 1
+    cV = 1./(T*T)*(E_exp_sq/N_cycles - E_exp/N_cycles * E_exp/N_cycles)/N;
+    chi = 1./T*(M_exp_sq/N_cycles - M_exp/N_cycles * M_exp/N_cycles)/N;
 
 
     /*
@@ -145,25 +145,27 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
     */
 
 
+
     ofstream eps_exp_file;
-    eps_exp_file.open("eps_exp.bin", ios::binary | ios::app);
+    eps_exp_file.open("eps_exp_100L.bin", ios::binary | ios::app);
     eps_exp_file << setw(25) << eps_exp << " " << T << endl;
     eps_exp_file.close();
 
     ofstream m_exp_file;
-    m_exp_file.open("m_exp.bin", ios::binary | ios::app);
+    m_exp_file.open("m_exp_100L.bin", ios::binary | ios::app);
     m_exp_file << setw(25) << m_exp << " " << T << endl;
     m_exp_file.close();
 
     ofstream cV_file;
-    cV_file.open("cV.bin", ios::binary | ios::app);
+    cV_file.open("cV_100L.bin", ios::binary | ios::app);
     cV_file << setw(25) << cV << " " << T << endl;
     cV_file.close();
 
     ofstream chi_file;
-    chi_file.open("chi.bin", ios::binary | ios::app);
+    chi_file.open("chi_100L.bin", ios::binary | ios::app);
     chi_file << setw(25) << chi << " " << T << endl;
     chi_file.close();
+
 
 
 
