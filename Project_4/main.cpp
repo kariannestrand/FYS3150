@@ -14,7 +14,7 @@ int main(int argc, char const *argv[]){
     int NT = 100;                        // number of temperature steps
     vec T_vec = linspace(2.1, 2.4, NT);  // temperature vector
     int N_cycles = pow(2, 21);           // number of cycles
-    int burnin = 50000;
+    int burnin = 50000;                  // burn-in time
 
     double E = 0.;                       // initialize energy
     double M = 0.;                       // initialize magnetization

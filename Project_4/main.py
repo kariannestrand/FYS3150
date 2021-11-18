@@ -1,12 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.stats import linregress
 
-<<<<<<< HEAD
-burn_in_time = True
+burn_in_time = False
 histogram = False
-phace_transition = False
+phase_transition = False
 
-# investigating the burning time
+# investigating the burnin time
 if burn_in_time:
     filename1 = "eps_exp_24_ordered.bin"
     filename2 = "eps_exp_1_ordered.bin"
@@ -90,55 +90,65 @@ if histogram:
     plt.savefig('histo_2.pdf')
     plt.show()
 
+# for testing the files
+filename = 'chi_40L.bin'
+loadtxt = np.loadtxt(filename, skiprows = 0)
+chi = loadtxt[:, 0]
+T = loadtxt[:, 1]
+T, chi = zip(*sorted(zip(T, chi)))
+T_max = T[np.argmax(chi)]
+print(T_max)
+plt.plot(T, chi, 'o')
+plt.savefig('test.pdf')
+plt.show()
 
-=======
-phace_transition = True
->>>>>>> 8e0e5065fb774d469bb0e90e6612c5d896a92f5b
 
 # investigating phace transitions
-if phace_transition:
-    filename = "eps_exp_100L.bin"
-    loadtxt = np.loadtxt(filename, skiprows = 1)
-    eps_exp = loadtxt[:, 0]
-    T = loadtxt[:, 1]
-<<<<<<< HEAD
-    T, eps_exp = zip(*sorted(zip(T, eps_exp)))
-=======
->>>>>>> 8e0e5065fb774d469bb0e90e6612c5d896a92f5b
-    plt.plot(T, eps_exp)
-    plt.show()
+if phase_transition:
+    filename_list_eps = ["eps_exp_40L.bin", "eps_exp_60L.bin", "eps_exp_80L.bin", "eps_exp_100L.bin"]
+    for i in range(len(filename_list_eps)):
+        filename = filename_list_eps[i]
+        loadtxt = np.loadtxt(filename, skiprows = 0)
+        eps_exp = loadtxt[:, 0]
+        T = loadtxt[:, 1]
+        T, cV = zip(*sorted(zip(T, eps_exp)))
+        plt.plot(T, eps_exp, 'o')
+        plt.show()
 
 
-    filename = "m_exp_100L.bin"
-    loadtxt = np.loadtxt(filename, skiprows = 1)
-    m_exp = loadtxt[:, 0]
-    T = loadtxt[:, 1]
-<<<<<<< HEAD
-    T, m_exp = zip(*sorted(zip(T, m_exp)))
-=======
->>>>>>> 8e0e5065fb774d469bb0e90e6612c5d896a92f5b
-    plt.plot(T, m_exp)
-    plt.show()
+    filename_list_m = ["m_exp_40L.bin", "m_exp_60L.bin", "m_exp_80L.bin", "m_exp_100L.bin"]
+    for i in range(len(filename_list_m)):
+        filename = filename_list_m[i]
+        loadtxt = np.loadtxt(filename, skiprows = 0)
+        m_exp = loadtxt[:, 0]
+        T = loadtxt[:, 1]
+        T, m_exp = zip(*sorted(zip(T, m_exp)))
+        plt.plot(T, m_exp, 'o')
+        plt.show()
 
+    
+    filename_list_cv = ["cV_40L.bin", "cV_60L.bin", "cV_80L.bin", "cV_100L.bin"]
+    for i in range(len(filename_list_cv)):
+        filename = filename_list_cv[i]
+        loadtxt = np.loadtxt(filename, skiprows = 0)
+        cV = loadtxt[:, 0]
+        T = loadtxt[:, 1]
+        T, cV = zip(*sorted(zip(T, cV)))
+        T_max = T[np.argmax(cV)]
+        print(T_max)
+        plt.plot(T, cV, 'o')
+        plt.show()
 
-    filename = "cV_100L.bin"
-    loadtxt = np.loadtxt(filename, skiprows = 1)
-    cV = loadtxt[:, 0]
-    T = loadtxt[:, 1]
-<<<<<<< HEAD
-    T, cV = zip(*sorted(zip(T, cV)))
-=======
->>>>>>> 8e0e5065fb774d469bb0e90e6612c5d896a92f5b
-    plt.plot(T, cV)
-    plt.show()
+    
 
-    filename = "chi_100L.bin"
-    loadtxt = np.loadtxt(filename, skiprows = 1)
-    chi = loadtxt[:, 0]
-    T = loadtxt[:, 1]
-<<<<<<< HEAD
-    T, chi = zip(*sorted(zip(T, chi)))
-=======
->>>>>>> 8e0e5065fb774d469bb0e90e6612c5d896a92f5b
-    plt.plot(T, chi)
-    plt.show()
+    filename_list_chi = ["chi_40L.bin", "chi_60L.bin", "chi_80L.bin", "chi_100L.bin"]
+    for i in range(len(filename_list_chi)):
+        filename = filename_list_chi[i]
+        loadtxt = np.loadtxt(filename, skiprows = 0)
+        chi = loadtxt[:, 0]
+        T = loadtxt[:, 1]
+        T, chi = zip(*sorted(zip(T, chi)))
+        T_max = T[np.argmax(chi)]
+        print(T_max)
+        plt.plot(T, chi, 'o')
+        plt.show()
