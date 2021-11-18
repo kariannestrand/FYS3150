@@ -4,21 +4,24 @@ using namespace arma;
 using namespace std;
 
 
-// inline function for Periodic Boundary Conditions
+/**
+ * inline function that implements periodic boundary conditions by returning the neighbouring indices of an element in a matrix
+ * i is the index of the element in question
+ * limit is the length of the matrix
+ * add is the number of indices you jump to the side ? wtf haheheh
+*/
 inline int PBC(int i, int limit, int add){
     return (i + limit + add) % (limit);
 }
 
-// matrix for number of spins
+// function that returns a matrix of size L x L
 arma::mat spin_matrix(int L){
     mat S = mat(L,L);
     return S;
 }
 
 // function to initialize spin configuration, energy and magnetization
-void initialize(int L, mat &S, double &E, double &M, int N){
-    bool random = false;        // random if true, ordered if false
-
+void initialize(int L, mat &S, double &E, double &M, int N, bool random){
     if (random){
         std::random_device rd;
         std::mt19937_64 gen(rd());
@@ -39,7 +42,7 @@ void initialize(int L, mat &S, double &E, double &M, int N){
     else{
         for(int i = 0; i < L; i++){
             for (int j = 0; j < L; j++){
-                S(i,j) = 1.0;           // spin configuration, choose -1 for down, 1 for up
+                S(i,j) = 1.0;           // ordered spin configuration with spin up
                 M += S(i, j);
             }
         }
@@ -65,8 +68,7 @@ int delta_E(mat &S, int L, int i, int j){
 }
 
 // metropolis algorithm
-void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int N, int burnin){
-
+void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int N, bool write, int burnin){
     std::random_device rd;
     std::mt19937_64 gen(rd());
     std::uniform_real_distribution<double> distribution(0.0,1.0);
@@ -104,7 +106,7 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
     }
 
 
-    for (int i = 1; i <= N_cycles; i++){
+    for (int i = 0; i <= N_cycles; i++){
         for(int j = 0; j < N; j++) {
             int x = distribution(gen)*L;
             int y = distribution(gen)*L;
@@ -150,8 +152,6 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
         eps_exp_file.close();
         */
 
-
-        // writing to file for problem 5
         double norm = 1./(((double) i)*N);
         epsilon_exp = E_exp*norm;
         magn_exp = M_exp*norm;
@@ -163,40 +163,28 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
         eps_exp_file << setw(25) << magn_exp << endl;
         eps_exp_file.close();
         */
-        
+
+
+        // for problem 5
+        // double norm = 1./(((double) i)*N);
+        // write this to file
+        // epsilon_exp = E_exp*norm;
 
     }
 
-
-
+    // problem 4
     e_exp = E_exp/N;
     eps_exp = e_exp/N_cycles;
+    //eps_exp_sq = E_exp_sq/(N * N * N_cycles);
+
     mag_exp = M_exp/N;
     m_exp = mag_exp/N_cycles;
-    
+    //m_exp_sq = M_exp_sq/(N * N * N_cycles);
+
     cV = 1./(T*T)*(E_exp_sq/N_cycles - E_exp/N_cycles * E_exp/N_cycles)/N;
     chi = 1./T*(M_exp_sq/N_cycles - M_exp/N_cycles * M_exp/N_cycles)/N;
 
-    ofstream eps_exp_file;
-    eps_exp_file.open("eps_exp_40L.bin", ios::binary | ios::app);
-    eps_exp_file << setw(25) << eps_exp << " " << T << endl;
-    eps_exp_file.close();
 
-    ofstream m_exp_file;
-    m_exp_file.open("m_exp_40L.bin", ios::binary | ios::app);
-    m_exp_file << setw(25) << m_exp << " " << T << endl;
-    m_exp_file.close();
-
-    ofstream cV_file;
-    cV_file.open("cV_40L.bin", ios::binary | ios::app);
-    cV_file << setw(25) << cV << " " << T << endl;
-    cV_file.close();
-
-    ofstream chi_file;
-    chi_file.open("chi_40L.bin", ios::binary | ios::app);
-    chi_file << setw(25) << chi << " " << T << endl;
-    chi_file.close();
-    
     /*
     cout << setprecision(15) << eps_exp << endl;
     cout << setprecision(15) << m_exp << endl;
@@ -205,4 +193,26 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
     */
     
 
+
+    if (write){
+        ofstream eps_exp_file;
+        eps_exp_file.open("eps_exp_" + to_string(L) + "L.bin", ios::binary | ios::app);
+        eps_exp_file << setw(25) << eps_exp << " " << T << endl;
+        eps_exp_file.close();
+
+        ofstream m_exp_file;
+        m_exp_file.open("m_exp_" + to_string(L) + "L.bin", ios::binary | ios::app);
+        m_exp_file << setw(25) << m_exp << " " << T << endl;
+        m_exp_file.close();
+
+        ofstream cV_file;
+        cV_file.open("cV_" + to_string(L) + "L.bin", ios::binary | ios::app);
+        cV_file << setw(25) << cV << " " << T << endl;
+        cV_file.close();
+
+        ofstream chi_file;
+        chi_file.open("chi_" + to_string(L) + "L.bin", ios::binary | ios::app);
+        chi_file << setw(25) << chi << " " << T << endl;
+        chi_file.close();
+    }
 }

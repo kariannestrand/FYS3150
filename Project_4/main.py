@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+<<<<<<< HEAD
 burn_in_time = True
 histogram = False
 phace_transition = False
@@ -90,6 +91,9 @@ if histogram:
     plt.show()
 
 
+=======
+phace_transition = True
+>>>>>>> 8e0e5065fb774d469bb0e90e6612c5d896a92f5b
 
 # investigating phace transitions
 if phace_transition:
@@ -97,7 +101,10 @@ if phace_transition:
     loadtxt = np.loadtxt(filename, skiprows = 1)
     eps_exp = loadtxt[:, 0]
     T = loadtxt[:, 1]
+<<<<<<< HEAD
     T, eps_exp = zip(*sorted(zip(T, eps_exp)))
+=======
+>>>>>>> 8e0e5065fb774d469bb0e90e6612c5d896a92f5b
     plt.plot(T, eps_exp)
     plt.show()
 
@@ -106,7 +113,10 @@ if phace_transition:
     loadtxt = np.loadtxt(filename, skiprows = 1)
     m_exp = loadtxt[:, 0]
     T = loadtxt[:, 1]
+<<<<<<< HEAD
     T, m_exp = zip(*sorted(zip(T, m_exp)))
+=======
+>>>>>>> 8e0e5065fb774d469bb0e90e6612c5d896a92f5b
     plt.plot(T, m_exp)
     plt.show()
 
@@ -115,7 +125,10 @@ if phace_transition:
     loadtxt = np.loadtxt(filename, skiprows = 1)
     cV = loadtxt[:, 0]
     T = loadtxt[:, 1]
+<<<<<<< HEAD
     T, cV = zip(*sorted(zip(T, cV)))
+=======
+>>>>>>> 8e0e5065fb774d469bb0e90e6612c5d896a92f5b
     plt.plot(T, cV)
     plt.show()
 
@@ -123,6 +136,9 @@ if phace_transition:
     loadtxt = np.loadtxt(filename, skiprows = 1)
     chi = loadtxt[:, 0]
     T = loadtxt[:, 1]
+<<<<<<< HEAD
     T, chi = zip(*sorted(zip(T, chi)))
+=======
+>>>>>>> 8e0e5065fb774d469bb0e90e6612c5d896a92f5b
     plt.plot(T, chi)
     plt.show()

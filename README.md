@@ -13,3 +13,8 @@ The topic of the second [project](https://github.com/mariaoftedahl/FYS3150/tree/
 
 In the third [project](https://github.com/mariaoftedahl/FYS3150/tree/main/Project_3) we made a numerical simulation of a Penning trap, using the Runge-Kutta 4 method to solve a system of ordinary differential equations for the Penning trap.
 
+## Project 4
+
+In [project 4](https://github.com/mariaoftedahl/FYS3150/tree/main/Project_4) we have used the Metropolis algorithm to implement the Ising model in two dimensions. The code is parallelized with OpenMP to be able to run the code with enough Monte Carlo cycles, and big enough lattice, to investigate phase transitions.
+
+
