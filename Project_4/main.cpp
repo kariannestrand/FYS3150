@@ -49,5 +49,6 @@ int main(int argc, char const *argv[]){
         double duration_seconds = std::chrono::duration<double>(t1 - t0).count();                   // calculates duration
         cout << "Time used with OpenMP parallelization = " << duration_seconds << " seconds\n";     // prints duration
     }
+
     return 0;
 }
