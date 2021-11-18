@@ -32,7 +32,6 @@ arma::mat spin_matrix(int L){
  * L:       length of the rows/columns of the square matrix
  * S:        of the rows/columns of the square matrix
  */
-
 void initialize(int L, mat &S, double &E, double &M, int N, bool random){
     if (random){
         std::random_device rd;
@@ -99,6 +98,7 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
     vec epsilon_samples = vec(N_cycles);
     vec magn_exp = vec(N_cycles);
 
+    /*
     for (int i = 1; i <= burnin; i++){
         for(int j = 0; j < N; j++) {
             int x = distribution(gen)*L;
@@ -116,6 +116,7 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
 
         }
     }
+    */
 
 
     for (int i = 0; i <= N_cycles; i++){
@@ -208,22 +209,22 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
 
     if (write){
         ofstream eps_exp_file;
-        eps_exp_file.open("eps_exp_" + to_string(L) + "L.bin", ios::binary | ios::app);
+        eps_exp_file.open("eps_exp_" + to_string(L) + "L_noburnin.bin", ios::binary | ios::app);
         eps_exp_file << setw(25) << eps_exp << " " << T << endl;
         eps_exp_file.close();
 
         ofstream m_exp_file;
-        m_exp_file.open("m_exp_" + to_string(L) + "L.bin", ios::binary | ios::app);
+        m_exp_file.open("m_exp_" + to_string(L) + "L_noburnin.bin", ios::binary | ios::app);
         m_exp_file << setw(25) << m_exp << " " << T << endl;
         m_exp_file.close();
 
         ofstream cV_file;
-        cV_file.open("cV_" + to_string(L) + "L.bin", ios::binary | ios::app);
+        cV_file.open("cV_" + to_string(L) + "L_noburnin.bin", ios::binary | ios::app);
         cV_file << setw(25) << cV << " " << T << endl;
         cV_file.close();
 
         ofstream chi_file;
-        chi_file.open("chi_" + to_string(L) + "L.bin", ios::binary | ios::app);
+        chi_file.open("chi_" + to_string(L) + "L_noburnin.bin", ios::binary | ios::app);
         chi_file << setw(25) << chi << " " << T << endl;
         chi_file.close();
     }
