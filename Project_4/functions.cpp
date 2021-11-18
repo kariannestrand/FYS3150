@@ -68,12 +68,11 @@ int delta_E(mat &S, int L, int i, int j){
 }
 
 // metropolis algorithm
-void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int N, bool write){
+void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int N, bool write, int burnin){
     std::random_device rd;
     std::mt19937_64 gen(rd());
     std::uniform_real_distribution<double> distribution(0.0,1.0);
 
-    //made from mortens lecture notes
     vec boltzmann = zeros<mat>(17);
 
     // possible energies
@@ -84,8 +83,27 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
     double eps_exp = 0; double eps_exp_sq = 0; double m_exp = 0; double m_exp_sq = 0;
     double cV = 0; double chi = 0; double e_exp = 0; double mag_exp = 0;
 
-    // vec epsilon_exp = vec(N_cycles + 1);
-    // vec epsilon_samples = vec(N_cycles + 1);
+    vec epsilon_exp = vec(N_cycles);
+    vec epsilon_samples = vec(N_cycles);
+    vec magn_exp = vec(N_cycles);
+
+    for (int i = 1; i <= burnin; i++){
+        for(int j = 0; j < N; j++) {
+            int x = distribution(gen)*L;
+            int y = distribution(gen)*L;
+
+            int dE = delta_E(S, L, x, y);
+
+            if (dE <= 0){
+                S(x, y) *= (-1);        // flips spin
+            }
+
+            else if (distribution(gen) <= boltzmann(dE+8) ){
+                S(x,y) *= (-1);         // flips spin
+            }
+
+        }
+    }
 
 
     for (int i = 0; i <= N_cycles; i++){
@@ -109,16 +127,42 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
             }
 
         }
+        
 
-
-        // for histogram in problem 6
-        // write this to file
-        // epsilon_samples = E/(N*N);
+        /*
+        // writing to file for problem 6
+        epsilon_samples = E/N;
+        ofstream eps_exp_file;
+        eps_exp_file.open("eps_histo_1.bin", ios::binary | ios::app);
+        eps_exp_file << setw(25) << epsilon_samples << endl;
+        eps_exp_file.close();
+        */
+        
+        
 
         E_exp += E;
         E_exp_sq += E*E;
         M_exp += abs(M);
         M_exp_sq += M*M;
+
+        /*
+        ofstream eps_exp_file;
+        eps_exp_file.open("test.bin", ios::binary | ios::app);
+        eps_exp_file << setw(25) << E_exp << endl;
+        eps_exp_file.close();
+        */
+
+        double norm = 1./(((double) i)*N);
+        epsilon_exp = E_exp*norm;
+        magn_exp = M_exp*norm;
+
+        /*
+
+        ofstream eps_exp_file;
+        eps_exp_file.open("m_exp_1_unordered.bin", ios::binary | ios::app);
+        eps_exp_file << setw(25) << magn_exp << endl;
+        eps_exp_file.close();
+        */
 
 
         // for problem 5
@@ -142,11 +186,12 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
 
 
     /*
-    cout << eps_exp << endl;
-    cout << eps_exp_sq << endl;
-    cout << m_exp << endl;
-    cout << m_exp_sq << endl;
+    cout << setprecision(15) << eps_exp << endl;
+    cout << setprecision(15) << m_exp << endl;
+    cout << setprecision(15) << cV << endl;
+    cout << setprecision(15) << chi << endl;
     */
+    
 
 
     if (write){
