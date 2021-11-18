@@ -16,11 +16,11 @@ inline int PBC(int i, int limit, int add){
 
 // function that returns a matrix of size L x L
 arma::mat spin_matrix(int L){
-    mat S = mat(L,L);
+    mat S = mat(L, L);
     return S;
 }
 
-// function to initialize spin configuration, energy and magnetization
+// function that initialize spin configuration, energy and magnetization
 void initialize(int L, mat &S, double &E, double &M, int N, bool random){
     if (random){
         std::random_device rd;
