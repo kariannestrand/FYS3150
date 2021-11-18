@@ -5,24 +5,23 @@ using namespace std;
 
 
 int main(int argc, char const *argv[]){
-    int L = 20;                         // lattice length
+    int L = 40;                         // lattice length
     double N = L*L;                     // number of spins
-    double T = 1.0;
-    int NT = 1000;
+    double T = 2.3;
+    int NT = 100;
     vec T_vec = linspace(2.1, 2.4, NT);
-    int N_cycles = 100000;
-
+    int N_cycles = pow(2, 21);
+    int burnin = 50000; 
 
     mat S = spin_matrix(L);
 
     double E = 0.;                      // initialize energy
     double M = 0.;                      // initialize magnetization
 
-    initialize(L, S, E, M, N);
-    metropolis(S, L, T, E, M, N_cycles, N);
+    //initialize(L, S, E, M, N);
+    //metropolis(S, L, T, E, M, N_cycles, N, bunrin);
 
-
-    /*
+    
     bool timing = true;
     if (timing){
         auto t0 = std::chrono::high_resolution_clock::now();
@@ -32,7 +31,7 @@ int main(int argc, char const *argv[]){
             initialize(L, S, E, M, N);
             #pragma omp for
             for(int i = 0; i < NT; i++){
-                metropolis(S, L, T_vec(i), E, M, N_cycles, N);
+                metropolis(S, L, T_vec(i), E, M, N_cycles, N, burnin);
             }
         }
         auto t = std::chrono::high_resolution_clock::now();
@@ -40,9 +39,6 @@ int main(int argc, char const *argv[]){
 
         cout << "time used with OpenMP = " << duration_seconds_wo << " seconds\n";
     }
-    */
-
-
-
+    
     return 0;
 }
