@@ -15,6 +15,6 @@ In the third [project](https://github.com/mariaoftedahl/FYS3150/tree/main/Projec
 
 ## Project 4
 
-In [project 4](https://github.com/mariaoftedahl/FYS3150/tree/main/Project_3) we have used the Metropolis algorithm to implement the Ising model in two dimensions. The code is parallelized with OpenMP to be able to run the code with enough Monte Carlo cycles, and big enough lattice, to investigate phase transitions.
+In [project 4](https://github.com/mariaoftedahl/FYS3150/tree/main/Project_4) we have used the Metropolis algorithm to implement the Ising model in two dimensions. The code is parallelized with OpenMP to be able to run the code with enough Monte Carlo cycles, and big enough lattice, to investigate phase transitions.
 
 
