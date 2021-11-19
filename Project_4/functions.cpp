@@ -87,7 +87,7 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
     vec boltzmann = zeros<mat>(17);
 
     // possible energies
-    for(int de =-8; de <= 8; de+=4) boltzmann(de+8) = exp(-de/T);
+    for (int de = -8; de <= 8; de += 4) boltzmann(de + 8) = exp(-de/T);
 
 
     double E_exp = 0; double E_exp_sq = 0; double M_exp = 0; double M_exp_sq = 0;
@@ -99,7 +99,7 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
     vec magn_exp = vec(N_cycles);
 
     /*
-    for (int i = 1; i <= burnin; i++){
+    for (int i = 0; i <= burnin; i++){
         for(int j = 0; j < N; j++) {
             int x = distribution(gen)*L;
             int y = distribution(gen)*L;
@@ -107,17 +107,15 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
             int dE = delta_E(S, L, x, y);
 
             if (dE <= 0){
-                S(x, y) *= (-1);        // flips spin
+                S(x, y) *= (-1);         // flips spin
             }
 
-            else if (distribution(gen) <= boltzmann(dE+8) ){
-                S(x,y) *= (-1);         // flips spin
+            else if (distribution(gen) <= boltzmann(dE + 8)){
+                S(x, y) *= (-1);         // flips spin
             }
-
         }
     }
     */
-
 
     for (int i = 0; i <= N_cycles; i++){
         for(int j = 0; j < N; j++) {
@@ -127,18 +125,16 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
             int dE = delta_E(S, L, x, y);
 
             if (dE <= 0){
-                S(x, y) *= (-1);        // flips spin
+                S(x, y) *= (-1);         // flips spin
                 E += dE;
                 M += 2*S(x, y);
             }
 
-            else if (distribution(gen) <= boltzmann(dE+8) ){
-                S(x,y) *= (-1);         // flips spin
+            else if (distribution(gen) <= boltzmann(dE + 8)){
+                S(x, y) *= (-1);         // flips spin
                 E += dE;
                 M += 2*S(x, y);
-
             }
-
         }
 
 

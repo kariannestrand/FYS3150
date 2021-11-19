@@ -91,7 +91,7 @@ if histogram:
     plt.show()
 
 # for testing the files
-filename = 'chi_40L_noburnin.bin'
+filename = 'chi_100L_noburnin.bin'
 loadtxt = np.loadtxt(filename, skiprows = 0)
 chi = loadtxt[:, 0]
 T = loadtxt[:, 1]
