@@ -5,22 +5,33 @@ using namespace std;
 
 
 /**
- * inline function that implements periodic boundary conditions by returning the neighbouring indices of an element in a matrix
- * i is the index of the element in question
- * limit is the length of the matrix
- * add is the number of indices you jump to the side ? wtf haheheh
-*/
+ * inline function that implements periodic boundary conditions
+ * returns the neighbouring indices of an element in the lattice
+ *
+ * i:       index of the element in question
+ * limit:   length of the rows/columns of the square matrix
+ * add:     number added to i
+ */
 inline int PBC(int i, int limit, int add){
     return (i + limit + add) % (limit);
 }
 
-// function that returns a matrix of size L x L
+
+/**
+ * function that returns a square matrix of size L x L
+ * L:       length of the rows/columns of the square matrix
+ */
 arma::mat spin_matrix(int L){
     mat S = mat(L, L);
     return S;
 }
 
-// function that initialize spin configuration, energy and magnetization
+
+/**
+ * function that initializes spin configuration, energy and magnetization
+ * L:       length of the rows/columns of the square matrix
+ * S:        of the rows/columns of the square matrix
+ */
 void initialize(int L, mat &S, double &E, double &M, int N, bool random){
     if (random){
         std::random_device rd;
@@ -29,11 +40,10 @@ void initialize(int L, mat &S, double &E, double &M, int N, bool random){
         for(int i = 0; i < L; i++){
             for (int j = 0; j < L; j++){
                 S(i, j) = distribution(gen);
-
                 if (S(i,j) == 0){
-                    S(i,j) += -1;
+                    S(i,j) += -1;       // random spin configuration with spins up and down
                 }
-                M += S(i, j);
+                M += S(i, j);           // magnetization
 
             }
         }
@@ -43,7 +53,7 @@ void initialize(int L, mat &S, double &E, double &M, int N, bool random){
         for(int i = 0; i < L; i++){
             for (int j = 0; j < L; j++){
                 S(i,j) = 1.0;           // ordered spin configuration with spin up
-                M += S(i, j);
+                M += S(i, j);           // magnetization
             }
         }
     }
@@ -51,7 +61,7 @@ void initialize(int L, mat &S, double &E, double &M, int N, bool random){
 
     for(int i = 0; i < L; i++){
         for (int j = 0; j < L; j++){
-                E -= S(i, j) * S(PBC(i, L, -1), j) + S(i, j) * S(i, PBC(j, L, -1));
+                E -= S(i, j) * S(PBC(i, L, -1), j) + S(i, j) * S(i, PBC(j, L, -1)); // energy
 
 
         }
@@ -59,12 +69,13 @@ void initialize(int L, mat &S, double &E, double &M, int N, bool random){
 
 }
 
-// delta E
+
+// function that returns the energy shift due to flipping a single spin
 int delta_E(mat &S, int L, int i, int j){
-    return 2*S(i,j)*(S(i, PBC(j,L,-1))
-            + S(PBC(i,L,-1),j)
-            + S(i, PBC(j,L,1))
-            + S(PBC(i,L,1),j));
+    return 2*S(i,j)*(S(i, PBC(j, L, -1))
+            + S(PBC(i, L, -1), j)
+            + S(i, PBC(j, L, 1))
+            + S(PBC(i, L, 1), j));
 }
 
 // metropolis algorithm
@@ -76,7 +87,7 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
     vec boltzmann = zeros<mat>(17);
 
     // possible energies
-    for(int de =-8; de <= 8; de+=4) boltzmann(de+8) = exp(-de/T);
+    for (int de = -8; de <= 8; de += 4) boltzmann(de + 8) = exp(-de/T);
 
 
     double E_exp = 0; double E_exp_sq = 0; double M_exp = 0; double M_exp_sq = 0;
@@ -87,7 +98,7 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
     vec epsilon_samples = vec(N_cycles);
     vec magn_exp = vec(N_cycles);
 
-    
+    /*
     for (int i = 0; i <= burnin; i++){
         for(int j = 0; j < N; j++) {
             int x = distribution(gen)*L;
@@ -96,17 +107,15 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
             int dE = delta_E(S, L, x, y);
 
             if (dE <= 0){
-                S(x, y) *= (-1);        // flips spin
+                S(x, y) *= (-1);         // flips spin
             }
 
-            else if (distribution(gen) <= boltzmann(dE+8) ){
-                S(x,y) *= (-1);         // flips spin
+            else if (distribution(gen) <= boltzmann(dE + 8)){
+                S(x, y) *= (-1);         // flips spin
             }
-
         }
     }
-    
-
+    */
 
     for (int i = 0; i <= N_cycles; i++){
         for(int j = 0; j < N; j++) {
@@ -116,20 +125,18 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
             int dE = delta_E(S, L, x, y);
 
             if (dE <= 0){
-                S(x, y) *= (-1);        // flips spin
+                S(x, y) *= (-1);         // flips spin
                 E += dE;
                 M += 2*S(x, y);
             }
 
-            else if (distribution(gen) <= boltzmann(dE+8) ){
-                S(x,y) *= (-1);         // flips spin
+            else if (distribution(gen) <= boltzmann(dE + 8)){
+                S(x, y) *= (-1);         // flips spin
                 E += dE;
                 M += 2*S(x, y);
-
             }
-
         }
-        
+
 
         /*
         // writing to file for problem 6
@@ -139,8 +146,8 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
         eps_exp_file << setw(25) << epsilon_samples << endl;
         eps_exp_file.close();
         */
-        
-        
+
+
 
         E_exp += E;
         E_exp_sq += E*E;
@@ -193,7 +200,7 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
     cout << setprecision(15) << cV << endl;
     cout << setprecision(15) << chi << endl;
     */
-    
+
 
 
     if (write){
