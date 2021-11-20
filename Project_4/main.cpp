@@ -34,7 +34,6 @@ int main(int argc, char const *argv[]){
     }
     else{
         auto t0 = omp_get_wtime();   // start clock
-
         #pragma omp parallel private(E, M)  // Start parallel region
         {
             mat S = spin_matrix(L);
@@ -44,6 +43,7 @@ int main(int argc, char const *argv[]){
                 metropolis(S, L, T_vec(i), E, M, N_cycles, N, write, burnin);
             }
         }
+        
 
         auto t1 = omp_get_wtime();   // end clock
         double duration_seconds = std::chrono::duration<double>(t1 - t0).count();                   // calculates duration

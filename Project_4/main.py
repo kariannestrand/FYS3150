@@ -91,14 +91,14 @@ if histogram:
     plt.show()
 
 # for testing the files
-filename = 'chi_40L.bin'
+filename = 'cV_60L_noburnin.bin'
 loadtxt = np.loadtxt(filename, skiprows = 0)
-chi = loadtxt[:, 0]
+eps = loadtxt[:, 0]
 T = loadtxt[:, 1]
-T, chi = zip(*sorted(zip(T, chi)))
-T_max = T[np.argmax(chi)]
+T, eps = zip(*sorted(zip(T, eps)))
+T_max = T[np.argmax(eps)]
 print(T_max)
-plt.plot(T, chi, 'o')
+plt.plot(T, eps, 'o')
 plt.savefig('test.pdf')
 plt.show()
 
