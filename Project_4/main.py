@@ -4,7 +4,7 @@ from scipy.stats import linregress
 
 burn_in_time = False
 histogram = False
-phase_transition = False
+phase_transition = True
 
 # investigating the burnin time
 if burn_in_time:
@@ -90,6 +90,7 @@ if histogram:
     plt.savefig('histo_2.pdf')
     plt.show()
 
+'''
 # for testing the files
 filename = 'chi_100L_noburnin.bin'
 loadtxt = np.loadtxt(filename, skiprows = 0)
@@ -101,33 +102,40 @@ T_max = T[np.argmax(chi)]
 plt.plot(T, chi, 'o')
 plt.savefig('test.pdf')
 plt.show()
+'''
 
 
 # investigating phace transitions
 if phase_transition:
-    filename_list_eps = ["eps_exp_40L.bin", "eps_exp_60L.bin", "eps_exp_80L.bin", "eps_exp_100L.bin"]
+    filename_list_eps = ["eps_exp_40L_noburnin.bin", "eps_exp_60L_noburnin.bin", "eps_exp_80L_noburnin.bin", "eps_exp_100L_noburnin.bin"]
     for i in range(len(filename_list_eps)):
         filename = filename_list_eps[i]
         loadtxt = np.loadtxt(filename, skiprows = 0)
         eps_exp = loadtxt[:, 0]
         T = loadtxt[:, 1]
-        T, cV = zip(*sorted(zip(T, eps_exp)))
-        plt.plot(T, eps_exp, 'o')
-        plt.show()
+        T, eps_exp = zip(*sorted(zip(T, eps_exp)))
+        L = [40,60,80,100]
+        plt.plot(T, eps_exp, 'o', label='L=' + str(L[i]))
+        plt.legend()
+        
+    plt.show()
 
 
-    filename_list_m = ["m_exp_40L.bin", "m_exp_60L.bin", "m_exp_80L.bin", "m_exp_100L.bin"]
+    filename_list_m = ["m_exp_40L_noburnin.bin", "m_exp_60L_noburnin.bin", "m_exp_80L_noburnin.bin", "m_exp_100L_noburnin.bin"]
     for i in range(len(filename_list_m)):
         filename = filename_list_m[i]
         loadtxt = np.loadtxt(filename, skiprows = 0)
         m_exp = loadtxt[:, 0]
         T = loadtxt[:, 1]
         T, m_exp = zip(*sorted(zip(T, m_exp)))
-        plt.plot(T, m_exp, 'o')
-        plt.show()
+        L = [40,60,80,100]
+        plt.plot(T, m_exp, 'o', label='L=' + str(L[i]))
+        plt.legend()
+        
+    plt.show()
 
 
-    filename_list_cv = ["cV_40L.bin", "cV_60L.bin", "cV_80L.bin", "cV_100L.bin"]
+    filename_list_cv = ["cV_40L_noburnin.bin", "cV_60L_noburnin.bin", "cV_80L_noburnin.bin", "cV_100L_noburnin.bin"]
     for i in range(len(filename_list_cv)):
         filename = filename_list_cv[i]
         loadtxt = np.loadtxt(filename, skiprows = 0)
@@ -136,12 +144,15 @@ if phase_transition:
         T, cV = zip(*sorted(zip(T, cV)))
         T_max = T[np.argmax(cV)]
         print(T_max)
-        plt.plot(T, cV, 'o')
-        plt.show()
+        L = [40,60,80,100]
+        plt.plot(T, cV, 'o', label='L=' + str(L[i]))
+        plt.legend()
+        
+    plt.show()
 
 
 
-    filename_list_chi = ["chi_40L.bin", "chi_60L.bin", "chi_80L.bin", "chi_100L.bin"]
+    filename_list_chi = ["chi_40L_noburnin.bin", "chi_60L_noburnin.bin", "chi_80L_noburnin.bin", "chi_100L_noburnin.bin"]
     for i in range(len(filename_list_chi)):
         filename = filename_list_chi[i]
         loadtxt = np.loadtxt(filename, skiprows = 0)
@@ -150,5 +161,14 @@ if phase_transition:
         T, chi = zip(*sorted(zip(T, chi)))
         T_max = T[np.argmax(chi)]
         print(T_max)
-        plt.plot(T, chi, 'o')
-        plt.show()
+        L = [40,60,80,100]
+        plt.plot(T, chi, 'o', label='L=' + str(L[i]))
+        plt.legend()
+        
+    plt.show()
+
+
+T_max = [2.28788, 2.28182, 2.27879, 2.28182]
+L = [1/40, 1/60, 1/80, 1/100]
+T_c = linregress(L, T_max)
+print(T_c)
