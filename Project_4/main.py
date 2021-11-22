@@ -90,20 +90,6 @@ if histogram:
     plt.savefig('histo_2.pdf')
     plt.show()
 
-'''
-# for testing the files
-filename = 'chi_100L_noburnin.bin'
-loadtxt = np.loadtxt(filename, skiprows = 0)
-eps = loadtxt[:, 0]
-T = loadtxt[:, 1]
-T, chi = zip(*sorted(zip(T, chi)))
-T_max = T[np.argmax(chi)]
-#print(T_max)
-plt.plot(T, chi, 'o')
-plt.savefig('test.pdf')
-plt.show()
-'''
-
 
 # investigating phace transitions
 if phase_transition:
@@ -143,7 +129,7 @@ if phase_transition:
         T = loadtxt[:, 1]
         T, cV = zip(*sorted(zip(T, cV)))
         T_max = T[np.argmax(cV)]
-        print(T_max)
+        #print(T_max)
         L = [40,60,80,100]
         plt.plot(T, cV, 'o', label='L=' + str(L[i]))
         plt.legend()
@@ -160,7 +146,7 @@ if phase_transition:
         T = loadtxt[:, 1]
         T, chi = zip(*sorted(zip(T, chi)))
         T_max = T[np.argmax(chi)]
-        print(T_max)
+        #print(T_max)
         L = [40,60,80,100]
         plt.plot(T, chi, 'o', label='L=' + str(L[i]))
         plt.legend()
@@ -172,3 +158,7 @@ T_max = [2.28788, 2.28182, 2.27879, 2.28182]
 L = [1/40, 1/60, 1/80, 1/100]
 T_c = linregress(L, T_max)
 print(T_c)
+
+T_max_2 = [2.32727, 2.30909, 2.29697, 2.29091]
+T_c_2 = linregress(L, T_max_2)
+print(T_c_2)
