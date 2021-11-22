@@ -6,11 +6,10 @@ using namespace std;
 
 /**
  * inline function that implements periodic boundary conditions
- * returns the neighbouring indices of an element in the lattice
- *
- * i:       index of the element in question
- * limit:   length of the rows/columns of the square matrix
- * add:     number added to i
+ * returns the correct neighbouring indices of an element at the edge of the lattice
+ * i:         index of the element in question
+ * limit:     length of the rows/columns of the square matrix
+ * add:       number added to i
  */
 inline int PBC(int i, int limit, int add){
     return (i + limit + add) % (limit);
@@ -19,7 +18,7 @@ inline int PBC(int i, int limit, int add){
 
 /**
  * function that returns a square matrix of size L x L
- * L:       length of the rows/columns of the square matrix
+ * L:         length of the rows/columns of the square matrix
  */
 arma::mat spin_matrix(int L){
     mat S = mat(L, L);
@@ -29,8 +28,12 @@ arma::mat spin_matrix(int L){
 
 /**
  * function that initializes spin configuration, energy and magnetization
- * L:       length of the rows/columns of the square matrix
- * S:        of the rows/columns of the square matrix
+ * L:         length of the rows/columns of the square matrix
+ * S:         decleared spin matrix to be initialized
+ * E:         decleared energy to be initialized
+ * M:         decleared magnetization to be initialized
+ * N:         L squared
+ * random:    bool to turn on or off randomized spin configuration
  */
 void initialize(int L, mat &S, double &E, double &M, int N, bool random){
     if (random){
@@ -69,8 +72,15 @@ void initialize(int L, mat &S, double &E, double &M, int N, bool random){
 
 }
 
-
-// function that returns the energy shift due to flipping a single spin
+/**
+ * function that returns the energy shift due to flipping a single spin
+ * L:         length of the rows/columns of the square matrix
+ * S:         spin configuration matrix
+ * E:         energy of the total spin configuration
+ * M:         magnetization of the total spin configuration
+ * i:         row index of spin configuration
+ * j:         column indx spin configuration
+ */
 int delta_E(mat &S, int L, int i, int j){
     return 2*S(i,j)*(S(i, PBC(j, L, -1))
             + S(PBC(i, L, -1), j)
@@ -78,7 +88,18 @@ int delta_E(mat &S, int L, int i, int j){
             + S(PBC(i, L, 1), j));
 }
 
-// metropolis algorithm
+/**
+ * function that runs the Metropolis algorithm
+ * S:         spin configuration matrix
+ * L:         length of the rows/columns of the square matrix
+ * T:         temperature applied to the system
+ * E:         energy of the total spin configuration
+ * M:         magnetization of the total spin configuration
+ * N_cycles:  number of Monte Carlo cycles
+ * N:         L squared
+ * write:     bool to turn on or off writing bin-files
+ * burnin:    bool to turn on or off whether to account for burn-in time or not
+ */
 void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int N, bool write, int burnin){
     std::random_device rd;
     std::mt19937_64 gen(rd());
@@ -86,9 +107,7 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
 
     vec boltzmann = zeros<mat>(17);
 
-    // possible energies
-    for (int de = -8; de <= 8; de += 4) boltzmann(de + 8) = exp(-de/T);
-
+    for (int de = -8; de <= 8; de += 4) boltzmann(de + 8) = exp(-de/T);             // probability distribution
 
     double E_exp = 0; double E_exp_sq = 0; double M_exp = 0; double M_exp_sq = 0;
     double eps_exp = 0; double eps_exp_sq = 0; double m_exp = 0; double m_exp_sq = 0;
@@ -98,7 +117,7 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
     vec epsilon_samples = vec(N_cycles);
     vec magn_exp = vec(N_cycles);
 
-    /*
+
     for (int i = 0; i <= burnin; i++){
         for(int j = 0; j < N; j++) {
             int x = distribution(gen)*L;
@@ -115,94 +134,67 @@ void metropolis(mat &S, int L, double T, double &E, double &M, int N_cycles, int
             }
         }
     }
-    */
 
     for (int i = 0; i <= N_cycles; i++){
         for(int j = 0; j < N; j++) {
             int x = distribution(gen)*L;
             int y = distribution(gen)*L;
 
-            int dE = delta_E(S, L, x, y);
+            int dE = delta_E(S, L, x, y);       
 
             if (dE <= 0){
                 S(x, y) *= (-1);         // flips spin
-                E += dE;
-                M += 2*S(x, y);
+                E += dE;                 // update energy
+                M += 2*S(x, y);          // update magnetization
             }
 
             else if (distribution(gen) <= boltzmann(dE + 8)){
                 S(x, y) *= (-1);         // flips spin
-                E += dE;
-                M += 2*S(x, y);
+                E += dE;                 // updates energy
+                M += 2*S(x, y);          // update magnetization
             }
         }
-
-
-        /*
-        // writing to file for problem 6
-        epsilon_samples = E/N;
-        ofstream eps_exp_file;
-        eps_exp_file.open("eps_histo_1.bin", ios::binary | ios::app);
-        eps_exp_file << setw(25) << epsilon_samples << endl;
-        eps_exp_file.close();
-        */
-
-
-
-        E_exp += E;
-        E_exp_sq += E*E;
-        M_exp += abs(M);
-        M_exp_sq += M*M;
-
-        /*
-        ofstream eps_exp_file;
-        eps_exp_file.open("test.bin", ios::binary | ios::app);
-        eps_exp_file << setw(25) << E_exp << endl;
-        eps_exp_file.close();
-        */
+        
+        E_exp += E;             // calculating energy
+        E_exp_sq += E*E;        // calculating energy squared
+        M_exp += abs(M);        // calculating magnetization
+        M_exp_sq += M*M;        // calculating magnetization squared
 
         double norm = 1./(((double) i)*N);
-        epsilon_exp = E_exp*norm;
+        epsilon_exp = E_exp*norm;               
         magn_exp = M_exp*norm;
+        
+        if (write){
+            ofstream eps_exp_file;
+            eps_exp_file.open("m_exp_1_unordered.bin", ios::binary | ios::app);
+            eps_exp_file << setw(25) << magn_exp << endl;
+            eps_exp_file.close();
+        }
 
-        /*
-
-        ofstream eps_exp_file;
-        eps_exp_file.open("m_exp_1_unordered.bin", ios::binary | ios::app);
-        eps_exp_file << setw(25) << magn_exp << endl;
-        eps_exp_file.close();
-        */
-
-
-        // for problem 5
-        // double norm = 1./(((double) i)*N);
-        // write this to file
-        // epsilon_exp = E_exp*norm;
+        epsilon_samples = E/N;
+        if (write){
+            ofstream epsilon_samples_file;
+            eps_exp_file.open("eps_histo_1.bin", ios::binary | ios::app);
+            eps_exp_file << setw(25) << epsilon_samples << endl;
+            eps_exp_file.close();
+        }
+    
 
     }
 
-    // problem 4
-    e_exp = E_exp/N;
-    eps_exp = e_exp/N_cycles;
-    //eps_exp_sq = E_exp_sq/(N * N * N_cycles);
+    e_exp = E_exp/N;                                // energy per spin   
+    eps_exp = e_exp/N_cycles;                       // mean energy per spin 
+    eps_exp_sq = E_exp_sq/(N * N * N_cycles);       // mean energy per spin squared 
 
-    mag_exp = M_exp/N;
-    m_exp = mag_exp/N_cycles;
-    //m_exp_sq = M_exp_sq/(N * N * N_cycles);
+    mag_exp = M_exp/N;                          // magnetization per spin
+    m_exp = mag_exp/N_cycles;                   // mean magnetization per spin
+    m_exp_sq = M_exp_sq/(N * N * N_cycles);     // mean magnetization per spin squared
 
-    cV = 1./(T*T)*(E_exp_sq/N_cycles - E_exp/N_cycles * E_exp/N_cycles)/N;
-    chi = 1./T*(M_exp_sq/N_cycles - M_exp/N_cycles * M_exp/N_cycles)/N;
-
-
-    /*
-    cout << setprecision(15) << eps_exp << endl;
-    cout << setprecision(15) << m_exp << endl;
-    cout << setprecision(15) << cV << endl;
-    cout << setprecision(15) << chi << endl;
-    */
+    cV = 1./(T*T)*(E_exp_sq/N_cycles - E_exp/N_cycles * E_exp/N_cycles)/N;      // heat capacity normalized under number of spins
+    chi = 1./T*(M_exp_sq/N_cycles - M_exp/N_cycles * M_exp/N_cycles)/N;         // susceptibility normalized under number of spins
 
 
-
+    // writing results to file
     if (write){
         ofstream eps_exp_file;
         eps_exp_file.open("eps_exp_" + to_string(L) + "L_noburnin.bin", ios::binary | ios::app);

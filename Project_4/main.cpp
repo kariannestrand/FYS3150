@@ -25,8 +25,8 @@ int main(int argc, char const *argv[]){
 
         double T = atoi(argv[2]);
         mat S = spin_matrix(L);
-        initialize(L, S, E, M, N, random);
-        metropolis(S, L, T, E, M, N_cycles, N, write, burnin);
+        initialize(L, S, E, M, N, random);                // calling function to initialize lattice
+        metropolis(S, L, T, E, M, N_cycles, N, write, burnin);      // calling metropolis function
 
         auto t1 = std::chrono::high_resolution_clock::now();   // end clock
         double duration_seconds = std::chrono::duration<double>(t1 - t0).count();                                // calculates duration
@@ -37,10 +37,10 @@ int main(int argc, char const *argv[]){
         #pragma omp parallel private(E, M)  // Start parallel region
         {
             mat S = spin_matrix(L);
-            initialize(L, S, E, M, N, random);
+            initialize(L, S, E, M, N, random);                                      // calling function to initialize lattice
             #pragma omp for
-            for(int i = 0; i < NT; i++){
-                metropolis(S, L, T_vec(i), E, M, N_cycles, N, write, burnin);
+            for(int i = 0; i < NT; i++){                                            // loop over temperature
+                metropolis(S, L, T_vec(i), E, M, N_cycles, N, write, burnin);       // calling metropolis function
             }
         }
         
