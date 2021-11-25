@@ -21,14 +21,24 @@ int main(int argc, char const *argv[]){
 
     mat A = mat((M-2)*(M-2), (M-2)*(M-2), fill::zeros);
 
-    for (int i = 0; i < (M-3)*(M-3); i++){
+    for (int i = 0; i < (M-2)*(M-2); i++){
         // filling main diagonal with a-vector:
         //A(i, i) = a(i);
         A(i,i) = 1.0;
-        // filling sub- and superdiagonal with a:
+    }
+
+    for (int i = 0; i < (M-2)*(M-2)-(M-2); i++){
+    // filling sub- and superdiagonal with a:
         A(i, i + (M-2)) = -r;
         A(i + (M-2), i) = -r;
     }
+
+    for (int i = 0; i < (M-2)*(M-2)-1; i++){
+        A(i, i + 1) = -r;
+        A(i + 1, i) = -r;
+        
+    }
+
 
     //A = matdiag(a);
 
