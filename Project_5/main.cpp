@@ -12,13 +12,38 @@ int main(int argc, char const *argv[]){
     cx_mat U_in = cx_mat(M-2, M-2, fill::randu);
     cx_vec u = state(U_in);
 
-
+    /*
     cx_mat A = cx_mat((M-2)*(M-2), (M-2)*(M-2), fill::zeros);
     cx_vec a = cx_vec((M-2)*(M-2), fill::randu);
+    */
     double r = 2;
 
 
-    A.submat(0, 0, M-3, M-3) = cx_mat(M-2, M-2, fill::ones);
+    mat A = mat((M-2)*(M-2), (M-2)*(M-2), fill::zeros);
+
+    for (int i = 0; i < (M-2)*(M-2); i++){
+        // filling main diagonal with a-vector:
+        //A(i, i) = a(i);
+        A(i,i) = 1.0;
+    }
+
+    for (int i = 0; i < (M-2)*(M-2)-(M-2); i++){
+    // filling sub- and superdiagonal with a:
+        A(i, i + (M-2)) = -r;
+        A(i + (M-2), i) = -r;
+    }
+
+    for (int i = 0; i < (M-2)*(M-2)-1; i++){
+        A(i, i + 1) = -r;
+        A(i + 1, i) = -r;
+        
+    }
+
+
+    //A = matdiag(a);
+
+
+    //submat_1 = A.submat(0, 0, M-3, M-3) = cx_mat(M-2, M-2, fill::eye);
     cout << A << endl;
 
     /*
