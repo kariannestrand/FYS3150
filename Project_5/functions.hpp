@@ -4,6 +4,7 @@
 #include <armadillo>
 #include <iostream>
 #include <iomanip>
+#include <complex>
 
 //declaring functions
 
