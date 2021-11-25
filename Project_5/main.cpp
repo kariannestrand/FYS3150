@@ -18,7 +18,7 @@ int main(int argc, char const *argv[]){
     double r = 2;
 
 
-    A.submat(1, 1, M-2, M-2) = cx_mat(M-2, M-2, fill::ones);
+    A.submat(0, 0, M-3, M-3) = cx_mat(M-2, M-2, fill::ones);
     cout << A << endl;
 
     /*
