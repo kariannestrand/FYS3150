@@ -23,7 +23,7 @@ void vector_ab(double r, double dt, int M, cx_vec &a, cx_vec &b){
 }
 
 
-void matrix(double r, cx_vec a, cx_vec b, cx_mat &A, cx_mat &B, int M){
+void matrix(double r, cx_vec a, cx_vec b, sp_cx_mat &A, cx_mat &B, int M){
     for (int i = 0; i < (M-2)*(M-2); i++){
         A(i, i) = a(i);
         B(i, i) = b(i);
@@ -51,11 +51,10 @@ void matrix(double r, cx_vec a, cx_vec b, cx_mat &A, cx_mat &B, int M){
 }
 
 
-void solver(cx_mat U_in, cx_mat B){
+void solver(cx_mat U_in, cx_mat B, sp_cx_mat A){
     cx_vec u = U_in.as_col();
     cx_vec b = cx_vec(u.size());
 
-    /*
     for (int k = 0; k < u.size(); k++){
         cx_double B_tot = 0;
         for (int s = 0; s < u.size(); s++){
@@ -63,13 +62,11 @@ void solver(cx_mat U_in, cx_mat B){
         }
         b(k) = B_tot*u(k);
     }
-    */
 
-    /*
-    for (int k = 0; k < u.size(); k++){
-        b(k) = B.each_col() %= u(k);
-    }
-    */
+    //cout << b << endl;
+    //cout << A << endl;
 
-    cout << b << endl;
+    cx_vec u_next = spsolve(A, b);
+
+    cout << u_next << endl;
 }

@@ -15,13 +15,13 @@ int main(int argc, char const *argv[]){
     cx_vec a = cx_vec((M-2)*(M-2));
     cx_vec b = cx_vec((M-2)*(M-2));
 
-    cx_mat A = cx_mat((M-2)*(M-2), (M-2)*(M-2), fill::zeros);
+    sp_cx_mat A = sp_cx_mat((M-2)*(M-2), (M-2)*(M-2));
     cx_mat B = cx_mat((M-2)*(M-2), (M-2)*(M-2), fill::zeros);
 
     vector_ab(r, dt, M, a, b);
     matrix(r, a, b, A, B, M);
 
-    solver(U_in, B);
+    solver(U_in, B, A);
 
 
 
