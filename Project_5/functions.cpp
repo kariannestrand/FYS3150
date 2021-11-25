@@ -9,19 +9,48 @@ cx_vec state(cx_mat U_in){
     return u;
 }
 
-cx_mat matrix(double r, cx_vec a, cx_mat A){
-    /*
-    cx_mat A = diagmat(a);
-    cx_mat sub_mat_1 = A.submat(0, 0, M-2, M-2, fill::(ones));
-
-    cx_mat sub_mat_1 = diagmat(1);
-    for(int i = 0; i < (M-2); i++){
-        for (int j = 0; j < (M-2); j++){
-            if (i == j){
-                mat1(i, j) = a;
+void matrix(double r, cx_vec a, cx_vec b, cx_mat &A, cx_mat &B, int M){
+    // A matrix
+    for (int i = 0; i < (M-2)*(M-2); i++){
+        A(i, i) = a(i);
+    }
+    for (int i = 0; i < (M-2)*(M-2)-(M-2); i++){
+    // filling sub- and superdiagonal with a:
+        A(i, i + (M-2)) = -r;
+        A(i + (M-2), i) = -r;
+    }
+    for (int i = 0; i < (M-2)*(M-2)-1; i++){
+        A(i, i + 1) = -r;
+        A(i + 1, i) = -r;
+        for (int j = 1; j < (M-2)*(M-2)-1; j++){
+            if (i == j*(M-2) - 1){
+                A(i, i + 1) = 0;
+                A(i + 1, i) = 0;
             }
         }
     }
-    */
-    return A;
+
+
+    // B matrix
+    for (int i = 0; i < (M-2)*(M-2); i++){
+        B(i, i) = b(i);
+    }
+    for (int i = 0; i < (M-2)*(M-2)-(M-2); i++){
+    // filling sub- and superdiagonal with a:
+        B(i, i + (M-2)) = r;
+        B(i + (M-2), i) = r;
+    }
+    for (int i = 0; i < (M-2)*(M-2)-1; i++){
+        B(i, i + 1) = r;
+        B(i + 1, i) = r;
+        for (int j = 1; j < (M-2)*(M-2)-1; j++){
+            if (i == j*(M-2) - 1){
+                B(i, i + 1) = 0;
+                B(i + 1, i) = 0;
+            }
+        }
+    }
+
+
+
 }
