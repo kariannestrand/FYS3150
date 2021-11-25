@@ -1,7 +1,7 @@
-all: build
+all: build run
 
 build:
-	g++ -O3 -larmadillo -std=c++11 *.cpp -o main.exe
+	g++ -std=c++11 *.cpp -o main.exe -O3 -larmadillo
 
 run:
 	./main.exe
