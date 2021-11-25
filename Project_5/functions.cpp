@@ -51,9 +51,10 @@ void matrix(double r, cx_vec a, cx_vec b, cx_mat &A, cx_mat &B, int M){
 }
 
 
-void solver(cx_mat U_in, cx_mat B){
+void solver(cx_mat U_in, cx_mat B, cx_mat A){
     cx_vec u = U_in.as_col();
     cx_vec b = cx_vec(u.size());
+    cx_vec u_next = cx_vec(u.size());
 
     for (int k = 0; k < u.size(); k++){
         cx_double B_tot = 0;
@@ -63,7 +64,7 @@ void solver(cx_mat U_in, cx_mat B){
         b(k) = B_tot*u(k);
     }
     
-
-
-    cout << b << endl;
+    u_next = solve(A, b);
+    cout << u_next << endl;
+    
 }

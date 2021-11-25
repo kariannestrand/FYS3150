@@ -21,11 +21,7 @@ int main(int argc, char const *argv[]){
     vector_ab(r, dt, M, a, b);
     matrix(r, a, b, A, B, M);
 
-    solver(U_in, B);
-
-
-
-
+    solver(U_in, B, A);
 
     return 0;
 }
