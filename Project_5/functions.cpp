@@ -56,7 +56,7 @@ cx_mat potential(double v0, int M, int size_slit, int size_between_slit){
 
 void vector_ab(cx_double r, double dt, int M, cx_vec &a, cx_vec &b, cx_mat V){
     cx_vec v = V.as_col();
-    complex<double> i(0.0, 1.0);
+    cx_double i = cx_double(0.0, 1.0);
 
     for (int k = 0; k < pow(M-2, 2); k++){
         a(k) = 1. + 4.*r + i*dt/2.0 * v(k);
@@ -98,7 +98,7 @@ void matrix(cx_double r, cx_vec a, cx_vec b, sp_cx_mat &A, cx_mat &B, int M){
 cx_vec CrankNicolson(cx_mat U_in, cx_mat B, sp_cx_mat A, int T){
     cx_vec u = U_in.as_col();
     cx_vec b = cx_vec(u.size());
-    complex<double> p;
+    cx_double p;
 
     
     for (int i = 0; i < T; i++){
