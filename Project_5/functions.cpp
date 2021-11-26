@@ -12,7 +12,7 @@ cx_mat initial(double mean_x, double mean_y, double var_x, double var_y, int M){
     cx_vec distr_y = cx_vec(M-2);
     cx_mat U_in = cx_mat(M-2, M-2);
 
-    complex<double> i(0.0, 1.0);
+    cx_double i = cx_double(0.0, 1.0);
     double k_x = 1;
     double k_y = 1;
     for (int i = 0; i < M-2; i++){
