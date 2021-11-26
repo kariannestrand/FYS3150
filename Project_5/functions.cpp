@@ -12,7 +12,7 @@ cx_mat initial(double mean_x, double mean_y, double var_x, double var_y, int M){
     cx_vec distr_y = cx_vec(M-2);
     cx_mat U_in = cx_mat(M-2, M-2);
 
-    complex<double> i(0.0, 1.0);
+    cx_double i = cx_double(0.0, 1.0);
     double k_x = 1;
     double k_y = 1;
     for (int i = 0; i < M-2; i++){
@@ -54,9 +54,9 @@ cx_mat potential(double v0, int M, int size_slit, int size_between_slit){
 }
 
 
-void vector_ab(double r, double dt, int M, cx_vec &a, cx_vec &b, cx_mat V){
+void vector_ab(cx_double r, double dt, int M, cx_vec &a, cx_vec &b, cx_mat V){
     cx_vec v = V.as_col();
-    complex<double> i(0.0, 1.0);
+    cx_double i = cx_double(0.0, 1.0);
 
     for (int k = 0; k < pow(M-2, 2); k++){
         a(k) = 1 + 4*r + i*dt/2.0 * v(k);
@@ -65,7 +65,7 @@ void vector_ab(double r, double dt, int M, cx_vec &a, cx_vec &b, cx_mat V){
 }
 
 
-void matrix(double r, cx_vec a, cx_vec b, sp_cx_mat &A, cx_mat &B, int M){
+void matrix(cx_double r, cx_vec a, cx_vec b, sp_cx_mat &A, cx_mat &B, int M){
     for (int i = 0; i < (M-2)*(M-2); i++){
         A(i, i) = a(i);
         B(i, i) = b(i);
@@ -93,13 +93,25 @@ void matrix(double r, cx_vec a, cx_vec b, sp_cx_mat &A, cx_mat &B, int M){
 }
 
 
-cx_vec CrankNicolson(cx_mat U_in, cx_mat B, sp_cx_mat A, double t){
+cx_mat CrankNicolson(cx_mat U_in, cx_mat B, sp_cx_mat A, int T, int M, bool write){
     cx_vec u = U_in.as_col();
     cx_vec b = cx_vec(u.size());
+    cx_double p;
 
     for (int i = 0; i < t; i++){
         b = B*u;
         u = spsolve(A, b);
+        p = cdot(u, u);
+
+        for (int i = 0; i < (M-2); i++){
+            for (int j = 0; j < (M-2); j++){
+                U_in(i, j) = u(i + j*(M-2));
+            }
+        }
+        cout << u << endl;
+        cout << U_in << endl;
+        U_in.save("U_in_" + to_string(i) + "t.bin");
     }
-    return u;
+
+    return U_in;
 }
