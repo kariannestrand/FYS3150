@@ -23,6 +23,8 @@ cx_mat initial(double mean_x, double mean_y, double var_x, double var_y, int M){
         }
     }
 
+    u = u/(u*u)
+
     return u;
 }
 
