@@ -63,9 +63,6 @@ void solver(cx_mat U_in, cx_mat B, sp_cx_mat A){
         b(k) = B_tot*u(k);
     }
 
-    //cout << b << endl;
-    //cout << A << endl;
-
     cx_vec u_next = spsolve(A, b);
 
     cout << u_next << endl;

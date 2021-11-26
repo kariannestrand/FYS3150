@@ -23,9 +23,5 @@ int main(int argc, char const *argv[]){
 
     solver(U_in, B, A);
 
-
-
-
-
     return 0;
 }
