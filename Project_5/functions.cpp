@@ -61,7 +61,7 @@ void vector_ab(cx_double r, double dt, int M, cx_vec &a, cx_vec &b, cx_mat V){
     for (int k = 0; k < pow(M-2, 2); k++){
         a(k) = 1. + 4.*r + i*dt/2.0 * v(k);
         b(k) = 1. - 4.*r - i*dt/2.0 * v(k);
-    
+
     }
 
 }
@@ -95,19 +95,26 @@ void matrix(cx_double r, cx_vec a, cx_vec b, sp_cx_mat &A, cx_mat &B, int M){
 }
 
 
-cx_vec CrankNicolson(cx_mat U_in, cx_mat B, sp_cx_mat A, int T){
+cx_mat CrankNicolson(cx_mat U_in, cx_mat B, sp_cx_mat A, int T, int M, bool write){
     cx_vec u = U_in.as_col();
     cx_vec b = cx_vec(u.size());
     cx_double p;
 
-    
+
     for (int i = 0; i < T; i++){
         b = B*u;
         u = spsolve(A, b);
         p = cdot(u, u);
-        cout << p << endl;
-    }
-    
 
-    return u;
+        for (int i = 0; i < (M-2); i++){
+            for (int j = 0; j < (M-2); j++){
+                U_in(i, j) = u(i + j*(M-2));
+            }
+        }
+        cout << u << endl;
+        cout << U_in << endl;
+        U_in.save("U_in_" + to_string(i) + "t.bin");
+    }
+
+    return U_in;
 }

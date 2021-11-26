@@ -4,10 +4,11 @@ using namespace arma;
 using namespace std;
 
 int main(int argc, char const *argv[]){
-    int M = 5;               // size of one side of outer matrix
+    bool write = true;
+    int M = 5;                // size of one side of outer matrix
     double h = 1./(M-1);           // step size in x and y direction
     double dt = 0.01;          // step size for t
-    int T = 1/dt;
+    int T = 1/dt;             // total time
     cx_double r = cx_double(0.0, dt/(2*h*h));
     double v0 = 10000;
     int size_slit = 1;
@@ -27,9 +28,7 @@ int main(int argc, char const *argv[]){
     cx_mat V = potential(v0, M, size_slit, size_between_slit);
     vector_ab(r, dt, M, a, b, V);                                // creating a and b vector
     matrix(r, a, b, A, B, M);                                    // creating A and B matrix
-
-
-    cx_vec U_in_vec = CrankNicolson(U_in, B, A, T);              // solving u(0, 0, 1)
+    U_in = CrankNicolson(U_in, B, A, T, M, write);        // solving u(x, y, t)
 
     return 0;
 }
