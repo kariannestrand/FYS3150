@@ -105,6 +105,7 @@ cx_vec CrankNicolson(cx_mat U_in, cx_mat B, sp_cx_mat A, int N_t){
         b = B*u;
         u = spsolve(A, b);
         p = cdot(u, u);
+        cout << p << endl;
     }
     
 

@@ -7,7 +7,7 @@ int main(int argc, char const *argv[]){
     int M = 5;               // size of one side of outer matrix
     double h = 1./(M-1);           // step size in x and y direction
     double dt = 0.01;          // step size for t
-    int N_t = 100;
+    int N_t = 1./dt;
     cx_double r = cx_double(0.0, dt/(2*h*h));
     double v0 = 10000;
     int size_slit = 1;
