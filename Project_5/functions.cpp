@@ -3,13 +3,28 @@
 using namespace arma;
 using namespace std;
 
-/*
-cx_vec state(cx_mat U_in){
-    cx_vec u = U_in.as_col();
+
+cx_mat initial(double mean_x, double mean_y, double var_x, double var_y, int M){
+    vec x = linspace(0, 1, M-2);  // x vector from 0 to 1 with M-3 steps
+    vec y = linspace(0, 1, M-2);  // y vector from 0 to 1 with M-3 steps
+
+    cx_vec distr_x = cx_vec(M-2);
+    cx_vec distr_y = cx_vec(M-2);
+    cx_mat u = cx_mat(M-2, M-2);
+
+    for (int i = 0; i < M-2; i++){
+        distr_x(i) = 1/(var_x*sqrt(2*M_PI))*exp(-(x(i) - mean_x)/(var_x)*(x(i) - mean_x)/(var_x));
+        distr_y(i) = 1/(var_y*sqrt(2*M_PI))*exp(-(y(i) - mean_y)/(var_y)*(y(i) - mean_y)/(var_y));
+    }
+
+    for (int i = 0; i < M-2; i++){
+        for (int j = 0; j < M-2; j++){
+            u(i, j) = distr_x(i)*distr_y(j);
+        }
+    }
+
     return u;
 }
-*/
-
 
 void vector_ab(double r, double dt, int M, cx_vec &a, cx_vec &b){
     cx_mat V = cx_mat((M-2), (M-2), fill::ones);
@@ -21,7 +36,6 @@ void vector_ab(double r, double dt, int M, cx_vec &a, cx_vec &b){
         b(k) = 1 - 4*r - i*dt/2.0 * v(k);
     }
 }
-
 
 void matrix(double r, cx_vec a, cx_vec b, sp_cx_mat &A, cx_mat &B, int M){
     for (int i = 0; i < (M-2)*(M-2); i++){
@@ -50,22 +64,9 @@ void matrix(double r, cx_vec a, cx_vec b, sp_cx_mat &A, cx_mat &B, int M){
     }
 }
 
-
-void solver(cx_mat U_in, cx_mat B, sp_cx_mat A){
+cx_vec solver(cx_mat U_in, cx_mat B, sp_cx_mat A){
     cx_vec u = U_in.as_col();
     cx_vec b = cx_vec(u.size());
-    cx_vec u_next = cx_vec(u.size());
-
-    for (int k = 0; k < u.size(); k++){
-        cx_double B_tot = 0;
-        for (int s = 0; s < u.size(); s++){
-            B_tot += B.col(k)(s);
-        }
-        b(k) = B_tot*u(k);
-    }
-
-
-    cx_vec u_next = spsolve(A, b);
-
-    cout << u_next << endl;
+    b = B*u;
+    return spsolve(A, b);
 }
