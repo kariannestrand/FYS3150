@@ -7,7 +7,7 @@ int main(int argc, char const *argv[]){
     int M = 5;               // size of one side of outer matrix
     double h = 1./(M-1);           // step size in x and y direction
     double dt = 0.01;          // step size for t
-    int N_t = 100;
+    int T = 1/dt;
     cx_double r = cx_double(0.0, dt/(2*h*h));
     double v0 = 10000;
     int size_slit = 1;
@@ -29,7 +29,7 @@ int main(int argc, char const *argv[]){
     matrix(r, a, b, A, B, M);                                    // creating A and B matrix
 
 
-    cx_vec U_in_vec = CrankNicolson(U_in, B, A, N_t);              // solving u(0, 0, 1)
+    cx_vec U_in_vec = CrankNicolson(U_in, B, A, T);              // solving u(0, 0, 1)
 
     return 0;
 }
