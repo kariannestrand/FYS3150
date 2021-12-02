@@ -111,6 +111,6 @@ cx_cube CrankNicolson(cx_mat U, cx_mat B, sp_cx_mat A, int M, int N){
 }
 
 
-void write_to_file(cx_cube U_cube){
-    U_cube.save("U_cube.bin");
+void write_to_file(cx_cube U_cube, string name){
+    U_cube.save(name);
 }
