@@ -5,13 +5,14 @@ from matplotlib.animation import FuncAnimation
 import pyarma as pa
 
 
-t = 3
-for i in range(t):
-    U_in = pa.cx_mat()
-    U_in.load("U_in_" + str(i) + "t.bin")
-print(U_in)
+U_in_cube = pa.cx_cube()
+U_in_cube.load("U_in_cube_100T.bin")  # U_in_cube(row, column, slize)
 
 
+
+
+
+"""
 #
 # Let's generate a dummy time series for a function z(x,y,t)
 #
@@ -101,3 +102,4 @@ plt.show()
 
 # # Save the animation
 # anim.save('./animation.mp4', writer="ffmpeg", bitrate=-1, fps=30)
+"""

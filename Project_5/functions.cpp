@@ -4,7 +4,7 @@ using namespace arma;
 using namespace std;
 
 
-cx_mat initial(double mean_x, double mean_y, double var_x, double var_y, int M){
+cx_mat initial(double mean_x, double mean_y, double var_x, double var_y, double p_x, double p_y, int M){
     vec x = linspace(0, 1, M-2);  // x vector from 0 to 1 with M-3 steps
     vec y = linspace(0, 1, M-2);  // y vector from 0 to 1 with M-3 steps
 
@@ -13,11 +13,9 @@ cx_mat initial(double mean_x, double mean_y, double var_x, double var_y, int M){
     cx_mat U_in = cx_mat(M-2, M-2);
 
     cx_double i = cx_double(0.0, 1.0);
-    double k_x = 1;
-    double k_y = 1;
     for (int i = 0; i < M-2; i++){
-        distr_x(i) = 1/(var_x*sqrt(2*M_PI))*exp(-(x(i) - mean_x)/(var_x)*(x(i) - mean_x)/(var_x))*exp(i*k_x*x(i));
-        distr_y(i) = 1/(var_y*sqrt(2*M_PI))*exp(-(y(i) - mean_y)/(var_y)*(y(i) - mean_y)/(var_y))*exp(i*k_y*y(i));
+        distr_x(i) = 1/(var_x*sqrt(2*M_PI))*exp(-(x(i) - mean_x)/(2*var_x)*(x(i) - mean_x)/(var_x))*exp(i*p_x*(x(i) - mean_x));  // unnormalised Gaussian wave packet for x
+        distr_y(i) = 1/(var_y*sqrt(2*M_PI))*exp(-(y(i) - mean_y)/(2*var_y)*(y(i) - mean_y)/(var_y))*exp(i*p_y*(y(i) - mean_y));  // unnormalised Gaussian wave packet for y
     }
 
     for (int i = 0; i < M-2; i++){
@@ -27,7 +25,6 @@ cx_mat initial(double mean_x, double mean_y, double var_x, double var_y, int M){
     }
 
     U_in = U_in/norm(U_in);  // making sure probability distribution starts out normalized to 1
-
     return U_in;
 }
 
@@ -61,9 +58,7 @@ void vector_ab(cx_double r, double dt, int M, cx_vec &a, cx_vec &b, cx_mat V){
     for (int k = 0; k < pow(M-2, 2); k++){
         a(k) = 1. + 4.*r + i*dt/2.0 * v(k);
         b(k) = 1. - 4.*r - i*dt/2.0 * v(k);
-
     }
-
 }
 
 
@@ -100,21 +95,20 @@ cx_mat CrankNicolson(cx_mat U_in, cx_mat B, sp_cx_mat A, int T, int M, bool writ
     cx_vec b = cx_vec(u.size());
     cx_double p;
 
-
-    for (int i = 0; i < T; i++){
+    cx_cube U_in_cube = cx_cube(M-2, M-2, T);
+    for (int k = 0; k < T; k++){
         b = B*u;
         u = spsolve(A, b);
         p = cdot(u, u);
 
         for (int i = 0; i < (M-2); i++){
             for (int j = 0; j < (M-2); j++){
-                U_in(i, j) = u(i + j*(M-2));
+                //U_in(i, j) = u(i + j*(M-2));
+                U_in_cube(i, j, k) = u(i + j*(M-2));
             }
         }
-        cout << u << endl;
-        cout << U_in << endl;
-        U_in.save("U_in_" + to_string(i) + "t.bin");
+        //U_in.save("U_in_" + to_string(k) + "T.bin");
     }
-
+    U_in_cube.save("U_in_cube_" + to_string(T) + "T.bin");
     return U_in;
 }
