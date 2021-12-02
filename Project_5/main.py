@@ -4,12 +4,29 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 import pyarma as pa
 
+M = 5
+T = 0.008
+dt = 2.5e-5
+N = int(T/dt)
 
-U_in_cube = pa.cx_cube()
-U_in_cube.load("U_in_cube_100T.bin")  # U_in_cube(row, column, slize)
+
+U_cube = pa.cx_cube()            # U_in_cube[row, column, slize]
+U_cube.load("U_cube.bin")
 
 
-
+t = np.linspace(0, T, N)
+for n in range(N):
+    p = 0.0
+    for i in range(M-2):
+        for j in range(M-2):
+            p += (np.conj(U_cube[i, j, n])*U_cube[i, j, n]).real
+    plt.plot(t[n], abs(1 - p), "b.")
+    plt.title("Deviation from the normalized probability as a function of time", size = 22)
+    plt.xlabel("Time", size = 22)
+    plt.ylabel("1 - $\sum_{i, j}\ p_{ij}$", size = 17)
+    plt.xticks(size = 20)
+    plt.yticks(size = 20); plt.yscale("log")
+plt.show()
 
 
 """

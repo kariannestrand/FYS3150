@@ -10,7 +10,7 @@ cx_mat initial(double mean_x, double mean_y, double var_x, double var_y, double 
 
     cx_vec distr_x = cx_vec(M-2);
     cx_vec distr_y = cx_vec(M-2);
-    cx_mat U_in = cx_mat(M-2, M-2);
+    cx_mat U = cx_mat(M-2, M-2);
 
     cx_double i = cx_double(0.0, 1.0);
     for (int i = 0; i < M-2; i++){
@@ -20,12 +20,12 @@ cx_mat initial(double mean_x, double mean_y, double var_x, double var_y, double 
 
     for (int i = 0; i < M-2; i++){
         for (int j = 0; j < M-2; j++){
-            U_in(i, j) = distr_x(i)*distr_y(j);
+            U(i, j) = distr_x(i)*distr_y(j);
         }
     }
 
-    U_in = U_in/norm(U_in);  // making sure probability distribution starts out normalized to 1
-    return U_in;
+    U = U/norm(U);  // making sure probability distribution starts out normalized to 1
+    return U;
 }
 
 
@@ -90,25 +90,27 @@ void matrix(cx_double r, cx_vec a, cx_vec b, sp_cx_mat &A, cx_mat &B, int M){
 }
 
 
-cx_mat CrankNicolson(cx_mat U_in, cx_mat B, sp_cx_mat A, int T, int M, bool write){
-    cx_vec u = U_in.as_col();
+cx_cube CrankNicolson(cx_mat U, cx_mat B, sp_cx_mat A, int M, int N){
+    cx_vec u = U.as_col();
     cx_vec b = cx_vec(u.size());
     cx_double p;
 
-    cx_cube U_in_cube = cx_cube(M-2, M-2, T);
-    for (int k = 0; k < T; k++){
+    cx_cube U_cube = cx_cube(M-2, M-2, N);
+    for (int n = 0; n < N; n++){
         b = B*u;
         u = spsolve(A, b);
-        p = cdot(u, u);
+        //p = cdot(u, u);
 
         for (int i = 0; i < (M-2); i++){
             for (int j = 0; j < (M-2); j++){
-                //U_in(i, j) = u(i + j*(M-2));
-                U_in_cube(i, j, k) = u(i + j*(M-2));
+                U_cube(i, j, n) = u(i + j*(M-2));
             }
         }
-        //U_in.save("U_in_" + to_string(k) + "T.bin");
     }
-    U_in_cube.save("U_in_cube_" + to_string(T) + "T.bin");
-    return U_in;
+    return U_cube;
+}
+
+
+void write_to_file(cx_cube U_cube){
+    U_cube.save("U_cube.bin");
 }
