@@ -4,15 +4,13 @@ using namespace arma;
 using namespace std;
 
 int main(int argc, char const *argv[]){
-    bool write = true;                             // writes internal state cube U(x, y, t) to bin-file in true
+    bool write = false;                             // writes internal state cube U(x, y, t) to bin-file in true
     string name = "T_0002.bin";                    // name of bin-file
-    int M = 7;                                     // size of one side of outer matrix
-    //double h = 1./(M-1);                         // step size in x and y direction
-    double h = 0.005;                              // step size in x and y direction
+    double h = 0.01;                         // step size in x and y direction
+    double M = 1./h + 1;                                     // size of one side of outer matrix
     double dt = 2.5*pow(10, -5);                   // step size for t
-    //int T = 1/dt;                                // total time
     double T = 0.002;                              // total time
-    double N = T/dt;                               // number of time steps
+    double N = T/dt+1;                               // number of time steps
     double v0 = pow(10, 10);                       // constant potential value inside barriers
     cx_double r = cx_double(0.0, dt/(2*h*h));
     int size_slit = 1;
@@ -31,7 +29,7 @@ int main(int argc, char const *argv[]){
     double p_x = 200.0;                                                  // p_x
     double p_y = 0.0;                                                    // p_y
 
-    cx_mat U = initial(mean_x, mean_y, var_x, var_y, p_x, p_y, M);       // initializing internal state matrix U(x, y, 0)
+    cx_mat U = initial(mean_x, mean_y, var_x, var_y, p_x, p_y, M, h);       // initializing internal state matrix U(x, y, 0)
     cx_mat V = potential(v0, M, size_slit, size_between_slit);           // generating potential matrix V(x, y)
     vector_ab(r, dt, M, a, b, V);                                        // generating a and b vector
     matrix(r, a, b, A, B, M);                                            // generating A and B matrix
@@ -40,6 +38,7 @@ int main(int argc, char const *argv[]){
     if (write){
         write_to_file(U_cube, name);                                     // writes U_cube to bin-file
     }
+    
 
     return 0;
 }
