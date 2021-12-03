@@ -26,19 +26,52 @@ cx_mat initial(double mean_x, double mean_y, double var_x, double var_y, double 
 
 cx_mat potential(double v0, double M, int size_slit, int size_between_slit){
     cx_mat V = cx_mat(M-2, M-2, fill::zeros);
-    for (int i = 0; i < M-2; i++){
-        for (int j = 0; j < M-2; j++){
-            if (j == (M-2)/2){
-                V(i, j) = v0;
+    double input = 0.02;
+    double slit_size = 0.05;
+    double size_between = 0.05;
+    int n_slits = 3;
 
-                for (int k = size_between_slit; k < size_between_slit + size_slit; k++){
-                    if (i == (M-2)/2 + k){
-                        V(i, j) = 0.0;
-                    }
-                    else if (i == (M-2)/2 - k){
-                        V(i, j) = 0.0;
-                    }
-                }
+
+    for (int i = (M-2)/2 - input/2*(M-2); i < (M-2)/2 + input/2*(M-2) + 1; i++){
+
+
+        if (n_slits == 1){
+            for (int j = 0; j < (M-2)/2 - slit_size/2*(M-2); j++){
+                V(i, j) = v0;
+            }
+            for (int j = (M-2)/2 + slit_size/2*(M-2); j < (M-2); j++){
+                V(i, j) = v0;
+            }
+        }
+
+
+        if (n_slits == 2){
+            for (int j = 0; j < (1 - 2*slit_size - size_between)/2*(M-2); j++){
+                V(i, j) = v0;
+            }
+            for (int j = ((1 - 2*slit_size - size_between)/2 + slit_size)*(M-2); j < (M-2)/2 + size_between/2*(M-2); j++){
+                V(i, j) = v0;
+            }
+            for (int j = (1 + 2*slit_size + size_between)/2*(M-2); j < (M-2); j++){
+                V(i, j) = v0;
+            }
+
+        }
+        if (n_slits == 3){
+            for (int j = 0; j < (1 - 3*slit_size - 2*size_between)/2*(M-2); j++){
+                V(i, j) = v0;
+            }
+
+            for (int j = ((1 - 3*slit_size - 2*size_between)/2 + slit_size)*(M-2); j < (M-2)/2 - slit_size/2*(M-2); j++){
+                V(i, j) = v0;
+            }
+
+            for (int j = (M-2)/2 + slit_size/2*(M-2); j < (M-2)/2 + slit_size/2*(M-2) + size_between*(M-2); j++){
+                V(i, j) = v0;
+            }
+
+            for (int j = (M-2)/2 + 1.5*slit_size*(M-2) + size_between*(M-2); j < (M-2); j++){
+                V(i, j) = v0;
             }
         }
     }
@@ -85,7 +118,7 @@ void matrix(cx_double r, cx_vec a, cx_vec b, sp_cx_mat &A, sp_cx_mat &B, double 
 }
 
 
-cx_cube CrankNicolson(cx_mat U, const sp_cx_mat &B, const sp_cx_mat &A, double M, int N){
+cx_cube CrankNicolson(cx_mat U, sp_cx_mat B, sp_cx_mat A, double M, int N){
     cx_vec u = U.as_col();
     cx_vec b = cx_vec(u.size());
     cx_double p;

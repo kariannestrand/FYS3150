@@ -46,8 +46,9 @@ if probability_deviation:
 
 
 if probability_time_evolution:
-    U_cube = pa.cx_cube()
-    U_cube.load("T_0002.bin")
+    U_cube_T = pa.cx_cube()
+    U_cube_T.load("T_0002.bin")
+    U_cube = np.transpose(U_cube_T)
 
     U_0_Re = np.zeros((M-2, M-2))
     U_0001_Re = np.zeros((M-2, M-2))
@@ -89,20 +90,30 @@ if probability_time_evolution:
     U_Im = [U_0_Im, U_0001_Im, U_0002_Im]
     U_Im_title = ["Im($U_0$)", "Im($U_{0001}$)", "Im($U_{0002}$)"]
 
+    """
     for i in range(len(p)):
         plt.imshow(p[i])
         plt.title(p_title[i])
         plt.show()
+
 
     for i in range(len(p)):
         plt.imshow(U_Re[i])
         plt.title(U_Re_title[i])
         plt.show()
 
+
     for i in range(len(p)):
         plt.imshow(U_Im[i])
         plt.title(U_Im_title[i])
         plt.show()
+        """
+
+    x = 0.8
+    y = np.linspace(0+h, 1-h, M-2)
+    plt.plot(y, p_0002[int(x*(M-2)), :])
+    plt.show()
+
 
 
 """
