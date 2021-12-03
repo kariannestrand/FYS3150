@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 import pyarma as pa
 
-M = 7
+h = 0.005
+M = int(1.0/h + 1.0);
 T = 0.002
 dt = 2.5e-5
 N = int(T/dt)
@@ -102,6 +103,7 @@ if probability_time_evolution:
         plt.imshow(U_Im[i])
         plt.title(U_Im_title[i])
         plt.show()
+
 
 """
 #
