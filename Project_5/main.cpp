@@ -14,14 +14,14 @@ int main(int argc, char const *argv[]){
     double N = T/dt;                               // number of time steps
     double v0 = pow(10, 10);                       // constant potential value inside barriers
     cx_double r = cx_double(0.0, dt/(2*h*h));
-    int size_slit = 1;
-    int size_between_slit = 1;
+    int size_slit = 10;
+    int size_between_slit = 10;
 
 
     cx_vec a = cx_vec((M-2)*(M-2));                                      // initializing a vector
     cx_vec b = cx_vec((M-2)*(M-2));                                      // initializing b vector
     sp_cx_mat A = sp_cx_mat((M-2)*(M-2), (M-2)*(M-2));                   // initializing A matrix
-    cx_mat B = cx_mat((M-2)*(M-2), (M-2)*(M-2), fill::zeros);            // initializing B matrix
+    sp_cx_mat B = sp_cx_mat((M-2)*(M-2), (M-2)*(M-2));                   // initializing B matrix
 
     double mean_x = 0.25;                                                // x_c
     double mean_y = 0.5;                                                 // y_c
