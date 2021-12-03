@@ -4,23 +4,18 @@ using namespace arma;
 using namespace std;
 
 
-cx_mat initial(double mean_x, double mean_y, double var_x, double var_y, double p_x, double p_y, int M){
-    vec x = linspace(0, 1, M-2);  // x vector from 0 to 1 with M-3 steps
-    vec y = linspace(0, 1, M-2);  // y vector from 0 to 1 with M-3 steps
+cx_mat initial(double mean_x, double mean_y, double var_x, double var_y, double p_x, double p_y, double M, double h){
+    vec x = linspace(0+h, 1-h, M-2);  // x vector from 0+h to 1-h with M-3 steps
+    vec y = linspace(0+h, 1-h, M-2);  // y vector from 0+h to 1-h with M-3 steps
 
     cx_vec distr_x = cx_vec(M-2);
     cx_vec distr_y = cx_vec(M-2);
     cx_mat U = cx_mat(M-2, M-2);
 
-    cx_double i = cx_double(0.0, 1.0);
-    for (int i = 0; i < M-2; i++){
-        distr_x(i) = 1/(var_x*sqrt(2*M_PI))*exp(-(x(i) - mean_x)/(2*var_x)*(x(i) - mean_x)/(var_x))*exp(i*p_x*(x(i) - mean_x));  // unnormalised Gaussian wave packet for x
-        distr_y(i) = 1/(var_y*sqrt(2*M_PI))*exp(-(y(i) - mean_y)/(2*var_y)*(y(i) - mean_y)/(var_y))*exp(i*p_y*(y(i) - mean_y));  // unnormalised Gaussian wave packet for y
-    }
-
+    cx_double imag = cx_double(0.0, 1.0);
     for (int i = 0; i < M-2; i++){
         for (int j = 0; j < M-2; j++){
-            U(i, j) = distr_x(i)*distr_y(j);
+            U(i, j) = exp(-(x(i) - mean_x)/(2.*var_x)*(x(i) - mean_x)/(var_x) - (y(i) - mean_y)/(2.*var_y)*(y(i) - mean_y)/(var_y) + imag*p_x*(x(i) - mean_x) + imag*p_y*(y(i) - mean_y));
         }
     }
 
@@ -29,7 +24,7 @@ cx_mat initial(double mean_x, double mean_y, double var_x, double var_y, double 
 }
 
 
-cx_mat potential(double v0, int M, int size_slit, int size_between_slit){
+cx_mat potential(double v0, double M, int size_slit, int size_between_slit){
     cx_mat V = cx_mat(M-2, M-2, fill::zeros);
     for (int i = 0; i < M-2; i++){
         for (int j = 0; j < M-2; j++){
@@ -51,7 +46,7 @@ cx_mat potential(double v0, int M, int size_slit, int size_between_slit){
 }
 
 
-void vector_ab(cx_double r, double dt, int M, cx_vec &a, cx_vec &b, cx_mat V){
+void vector_ab(cx_double r, double dt, double M, cx_vec &a, cx_vec &b, cx_mat V){
     cx_vec v = V.as_col();
     cx_double i = cx_double(0.0, 1.0);
 
@@ -62,7 +57,7 @@ void vector_ab(cx_double r, double dt, int M, cx_vec &a, cx_vec &b, cx_mat V){
 }
 
 
-void matrix(cx_double r, cx_vec a, cx_vec b, sp_cx_mat &A, cx_mat &B, int M){
+void matrix(cx_double r, cx_vec a, cx_vec b, sp_cx_mat &A, cx_mat &B, double M){
     for (int i = 0; i < (M-2)*(M-2); i++){
         A(i, i) = a(i);
         B(i, i) = b(i);
@@ -80,32 +75,34 @@ void matrix(cx_double r, cx_vec a, cx_vec b, sp_cx_mat &A, cx_mat &B, int M){
         B(i + 1, i) = r;
         for (int j = 1; j < (M-2)*(M-2)-1; j++){
             if (i == j*(M-2) - 1){
-                A(i, i + 1) = 0;
-                A(i + 1, i) = 0;
-                B(i, i + 1) = 0;
-                B(i + 1, i) = 0;
+                A(i, i + 1) = 0.0;
+                A(i + 1, i) = 0.0;
+                B(i, i + 1) = 0.0;
+                B(i + 1, i) = 0.0;
             }
         }
     }
 }
 
 
-cx_cube CrankNicolson(cx_mat U, cx_mat B, sp_cx_mat A, int M, int N){
+cx_cube CrankNicolson(cx_mat U, cx_mat B, sp_cx_mat A, double M, int N){
     cx_vec u = U.as_col();
     cx_vec b = cx_vec(u.size());
     cx_double p;
 
     cx_cube U_cube = cx_cube(M-2, M-2, N);
+    double count = 0.0;
     for (int n = 0; n < N; n++){
         b = B*u;
         u = spsolve(A, b);
-        //p = cdot(u, u);
 
         for (int i = 0; i < (M-2); i++){
             for (int j = 0; j < (M-2); j++){
                 U_cube(i, j, n) = u(i + j*(M-2));
             }
         }
+        count += 1.0;
+        cout << count/N*100.0 << "%" << endl;
     }
     return U_cube;
 }
