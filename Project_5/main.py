@@ -101,14 +101,10 @@ if probability_time_evolution:
         plt.imshow(p[i])
         plt.title(p_title[i])
         plt.show()
-
-
     for i in range(len(p)):
         plt.imshow(U_Re[i])
         plt.title(U_Re_title[i])
         plt.show()
-
-
     for i in range(len(p)):
         plt.imshow(U_Im[i])
         plt.title(U_Im_title[i])
