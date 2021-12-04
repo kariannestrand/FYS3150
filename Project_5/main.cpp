@@ -4,7 +4,7 @@ using namespace arma;
 using namespace std;
 
 int main(int argc, char const *argv[]){
-    bool write = true;                             // writes internal state cube U(x, y, t) to bin-file in true
+    bool write = false;                            // writes internal state cube U(x, y, t) to bin-file in true
     string name = "10_v0.bin";                     // name of bin-file
 
     double h = 0.005;                              // step size in x and y direction
