@@ -90,25 +90,29 @@ if probability_time_evolution:
     U_Im = [U_0_Im, U_0001_Im, U_0002_Im]
     U_Im_title = ["Im($U_0$)", "Im($U_{0001}$)", "Im($U_{0002}$)"]
 
-    """
+    
     for i in range(len(p)):
         plt.imshow(p[i])
         plt.title(p_title[i])
+        plt.savefig('plot_test_3' + str(i)+ '.pdf')
         plt.show()
 
 
     for i in range(len(p)):
         plt.imshow(U_Re[i])
         plt.title(U_Re_title[i])
+        plt.savefig('plot_test_2' + str(i)+ '.pdf')
         plt.show()
 
 
     for i in range(len(p)):
         plt.imshow(U_Im[i])
         plt.title(U_Im_title[i])
+        plt.savefig('plot_test' + str(i)+ '.pdf')
         plt.show()
-        """
+        
 
+    '''
     x = 0.8
     y = np.linspace(0+h, 1-h, M-2)
     plt.plot(y, p_0002[int(x*(M-2)), :])
@@ -116,7 +120,7 @@ if probability_time_evolution:
 
 
 
-"""
+
 #
 # Let's generate a dummy time series for a function z(x,y,t)
 #
@@ -206,4 +210,4 @@ plt.show()
 
 # # Save the animation
 # anim.save('./animation.mp4', writer="ffmpeg", bitrate=-1, fps=30)
-"""
+'''
