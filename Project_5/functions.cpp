@@ -4,18 +4,15 @@ using namespace arma;
 using namespace std;
 
 
-cx_mat initial(double mean_x, double mean_y, double var_x, double var_y, double p_x, double p_y, double M, double h){
+/**
+ * function that initializes and returns the internal state matrix U(x, y, 0)
+ */
+cx_mat initial_state(double mean_x, double mean_y, double var_x, double var_y, double p_x, double p_y, double M, double h){
     vec x = linspace(0+h, 1-h, M-2);  // x vector from 0+h to 1-h with M-3 steps
     vec y = linspace(0+h, 1-h, M-2);  // y vector from 0+h to 1-h with M-3 steps
-
-    // wrote these to file to make meshgrid
-    //x.save("x.bin");
-    //y.save("y.bin");
-
-    cx_vec distr_x = cx_vec(M-2);
-    cx_vec distr_y = cx_vec(M-2);
     cx_mat U = cx_mat(M-2, M-2);
 
+    // filling U matrix with expression for unnormalised Gaussian wave packet
     cx_double imag = cx_double(0.0, 1.0);
     for (int i = 0; i < M-2; i++){
         for (int j = 0; j < M-2; j++){
@@ -28,9 +25,12 @@ cx_mat initial(double mean_x, double mean_y, double var_x, double var_y, double 
 }
 
 
+/**
+ * function that initializes and returns the potential matrix V(x, y) with the barrier/wall and slit(s)
+ */
 cx_mat potential(double v0, double M, int n_slits, double slit_size, double separation_size, double wall_thickness){
     cx_mat V = cx_mat(M-2, M-2, fill::zeros);
-    
+
 
     for (int i = (M-2)/2 - wall_thickness/2*(M-2); i < (M-2)/2 + wall_thickness/2*(M-2) + 1; i++){
         if (n_slits == 1){
@@ -74,7 +74,10 @@ cx_mat potential(double v0, double M, int n_slits, double slit_size, double sepa
 }
 
 
-void vector_ab(cx_double r, double dt, double M, cx_vec &a, cx_vec &b, cx_mat V){
+/**
+ * function that fills the elements of the initialized vectors a and b
+ */
+void a_b_vectors(cx_double r, double dt, double M, cx_vec &a, cx_vec &b, cx_mat V){
     cx_vec v = V.as_col();
     cx_double i = cx_double(0.0, 1.0);
 
@@ -85,7 +88,10 @@ void vector_ab(cx_double r, double dt, double M, cx_vec &a, cx_vec &b, cx_mat V)
 }
 
 
-void matrix(cx_double r, cx_vec a, cx_vec b, sp_cx_mat &A, sp_cx_mat &B, double M){
+/**
+ * function that fills the elements of the initialized matrices A and B
+ */
+void A_B_matrices(cx_double r, cx_vec a, cx_vec b, sp_cx_mat &A, sp_cx_mat &B, double M){
     for (int i = 0; i < (M-2)*(M-2); i++){
         A(i, i) = a(i);
         B(i, i) = b(i);
@@ -113,6 +119,9 @@ void matrix(cx_double r, cx_vec a, cx_vec b, sp_cx_mat &A, sp_cx_mat &B, double 
 }
 
 
+/**
+ * function that uses the Crank-Nicolson method to evolve the initialized state matrix in time, returning U(x, y, t)
+ */
 cx_cube CrankNicolson(cx_mat U, const sp_cx_mat &B, const sp_cx_mat &A, double M, int N){
     cx_vec u = U.as_col();
     cx_vec b = cx_vec(u.size());
@@ -136,6 +145,9 @@ cx_cube CrankNicolson(cx_mat U, const sp_cx_mat &B, const sp_cx_mat &A, double M
 }
 
 
+/**
+ * function that writes the state matrix U(x, y, t) to a bin-file
+ */
 void write_to_file(cx_cube U_cube, string name){
     U_cube.save(name);
 }
