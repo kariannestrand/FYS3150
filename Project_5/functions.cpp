@@ -125,7 +125,7 @@ cx_cube CrankNicolson(cx_mat U, const sp_cx_mat &B, const sp_cx_mat &A, double M
             }
         }
         count += 1.0;
-        cout << count/N*100.0 << "%" << endl;  // shows percentage of time steps calculated
+        cout << count/N*100.0 << "%" << endl;  // shows percentage of calculated time steps
     }
     return U_cube;
 }
