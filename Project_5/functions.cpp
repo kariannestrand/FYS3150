@@ -8,6 +8,10 @@ cx_mat initial(double mean_x, double mean_y, double var_x, double var_y, double 
     vec x = linspace(0+h, 1-h, M-2);  // x vector from 0+h to 1-h with M-3 steps
     vec y = linspace(0+h, 1-h, M-2);  // y vector from 0+h to 1-h with M-3 steps
 
+    // wrote these to file to make meshgrid
+    //x.save("x.bin");
+    //y.save("y.bin");
+
     cx_vec distr_x = cx_vec(M-2);
     cx_vec distr_y = cx_vec(M-2);
     cx_mat U = cx_mat(M-2, M-2);
@@ -15,7 +19,7 @@ cx_mat initial(double mean_x, double mean_y, double var_x, double var_y, double 
     cx_double imag = cx_double(0.0, 1.0);
     for (int i = 0; i < M-2; i++){
         for (int j = 0; j < M-2; j++){
-            U(i, j) = exp(-(x(i) - mean_x)/(2.*var_x)*(x(i) - mean_x)/(var_x) - (y(i) - mean_y)/(2.*var_y)*(y(i) - mean_y)/(var_y) + imag*p_x*(x(i) - mean_x) + imag*p_y*(y(i) - mean_y));
+            U(i, j) = exp(-(x(i) - mean_x)/(2.*var_x)*(x(i) - mean_x)/(var_x) - (y(j) - mean_y)/(2.*var_y)*(y(j) - mean_y)/(var_y) + imag*p_x*(x(i) - mean_x) + imag*p_y*(y(j) - mean_y));
         }
     }
 
@@ -26,6 +30,7 @@ cx_mat initial(double mean_x, double mean_y, double var_x, double var_y, double 
 
 cx_mat potential(double v0, double M, int n_slits, double slit_size, double separation_size, double wall_thickness){
     cx_mat V = cx_mat(M-2, M-2, fill::zeros);
+    
 
     for (int i = (M-2)/2 - wall_thickness/2*(M-2); i < (M-2)/2 + wall_thickness/2*(M-2) + 1; i++){
         if (n_slits == 1){

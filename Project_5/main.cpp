@@ -5,18 +5,17 @@ using namespace std;
 
 int main(int argc, char const *argv[]){
     bool write = false;                            // writes internal state cube U(x, y, t) to bin-file in true
-    string name = "10_v0.bin";                     // name of bin-file
+    string name = "double_slit.bin";                     // name of bin-file
 
     double h = 0.005;                              // step size in x and y direction
     double M = 1.0/h + 1.0;                        // size of one side of outer matrix
     double dt = 2.5*pow(10, -5);                   // step size for t
     double T = 0.008;                              // total time
-    double M = 1.0/h + 1.0;                        // size of one side of outer matrix
     double N = T/dt;                               // number of time steps
     double v0 = pow(10, 10);                       // constant potential value inside barriers
     cx_double r = cx_double(0.0, dt/(2*h*h));      // constant
     int n_slits = 2;                               // number of slits, must be either 0, 1, 2 or 3
-    double wall_thickness = 0.05;                  // size of the wall thickness in the x-direction
+    double wall_thickness = 0.02;                  // size of the wall thickness in the x-direction
     double separation_size = 0.05;                 // length of the wall piece separating the slits
     double slit_size = 0.05;                       // slit aperture (opening in the y-direction)
 
