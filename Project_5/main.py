@@ -11,7 +11,7 @@ T = 0.01
 dt = 2.5e-5
 N = int(T/dt)
 
-save_fig = False
+save_fig = True
 
 probability_deviation = False
 probability_deviation_bin_name_no_barrier = "probability_deviation_no_barrier.bin"
