@@ -7,7 +7,7 @@ import pyarma as pa
 
 h = 0.005
 M = int(1.0/h + 1.0);
-T = 0.01
+T = 0.002
 dt = 2.5e-5
 N = int(T/dt)
 
