@@ -1,3 +1,4 @@
+from matplotlib.colors import Normalize
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
@@ -6,21 +7,21 @@ import pyarma as pa
 
 h = 0.005
 M = int(1.0/h + 1.0);
-T = 0.008
+T = 0.002
 dt = 2.5e-5
 N = int(T/dt)
 
-probability_deviation = True
-probability_time_evolution = False
+probability_deviation =  False
+probability_time_evolution = True
 
 if probability_deviation:
     U_cube_0_T = pa.cx_cube()
-    U_cube_0_T.load("0_v0.bin")
+    U_cube_0_T.load("no_barrier.bin")
     U_cube_0 = np.transpose(U_cube_0_T)
 
 
     U_cube_10_T = pa.cx_cube()
-    U_cube_10_T.load("10_v0.bin")
+    U_cube_10_T.load("double_slit.bin")
     U_cube_10 = np.transpose(U_cube_10_T)
 
 
@@ -36,16 +37,19 @@ if probability_deviation:
         p_0_array[n] = p_0
         p_10_array[n] = p_10
 
-
+    
     t = np.linspace(0, T, N)
+    plt.figure(figsize=(11,8))
     plt.plot(t, abs(1 - p_0_array), ".", label = "$v_0 = 0$")
     plt.plot(t, abs(1 - p_10_array), ".", label = "$v_0 = 10^{10}$")
-    plt.title("Deviation from the normalized probability as a function of time", size = 22)
-    plt.xlabel("Time", size = 22)
+    #plt.title("Deviation from the normalized probability as a function of time", size = 22)
+    plt.xlabel("Time", size = 24)
     plt.ylabel("|1 - $\sum_{i, j}\ p_{ij}$|", size = 22)
-    plt.xticks(size = 20)
-    plt.yticks(size = 20); plt.yscale("log")
-    plt.legend(fontsize = 15)
+    plt.xticks([0.0, 0.002, 0.004, 0.006, 0.008], size = 24)
+    plt.yticks(size = 24); plt.yscale("log")
+    plt.legend(fontsize = 24)
+    plt.tight_layout()
+    plt.savefig('probability.pdf')
     plt.show()
 
 
@@ -53,7 +57,7 @@ if probability_deviation:
 
 if probability_time_evolution:
     U_cube_T = pa.cx_cube()
-    U_cube_T.load("T_0002.bin")
+    U_cube_T.load("colourmap.bin")
     U_cube = np.transpose(U_cube_T)
 
     U_0_Re = np.zeros((M-2, M-2))
@@ -68,7 +72,8 @@ if probability_time_evolution:
     p_0001 = np.zeros((M-2, M-2))
     p_0002 = np.zeros((M-2, M-2))
 
-
+    
+    
     for i in range(M-2):
         for j in range(M-2):
             U_0_Re[i, j] = U_cube[i, j, 0].real
@@ -79,13 +84,9 @@ if probability_time_evolution:
             U_0001_Im[i, j] = U_cube[i, j, int(N/2)].imag
             U_0002_Im[i, j] = U_cube[i, j, N-1].imag
 
-            p_0[i, j] = (np.conj(U_cube[i, j, 0])*U_cube[i, j, 0]).real
+            p_0[i, j] = np.real(np.conj(U_cube[i, j, 0])*U_cube[i, j, 0])
             p_0001[i, j] = (np.conj(U_cube[i, j, int(N/2)])*U_cube[i, j, int(N/2)]).real
             p_0002[i, j] = (np.conj(U_cube[i, j, N-1])*U_cube[i, j, N-1]).real
-
-
-
-    fig = plt.figure(figsize = (8,6))
 
     p = [p_0, p_0001, p_0002]
     p_title = ["$p_0$", "$p_{0001}$", "$p_{0002}$"]
@@ -96,22 +97,65 @@ if probability_time_evolution:
     U_Im = [U_0_Im, U_0001_Im, U_0002_Im]
     U_Im_title = ["Im($U_0$)", "Im($U_{0001}$)", "Im($U_{0002}$)"]
 
-    """
-    for i in range(len(p)):
-        plt.imshow(p[i])
-        plt.title(p_title[i])
-        plt.show()
-    for i in range(len(p)):
-        plt.imshow(U_Re[i])
-        plt.title(U_Re_title[i])
-        plt.show()
-    for i in range(len(p)):
-        plt.imshow(U_Im[i])
-        plt.title(U_Im_title[i])
-        plt.show()
-        """
 
-    x = 0.8
-    y = np.linspace(0+h, 1-h, M-2)
-    plt.plot(y, p_0002[int(x*(M-2)), :])
-    plt.show()
+    #saved x and y from c++ to file to make the grid from 0 to 1
+    x = pa.mat()
+    y = pa.mat()
+    x.load("x.bin")
+    y.load("y.bin")
+    X, Y = np.meshgrid(x,y)
+    
+    for i in range(len(p)):
+        plt.contourf(X, Y, p[i], 20)
+        plt.xlabel("x")
+        plt.ylabel("y")
+        plt.xticks([0.2,0.4,0.6,0.8,1])
+        plt.yticks([0,0.2,0.4,0.6,0.8])
+        cb = plt.colorbar()
+        cb.set_label(label='Probability')
+        cb.ax.tick_params()
+        plt.savefig('prob' + str(i)+ '.pdf')
+        plt.show()
+        plt.close("all")
+    
+    
+    for i in range(len(p)):
+        plt.contourf(X, Y, U_Re[i], 20)
+        plt.xlabel("x")
+        plt.ylabel("y")
+        plt.xticks([0.2,0.4,0.6,0.8,1])
+        plt.yticks([0,0.2,0.4,0.6,0.8])
+        cb = plt.colorbar()
+        cb.set_label(label='Real part')
+        cb.ax.tick_params()
+        plt.savefig('real' + str(i)+ '.pdf')
+        plt.show()
+        plt.close("all")
+
+    for i in range(len(p)):
+        plt.contourf(X, Y, U_Im[i], 20)
+        plt.xlabel("x")
+        plt.ylabel("y")
+        plt.xticks([0.2,0.4,0.6,0.8,1])
+        plt.yticks([0,0.2,0.4,0.6,0.8])
+        cb = plt.colorbar()
+        cb.set_label(label='Imaginary part')
+        cb.ax.tick_params()
+        plt.savefig('imag' + str(i)+ '.pdf')
+        plt.show()
+        plt.close("all")
+
+
+
+'''
+this is what we had before, saved it here just in case
+    for i in range(len(p)):
+        plt.ax.imshow(U_Im[i])
+        plt.title(U_Im_title[i])
+        plt.colorbar()
+        plt.savefig('plot_test' + str(i)+ '.pdf')
+        plt.show()
+'''
+    
+    
+    
