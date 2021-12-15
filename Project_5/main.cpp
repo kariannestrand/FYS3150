@@ -10,11 +10,11 @@ int main(int argc, char const *argv[]){
     double h = 0.005;                              // step size in the x- and y-direction
     double M = 1.0/h + 1.0;                        // number of points along the x-axis of total state matrix, including boundary points
     double dt = 2.5*pow(10, -5);                   // time step size
-    double T = 0.002;                              // total time
+    double T = 0.008;                              // total time
     double N = T/dt;                               // number of time steps
     double v0 = pow(10, 10);                       // constant potential value inside barriers
     cx_double r = cx_double(0.0, dt/(2*h*h));      // constant
-    int n_slits = 3;                               // number of slits, must be either 0, 1, 2 or 3
+    int n_slits = 2;                               // number of slits, must be either 0, 1, 2 or 3
     double wall_thickness = 0.02;                  // size of the wall thickness in the x-direction
     double separation_size = 0.05;                 // length of the wall piece separating the slits
     double slit_size = 0.05;                       // slit aperture (opening in the y-direction)
