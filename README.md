@@ -17,4 +17,8 @@ In the third [project](https://github.com/mariaoftedahl/FYS3150/tree/main/Projec
 
 In [project 4](https://github.com/mariaoftedahl/FYS3150/tree/main/Project_4) we have used the Metropolis algorithm to implement the Ising model in two dimensions. The code is parallelized with OpenMP to be able to run the code with enough Monte Carlo cycles, and big enough lattice, to investigate phase transitions.
 
+## Project 5
+
+In [project 5](https://github.com/mariaoftedahl/FYS3150/tree/main/Project_5) we have used the Crank Nicolson method to solve the Schrödinger equation in two spatial and one time dimension. The solution was then used to try to simulate results from the Double Slit experiment. 
+
 
