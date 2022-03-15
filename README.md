@@ -1,4 +1,4 @@
-# FYS3150
+# FYS3150 - Computational Physics
 Repository with the projects from FYS3150 at UiO done by Maria Lunde Oftedahl and Karianne Strand.
 
 ## Project 1
